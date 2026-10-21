@@ -10,7 +10,11 @@
     "deepLink": "netflix://",
     "trakt_id": "netflix",
     "categoria": "streaming",
-    "drm": true
+    "drm": true,
+    "host": "externo",
+    "type": "iframe",
+    "player": "externo - precisa login DRM",
+    "letter": "🔴"
   },
   {
     "id": "prime",
@@ -23,7 +27,11 @@
     "deepLink": "intent://#Intent;package=com.amazon.avod;end",
     "trakt_id": "prime-video",
     "categoria": "streaming",
-    "drm": true
+    "drm": true,
+    "host": "externo",
+    "type": "iframe",
+    "player": "externo - precisa login DRM",
+    "letter": "📦"
   },
   {
     "id": "disney",
@@ -36,12 +44,16 @@
     "deepLink": "disneyplus://",
     "trakt_id": "disney-plus",
     "categoria": "streaming",
-    "drm": true
+    "drm": true,
+    "host": "externo",
+    "type": "iframe",
+    "player": "externo - precisa login DRM",
+    "letter": "✨"
   },
   {
     "id": "globoplay",
     "nome": "Globoplay",
-    "logo": "▶️",
+    "logo": "▶",
     "cor": "#FF4D00",
     "webUrl": "https://globoplay.globo.com",
     "androidPackage": "com.globo.globoplay",
@@ -49,7 +61,11 @@
     "deepLink": "globoplay://",
     "trakt_id": "globoplay",
     "categoria": "streaming",
-    "drm": true
+    "drm": true,
+    "host": "externo",
+    "type": "iframe",
+    "player": "externo - precisa login DRM",
+    "letter": "▶"
   },
   {
     "id": "max",
@@ -62,7 +78,11 @@
     "deepLink": "hbo://",
     "trakt_id": "hbo-max",
     "categoria": "streaming",
-    "drm": true
+    "drm": true,
+    "host": "externo",
+    "type": "iframe",
+    "player": "externo - precisa login DRM",
+    "letter": "🎬"
   },
   {
     "id": "appletv",
@@ -75,7 +95,11 @@
     "deepLink": "https://tv.apple.com",
     "trakt_id": "apple-tv-plus",
     "categoria": "streaming",
-    "drm": true
+    "drm": true,
+    "host": "externo",
+    "type": "iframe",
+    "player": "externo - precisa login DRM",
+    "letter": "🍎"
   },
   {
     "id": "star",
@@ -88,12 +112,16 @@
     "deepLink": "starplus://",
     "trakt_id": "star-plus",
     "categoria": "streaming",
-    "drm": true
+    "drm": true,
+    "host": "externo",
+    "type": "iframe",
+    "player": "externo - precisa login DRM",
+    "letter": "⭐"
   },
   {
     "id": "paramount",
     "nome": "Paramount+",
-    "logo": "⛰️",
+    "logo": "⛰",
     "cor": "#0064FF",
     "webUrl": "https://www.paramountplus.com",
     "androidPackage": "com.cbs.ca",
@@ -101,12 +129,16 @@
     "deepLink": "paramountplus://",
     "trakt_id": "paramount-plus",
     "categoria": "streaming",
-    "drm": true
+    "drm": true,
+    "host": "externo",
+    "type": "iframe",
+    "player": "externo - precisa login DRM",
+    "letter": "⛰"
   },
   {
     "id": "youtube",
     "nome": "YouTube",
-    "logo": "▶️",
+    "logo": "▶",
     "cor": "#FF0000",
     "webUrl": "https://www.youtube.com",
     "androidPackage": "com.google.android.youtube.tv",
@@ -114,7 +146,11 @@
     "deepLink": "vnd.youtube://",
     "trakt_id": "youtube",
     "categoria": "video",
-    "drm": false
+    "drm": false,
+    "host": "hospedado",
+    "type": "iframe",
+    "player": "interno - CENTRAL+ player",
+    "letter": "▶"
   },
   {
     "id": "spotify",
@@ -127,7 +163,11 @@
     "deepLink": "spotify://",
     "trakt_id": "spotify",
     "categoria": "musica",
-    "drm": false
+    "drm": false,
+    "host": "hospedado",
+    "type": "iframe",
+    "player": "interno - CENTRAL+ player",
+    "letter": "🎵"
   },
   {
     "id": "deezer",
@@ -140,7 +180,11 @@
     "deepLink": "deezer://",
     "trakt_id": "deezer",
     "categoria": "musica",
-    "drm": false
+    "drm": false,
+    "host": "hospedado",
+    "type": "iframe",
+    "player": "interno - CENTRAL+ player",
+    "letter": "🎧"
   },
   {
     "id": "sbt",
@@ -153,6 +197,44 @@
     "deepLink": "https://www.sbt.com.br",
     "trakt_id": "sbt",
     "categoria": "aberta",
-    "drm": false
+    "drm": false,
+    "host": "hospedado",
+    "type": "iframe",
+    "player": "interno - CENTRAL+ player",
+    "letter": "📺"
+  },
+  {
+    "id": "tvcultura_belem",
+    "nome": "TV Cultura Belém (Teste HLS)",
+    "logo": "📡",
+    "cor": "#00A859",
+    "webUrl": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+    "type": "hls",
+    "host": "hospedado",
+    "player": "interno HLS - CENTRAL+ player",
+    "androidPackage": "com.cultura.belem",
+    "fireTvIntent": "",
+    "deepLink": "",
+    "trakt_id": "cultura-belem",
+    "categoria": "aovivo",
+    "drm": false,
+    "letter": "📡"
+  },
+  {
+    "id": "radio_belem",
+    "nome": "Rádio Belém Ao Vivo",
+    "logo": "🎙️",
+    "cor": "#8b5cf6",
+    "webUrl": "https://www.youtube.com/embed/jfKfPfyJRdk",
+    "type": "iframe",
+    "host": "hospedado",
+    "player": "interno iframe - CENTRAL+ player",
+    "androidPackage": "",
+    "fireTvIntent": "",
+    "deepLink": "",
+    "trakt_id": "radio-belem",
+    "categoria": "aovivo",
+    "drm": false,
+    "letter": "🎙️"
   }
 ]
