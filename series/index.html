@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CENTRAL+ • Séries</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a14;--card:#16162a;--purple:#8b5cf6;--muted:#9A9AB5;--border:rgba(255,255,255,.08)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:#fff;font-family:'Space Grotesk',system-ui,sans-serif;min-height:100vh;overflow-x:hidden}
+.mono{font-family:'JetBrains Mono',monospace}
+header{position:sticky;top:0;z-index:40;backdrop-filter:blur(20px);background:rgba(10,10,20,.9);border-bottom:1px solid var(--border);height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 24px}
+.logo{font-weight:900;font-size:18px;display:flex;align-items:center;gap:10px;letter-spacing:-.02em}
+.logo b{width:32px;height:32px;background:#fff;color:#000;display:grid;place-items:center;border-radius:8px;font-size:18px}
+.badge{font-size:10px;padding:4px 10px;border-radius:20px;background:rgba(139,92,246,.2);border:1px solid rgba(139,92,246,.3);color:#c4b5fd}
+.back{color:#fff;text-decoration:none;font-size:13px;display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;background:rgba(255,255,255,.08);border:1px solid var(--border)}
+.main{padding:24px}
+.h1{font-size:28px;font-weight:900;letter-spacing:-.03em;display:flex;align-items:center;gap:12px}
+.sub{color:var(--muted);font-size:12px;margin:8px 0 24px 0;display:flex;gap:12px;align-items:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px}
+@media(min-width:768px){.grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}}
+.card{border-radius:16px;background:var(--card);border:1px solid rgba(255,255,255,.1);overflow:hidden;transition:.2s;cursor:pointer;position:relative}
+.card:hover{border-color:rgba(139,92,246,.4);transform:translateY(-3px);box-shadow:0 0 30px rgba(139,92,246,.25)}
+.card:focus-visible{outline:2px solid #fff;outline-offset:2px;box-shadow:0 0 0 4px rgba(139,92,246,.6)}
+.poster{height:320px;background:linear-gradient(135deg,#1a0a2e,#0a0a14);padding:16px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden}
+.poster img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.7}
+.poster .meta-top{position:absolute;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;z-index:2}
+.pill{font-size:9px;padding:4px 8px;border-radius:20px;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(8px)}
+.live-pill{background:#ff0033;color:#fff;font-weight:700;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+.info{padding:14px}
+.name{font-weight:700;font-size:14px;line-height:1.2}
+.meta{font-size:11px;color:var(--muted);margin-top:4px}
+.status{margin-top:24px;background:#111;border-radius:12px;padding:12px;font-family:monospace;font-size:11px;color:var(--muted);white-space:pre-wrap}
+</style>
+</head>
+<body>
+<header>
+<div class="logo"><b>+</b> CENTRAL+ • Séries</div>
+<div style="display:flex;gap:8px;align-items:center">
+<a class="back" href="../">‹ Home</a>
+<div class="badge" id="badge">4K • series.json</div>
+</div>
+</header>
+<div class="main">
+<div class="h1">🍿 Séries</div>
+<div class="sub"><span id="count">Carregando series.json...</span> • <span class="mono">Premium Apple TV • Travado</span></div>
+<div class="grid" id="grid"></div>
+<div class="status" id="status">CENTRAL+ Séries Premium Travado • Lendo ../data/series.json</div>
+</div>
+<script>
+async function loadJSON(p){try{let r=await fetch(p+'?t='+Date.now()); if(!r.ok) throw 0; return await r.json();}catch{return null}}
+async function init(){
+ let data = await loadJSON('../data/series.json');
+ let fallback = [];
+ if(!data || !data.length){
+  document.getElementById('badge').textContent='series.json FALLBACK';
+  data=fallback;
+ }
+ document.getElementById('count').textContent = data.length+' itens • ../data/series.json '+(data.length?'OK ✅':'vazio');
+ let grid=document.getElementById('grid');
+ grid.innerHTML = data.map(i=>{
+  let titulo = i.titulo || i.nome || i.title || i.name || 'Item';
+  let ano = i.ano || i.year || i.regiao || i.region || i.source || i.categoria || '';
+  let g1 = (i.gradient && i.gradient[0]) || i.cor || '#2e1065';
+  let g2 = (i.gradient && i.gradient[1]) || '#0a0a14';
+  let poster = i.poster || i.logo || i.imagem || '';
+  let badge = i.meta || i.viewers || i.time || '';
+  return `
+  <div class="card" tabindex="0" onclick="handleClick('${titulo.replace("'","")}','${(i.webUrl||i.url||i.link||'#').replace("'","")}')">
+    <div class="poster" style="--g1:${g1};--g2:${g2};background:linear-gradient(135deg,${g1},${g2})">
+      ${poster ? `<img src="${poster}" onerror="this.style.display='none'">` : ''}
+      <div class="meta-top">
+        <span class="pill">${ano || '2024'}</span>
+        ${badge ? `<span class="pill ${badge.includes('LIVE')||badge.includes('AO VIVO')?'live-pill':''}">${badge}</span>` : ''}
+      </div>
+      <div style="position:relative;z-index:2">
+        <div style="font-size:18px;font-weight:900;line-height:1.1">${titulo}</div>
+        <div class="mono" style="font-size:10px;color:rgba(255,255,255,.6);margin-top:6px">${ano}</div>
+      </div>
+      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.8),transparent);z-index:1"></div>
+    </div>
+    <div class="info"><div class="name">${titulo}</div><div class="meta">${ano}</div></div>
+  </div>`;
+ }).join('');
+ document.getElementById('status').textContent=`CENTRAL+ Séries Premium Travado • ${data.length} itens • Lendo ../data/series.json OK ✅\nTravado: nunca edita esse index, só data/series.json`;
+} 
+function handleClick(t,u){ if(u && u!=='#' ) window.open(u,'_blank'); else alert(t); }
+init();
+</script>
+</body>
+</html>
