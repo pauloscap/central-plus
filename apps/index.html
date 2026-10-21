@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apps • CENTRAL+</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A14;--card:#15151F;--card2:#1E1E2E;--purple:#7A5CFF;--muted:#9AA0B5}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:#fff;font-family:Inter,sans-serif;padding:28px}
+a.back{color:var(--muted);text-decoration:none;font-size:14px;display:inline-flex;gap:6px;align-items:center;margin-bottom:18px}
+h1{font-size:28px;font-weight:800;margin-bottom:6px}
+.sub{color:var(--muted);font-size:14px;margin-bottom:24px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px}
+.card{background:var(--card2);border-radius:20px;padding:20px;text-align:center;cursor:pointer;transition:.2s;border:2px solid transparent;position:relative;overflow:hidden}
+.card:hover{transform:scale(1.05);border-color:var(--purple);box-shadow:0 0 24px rgba(122,92,255,.3)}
+.logo{font-size:38px;margin-bottom:10px}
+.nome{font-weight:700;font-size:14px}
+.badge{position:absolute;top:8px;right:8px;background:var(--purple);font-size:9px;font-weight:800;padding:3px 6px;border-radius:6px}
+.status{font-size:11px;color:var(--muted);margin-top:6px}
+.log{margin-top:28px;background:#111;border-radius:12px;padding:14px;font-family:monospace;font-size:11px;color:var(--muted);white-space:pre-wrap}
+</style>
+</head>
+<body>
+<a class="back" href="../">← Voltar para Home Travada</a>
+<h1>📱 Aplicativos</h1>
+<div class="sub">12 apps • Clique para assistir no Silk / Fire TV • Preparado para Trakt.tv (próxima etapa) • HOME continua travada</div>
+<div class="grid" id="grid"></div>
+<div class="log" id="log">CENTRAL+ Launcher v1 • Detectando dispositivo...
+isFireTV: ?
+isSilk: ?
+Trakt pronto: aguardando login (etapa 2)
+</div>
+<script>
+const grid=document.getElementById('grid');
+const logEl=document.getElementById('log');
+let APPS=[];
+function isFireTV(){ return /AFT|Fire TV|Silk/i.test(navigator.userAgent); }
+function isSilk(){ return /Silk/i.test(navigator.userAgent); }
+async function load(){
+  try{
+    const r=await fetch('../data/apps.json?v='+Date.now());
+    APPS=await r.json();
+  }catch(e){
+    logEl.textContent='Erro ao carregar ../data/apps.json - verifique se subiu o arquivo novo';
+    return;
+  }
+  logEl.textContent=`CENTRAL+ Launcher v1
+isFireTV: ${isFireTV()} | isSilk: ${isSilk()}
+UserAgent: ${navigator.userAgent}
+Apps carregados: ${APPS.length}
+Trakt: campos trakt_id já presentes, pronto para etapa 2`;
+  grid.innerHTML=APPS.map(a=>`
+    <div class="card" onclick="launchApp('${a.id}')" style="border-top:4px solid ${a.cor}">
+      <div class="badge">${a.drm?'DRM':''}</div>
+      <div class="logo">${a.logo}</div>
+      <div class="nome">${a.nome}</div>
+      <div class="status">${a.categoria} • ${a.trakt_id}</div>
+    </div>
+  `).join('');
+}
+function launchApp(id){
+  const app=APPS.find(x=>x.id===id);
+  if(!app) return;
+  // Salva em recentes (para Home Travada ler)
+  let recentes=JSON.parse(localStorage.getItem('centralplus_recentes')||'[]');
+  recentes=recentes.filter(r=>r.id!==app.id);
+  recentes.unshift(app);
+  localStorage.setItem('centralplus_recentes', JSON.stringify(recentes.slice(0,8)));
+  
+  // Salva histórico local para futura IA
+  let hist=JSON.parse(localStorage.getItem('centralplus_historico')||'[]');
+  hist.unshift({id:app.id, nome:app.nome, data:new Date().toISOString(), acao:'launch'});
+  localStorage.setItem('centralplus_historico', JSON.stringify(hist.slice(0,100)));
+  // Estratégia Launcher Híbrido (igual Fire TV faz)
+  if(isFireTV()){
+    // Tenta abrir app nativo, se falhar abre web
+    logEl.textContent+='\nTentando abrir app nativo: '+app.androidPackage;
+    // Tenta deep link
+    window.location.href=app.deepLink;
+    setTimeout(()=>{ window.open(app.webUrl,'_blank'); }, 1200);
+  }else{
+    // No navegador/Silk: abre web direto (logado)
+    window.open(app.webUrl,'_blank');
+  }
+  logEl.textContent+='\n✓ Lançado: '+app.nome+' -> '+app.webUrl+'\n✓ Salvo em Recentes para Home Travada';
+}
+load();
+</script>
+</body>
+</html>
