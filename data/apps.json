@@ -102,23 +102,6 @@
     "letter": "🍎"
   },
   {
-    "id": "star",
-    "nome": "Star+",
-    "logo": "⭐",
-    "cor": "#FF6B00",
-    "webUrl": "https://www.starplus.com",
-    "androidPackage": "com.disney.star",
-    "fireTvIntent": "amzn://apps/android?p=com.disney.star",
-    "deepLink": "starplus://",
-    "trakt_id": "star-plus",
-    "categoria": "streaming",
-    "drm": true,
-    "host": "externo",
-    "type": "iframe",
-    "player": "externo - precisa login DRM",
-    "letter": "⭐"
-  },
-  {
     "id": "paramount",
     "nome": "Paramount+",
     "logo": "⛰",
@@ -236,5 +219,39 @@
     "categoria": "aovivo",
     "drm": false,
     "letter": "🎙️"
+  },
+  {
+    "id": "mubi",
+    "nome": "MUBI",
+    "logo": "🎞️",
+    "cor": "#000000",
+    "webUrl": "https://mubi.com/pt",
+    "androidPackage": "com.mubi",
+    "fireTvIntent": "amzn://apps/android?p=com.mubi",
+    "deepLink": "mubi://",
+    "trakt_id": "mubi",
+    "categoria": "streaming",
+    "drm": true,
+    "host": "externo",
+    "type": "iframe",
+    "player": "externo - precisa login DRM",
+    "letter": "🎞️"
+  },
+  {
+    "id": "pluto",
+    "nome": "Pluto TV",
+    "logo": "🪐",
+    "cor": "#FFCC00",
+    "webUrl": "https://pluto.tv/live-tv",
+    "androidPackage": "tv.pluto.android",
+    "fireTvIntent": "amzn://apps/android?p=tv.pluto.android",
+    "deepLink": "pluto://",
+    "trakt_id": "pluto-tv",
+    "categoria": "gratis",
+    "drm": false,
+    "host": "hospedado",
+    "type": "iframe",
+    "player": "interno - CENTRAL+ player - Grátis",
+    "letter": "🪐"
   }
 ]
