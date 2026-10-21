@@ -2,91 +2,128 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Apps • CENTRAL+</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CENTRAL+ • Apps • Launcher Triplo Premium</title>
 <style>
-:root{--bg:#0A0A14;--card:#15151F;--card2:#1E1E2E;--purple:#7A5CFF;--muted:#9AA0B5}
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap');
+:root{--bg:#0a0a14;--card:#16162a;--purple:#8b5cf6;--border:rgba(255,255,255,.08)}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:#fff;font-family:Inter,sans-serif;padding:28px}
-a.back{color:var(--muted);text-decoration:none;font-size:14px;display:inline-flex;gap:6px;align-items:center;margin-bottom:18px}
-h1{font-size:28px;font-weight:800;margin-bottom:6px}
-.sub{color:var(--muted);font-size:14px;margin-bottom:24px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px}
-.card{background:var(--card2);border-radius:20px;padding:20px;text-align:center;cursor:pointer;transition:.2s;border:2px solid transparent;position:relative;overflow:hidden}
-.card:hover{transform:scale(1.05);border-color:var(--purple);box-shadow:0 0 24px rgba(122,92,255,.3)}
-.logo{font-size:38px;margin-bottom:10px}
-.nome{font-weight:700;font-size:14px}
-.badge{position:absolute;top:8px;right:8px;background:var(--purple);font-size:9px;font-weight:800;padding:3px 6px;border-radius:6px}
-.status{font-size:11px;color:var(--muted);margin-top:6px}
-.log{margin-top:28px;background:#111;border-radius:12px;padding:14px;font-family:monospace;font-size:11px;color:var(--muted);white-space:pre-wrap}
+body{background:var(--bg);color:#fff;font-family:'Space Grotesk',system-ui,sans-serif;min-height:100vh}
+.mono{font-family:'JetBrains Mono',monospace}
+header{position:sticky;top:0;z-index:20;background:rgba(10,10,20,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:900;font-size:18px;letter-spacing:-.02em}
+.badge{font-size:10px;background:rgba(139,92,246,.2);border:1px solid rgba(139,92,246,.3);padding:6px 12px;border-radius:20px;color:#c4b5fd}
+.tabs{display:flex;gap:8px;padding:16px 24px;overflow-x:auto}
+.tab{padding:10px 18px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:.2s}
+.tab.active{background:#fff;color:#000;border-color:#fff;box-shadow:0 0 20px rgba(139,92,246,.4)}
+.main{padding:0 24px 32px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:16px;cursor:pointer;transition:.2s;position:relative;overflow:hidden}
+.card:hover{transform:translateY(-3px) scale(1.02);border-color:rgba(139,92,246,.4);box-shadow:0 10px 30px rgba(139,92,246,.25)}
+.card:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.icon{font-size:32px;margin-bottom:10px}
+.name{font-weight:700;font-size:14px}
+.sub{font-size:11px;color:#9A9AB5;margin-top:4px}
+.badge-firefox{position:absolute;top:10px;right:10px;font-size:9px;font-weight:800;padding:3px 6px;border-radius:6px;background:#ff7139;color:#fff}
+.badge-silk{position:absolute;top:10px;right:10px;font-size:9px;font-weight:800;padding:3px 6px;border-radius:6px;background:#00a8e1;color:#fff}
+.info{margin-top:16px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:12px;font-size:11px;color:#9A9AB5;line-height:1.5}
+.info strong{color:#fff}
+.status{margin-top:16px;font-family:monospace;font-size:11px;color:#9A9AB5}
 </style>
 </head>
 <body>
-<a class="back" href="../">← Voltar para Home Travada</a>
-<h1>📱 Aplicativos</h1>
-<div class="sub">12 apps • Clique para assistir no Silk / Fire TV • Preparado para Trakt.tv (próxima etapa) • HOME continua travada</div>
+<header>
+<div style="display:flex;align-items:center;gap:12px"><a href="../" style="color:#fff;text-decoration:none">‹ Home</a><div class="logo">APPS • Launcher Triplo</div></div>
+<div class="badge" id="countBadge">Carregando data/apps.json...</div>
+</header>
+<div class="tabs">
+<button class="tab active" id="tab-silk" onclick="switchTab('silk')">🔵 Silk • Fire TV Nativo</button>
+<button class="tab" id="tab-firefox" onclick="switchTab('firefox')">🟠 Firefox • Desbloqueia Tudo</button>
+<button class="tab" id="tab-direct" onclick="switchTab('direct')">⚪ Direto • WebView</button>
+</div>
+<div class="main">
+<div id="infoBox" class="info">
+<strong id="infoTitle">🔵 Modo Silk - Fire TV Nativo</strong><br>
+<span id="infoDesc">Abre direto no Silk. Compatível com 80% dos apps. Sem instalar nada. Ideal pra testar agora.</span>
+</div>
 <div class="grid" id="grid"></div>
-<div class="log" id="log">CENTRAL+ Launcher v1 • Detectando dispositivo...
-isFireTV: ?
-isSilk: ?
-Trakt pronto: aguardando login (etapa 2)
+<div class="status" id="status">CENTRAL+ Apps Premium Travado • Lendo data/apps.json...</div>
 </div>
 <script>
-const grid=document.getElementById('grid');
-const logEl=document.getElementById('log');
-let APPS=[];
-function isFireTV(){ return /AFT|Fire TV|Silk/i.test(navigator.userAgent); }
-function isSilk(){ return /Silk/i.test(navigator.userAgent); }
-async function load(){
-  try{
-    const r=await fetch('../data/apps.json?v='+Date.now());
-    APPS=await r.json();
-  }catch(e){
-    logEl.textContent='Erro ao carregar ../data/apps.json - verifique se subiu o arquivo novo';
-    return;
-  }
-  logEl.textContent=`CENTRAL+ Launcher v1
-isFireTV: ${isFireTV()} | isSilk: ${isSilk()}
-UserAgent: ${navigator.userAgent}
-Apps carregados: ${APPS.length}
-Trakt: campos trakt_id já presentes, pronto para etapa 2`;
-  grid.innerHTML=APPS.map(a=>`
-    <div class="card" onclick="launchApp('${a.id}')" style="border-top:4px solid ${a.cor}">
-      <div class="badge">${a.drm?'DRM':''}</div>
-      <div class="logo">${a.logo}</div>
-      <div class="nome">${a.nome}</div>
-      <div class="status">${a.categoria} • ${a.trakt_id}</div>
-    </div>
-  `).join('');
+let currentTab='silk';
+let appsData=[];
+async function loadJSON(p){try{let r=await fetch(p+'?t='+Date.now()); if(!r.ok) throw 0; return await r.json();}catch{return null}}
+function switchTab(tab){
+ currentTab=tab;
+ document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+ document.getElementById('tab-'+tab).classList.add('active');
+ let titles={
+  silk:['🔵 Modo Silk - Fire TV Nativo','Abre direto no Silk. Compatível com 80% dos apps. Sem instalar nada.'],
+  firefox:['🟠 Modo Firefox - Desbloqueia Tudo','Abre no Firefox (quando instalar à noite). Compatível com 100% - Netflix, Disney+, HBO, Globoplay. Recomendado!'],
+  direct:['⚪ Modo Direto - WebView','Abre direto via WebView. Fallback se Silk/Firefox falhar.']
+ };
+ document.getElementById('infoTitle').textContent=titles[tab][0];
+ document.getElementById('infoDesc').textContent=titles[tab][1];
+ render();
 }
-function launchApp(id){
-  const app=APPS.find(x=>x.id===id);
-  if(!app) return;
-  // Salva em recentes (para Home Travada ler)
-  let recentes=JSON.parse(localStorage.getItem('centralplus_recentes')||'[]');
-  recentes=recentes.filter(r=>r.id!==app.id);
-  recentes.unshift(app);
-  localStorage.setItem('centralplus_recentes', JSON.stringify(recentes.slice(0,8)));
+function render(){
+ if(!appsData.length) return;
+ let html = appsData.map(app=>{
+  let name = app.nome || app.name || 'App';
+  let url = app.webUrl || app.url || '#';
+  let letter = app.letter || name[0];
+  let sub = app.categoria || app.sub || 'Streaming';
+  let g1 = app.cor || '#5a1de8';
+  let g2 = '#1a1a2e';
+  let badge='';
+  if(currentTab==='firefox') badge='<span class="badge-firefox">FIREFOX</span>';
+  if(currentTab==='silk') badge='<span class="badge-silk">SILK</span>';
   
-  // Salva histórico local para futura IA
-  let hist=JSON.parse(localStorage.getItem('centralplus_historico')||'[]');
-  hist.unshift({id:app.id, nome:app.nome, data:new Date().toISOString(), acao:'launch'});
-  localStorage.setItem('centralplus_historico', JSON.stringify(hist.slice(0,100)));
-  // Estratégia Launcher Híbrido (igual Fire TV faz)
-  if(isFireTV()){
-    // Tenta abrir app nativo, se falhar abre web
-    logEl.textContent+='\nTentando abrir app nativo: '+app.androidPackage;
-    // Tenta deep link
-    window.location.href=app.deepLink;
-    setTimeout(()=>{ window.open(app.webUrl,'_blank'); }, 1200);
-  }else{
-    // No navegador/Silk: abre web direto (logado)
-    window.open(app.webUrl,'_blank');
-  }
-  logEl.textContent+='\n✓ Lançado: '+app.nome+' -> '+app.webUrl+'\n✓ Salvo em Recentes para Home Travada';
+  let finalUrl=url;
+  if(currentTab==='silk') finalUrl=url;
+  if(currentTab==='firefox') finalUrl=url; // Firefox vai abrir, mas instrução pra user
+  if(currentTab==='direct') finalUrl=url;
+  return `<div class="card" tabindex="0" onclick="openApp('${finalUrl}','${name}')">
+    ${badge}
+    <div class="icon" style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,${g1},${g2});display:grid;place-items:center;font-weight:900;font-size:20px">${letter}</div>
+    <div class="name">${name}</div>
+    <div class="sub">${sub} • ${currentTab.toUpperCase()}</div>
+  </div>`;
+ }).join('');
+ document.getElementById('grid').innerHTML=html;
 }
-load();
+function openApp(url,name){
+ if(currentTab==='firefox'){
+  // Tenta abrir, se não tiver Firefox, instrui
+  if(confirm('🟠 MODO FIREFOX\n\nApp: '+name+'\n\nVocê já instalou o Firefox no Fire TV?\n\nOK = Abrir agora (se já instalou)\nCancelar = Ver como instalar')){
+   window.open(url,'_blank');
+  } else {
+   alert('Para instalar Firefox no Fire TV:\n1. Na Home do Fire TV > Pesquisar > Firefox\n2. Instalar\n3. Depois voltar aqui e usar aba Firefox');
+  }
+ } else {
+  window.open(url,'_blank');
+ }
+}
+async function init(){
+ let data = await loadJSON('../data/apps.json');
+ if(!data || !data.length){
+  document.getElementById('countBadge').textContent='ERRO data/apps.json - usando fallback';
+  data=[
+   {nome:'Globoplay',webUrl:'https://globoplay.globo.com',cor:'#ff4a00',letter:'G',categoria:'Globo'},
+   {nome:'Disney+',webUrl:'https://www.disneyplus.com/pt-br',cor:'#0a0e8a',letter:'D+',categoria:'Disney'},
+   {nome:'Netflix',webUrl:'https://www.netflix.com/browse',cor:'#e50914',letter:'N',categoria:'Original'},
+   {nome:'Prime Video',webUrl:'https://www.primevideo.com',cor:'#00a8e1',letter:'prime',categoria:'Amazon'},
+   {nome:'HBO Max',webUrl:'https://www.max.com/br/pt',cor:'#5a1de8',letter:'MAX',categoria:'Warner'},
+   {nome:'YouTube',webUrl:'https://www.youtube.com/tv',cor:'#ff0000',letter:'YT',categoria:'Vídeos'}
+  ];
+ } else {
+  document.getElementById('countBadge').textContent = data.length+' APPS • data/apps.json OK ✅';
+ }
+ appsData=data;
+ document.getElementById('status').textContent = `CENTRAL+ Apps Premium Travado v2 • ${data.length} apps • Modo: ${currentTab} • Travado lendo data/apps.json • Silk + Firefox + Trakt`;
+ render();
+}
+init();
 </script>
 </body>
 </html>
