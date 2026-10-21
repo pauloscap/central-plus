@@ -1,126 +1,118 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CENTRAL+ • Apps • Launcher Triplo Premium</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CENTRAL+ • Apps • Hospedando Streamings</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap');
-:root{--bg:#0a0a14;--card:#16162a;--purple:#8b5cf6;--border:rgba(255,255,255,.08)}
+:root{--bg:#0a0a14;--card:#16162a;--purple:#8b5cf6;--muted:#9A9AB5;--border:rgba(255,255,255,.08)}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:#fff;font-family:'Space Grotesk',system-ui,sans-serif;min-height:100vh}
 .mono{font-family:'JetBrains Mono',monospace}
-header{position:sticky;top:0;z-index:20;background:rgba(10,10,20,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;justify-content:space-between;align-items:center}
-.logo{font-weight:900;font-size:18px;letter-spacing:-.02em}
-.badge{font-size:10px;background:rgba(139,92,246,.2);border:1px solid rgba(139,92,246,.3);padding:6px 12px;border-radius:20px;color:#c4b5fd}
+header{position:sticky;top:0;z-index:40;backdrop-filter:blur(20px);background:rgba(10,10,20,.9);border-bottom:1px solid var(--border);height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 24px}
+.logo{font-weight:900;font-size:18px;display:flex;align-items:center;gap:10px}
+.logo b{width:32px;height:32px;background:#fff;color:#000;display:grid;place-items:center;border-radius:8px}
+.badge{font-size:10px;padding:4px 10px;border-radius:20px;background:rgba(139,92,246,.2);border:1px solid rgba(139,92,246,.3);color:#c4b5fd}
 .tabs{display:flex;gap:8px;padding:16px 24px;overflow-x:auto}
-.tab{padding:10px 18px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:.2s}
-.tab.active{background:#fff;color:#000;border-color:#fff;box-shadow:0 0 20px rgba(139,92,246,.4)}
+.tab{padding:10px 18px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.tab.active{background:#fff;color:#000}
 .main{padding:0 24px 32px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:16px;cursor:pointer;transition:.2s;position:relative;overflow:hidden}
+.card{background:var(--card);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:16px;cursor:pointer;transition:.2s;position:relative;overflow:hidden}
 .card:hover{transform:translateY(-3px) scale(1.02);border-color:rgba(139,92,246,.4);box-shadow:0 10px 30px rgba(139,92,246,.25)}
 .card:focus-visible{outline:2px solid #fff;outline-offset:2px}
-.icon{font-size:32px;margin-bottom:10px}
+.icon{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;font-weight:900;font-size:20px;margin-bottom:10px}
 .name{font-weight:700;font-size:14px}
-.sub{font-size:11px;color:#9A9AB5;margin-top:4px}
-.badge-firefox{position:absolute;top:10px;right:10px;font-size:9px;font-weight:800;padding:3px 6px;border-radius:6px;background:#ff7139;color:#fff}
-.badge-silk{position:absolute;top:10px;right:10px;font-size:9px;font-weight:800;padding:3px 6px;border-radius:6px;background:#00a8e1;color:#fff}
-.info{margin-top:16px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:12px;font-size:11px;color:#9A9AB5;line-height:1.5}
-.info strong{color:#fff}
-.status{margin-top:16px;font-family:monospace;font-size:11px;color:#9A9AB5}
+.sub{font-size:11px;color:var(--muted);margin-top:4px}
+.host-badge{position:absolute;top:10px;right:10px;font-size:8px;font-weight:800;padding:3px 6px;border-radius:6px;background:#10b981;color:#fff}
+.info{margin:16px 24px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:12px;font-size:11px;color:var(--muted);line-height:1.5}
+.code{background:#111;border:1px solid var(--border);border-radius:8px;padding:12px;font-family:monospace;font-size:11px;overflow-x:auto;margin-top:8px;white-space:pre-wrap;color:#c4b5fd}
 </style>
 </head>
 <body>
 <header>
-<div style="display:flex;align-items:center;gap:12px"><a href="../" style="color:#fff;text-decoration:none">‹ Home</a><div class="logo">APPS • Launcher Triplo</div></div>
-<div class="badge" id="countBadge">Carregando data/apps.json...</div>
+<div class="logo"><b>+</b> CENTRAL+ • Apps Hospedados</div>
+<div style="display:flex;gap:8px;align-items:center"><a href="../" style="color:#fff;text-decoration:none;font-size:13px;padding:6px 12px;border-radius:20px;background:rgba(255,255,255,.08);border:1px solid var(--border)">‹ Home</a><div class="badge" id="badge">Hospedando Streamings</div></div>
 </header>
 <div class="tabs">
-<button class="tab active" id="tab-silk" onclick="switchTab('silk')">🔵 Silk • Fire TV Nativo</button>
-<button class="tab" id="tab-firefox" onclick="switchTab('firefox')">🟠 Firefox • Desbloqueia Tudo</button>
-<button class="tab" id="tab-direct" onclick="switchTab('direct')">⚪ Direto • WebView</button>
+<button class="tab active" onclick="filterApps('all')">Todos</button>
+<button class="tab" onclick="filterApps('hospedado')">📡 Hospedados (player interno)</button>
+<button class="tab" onclick="filterApps('externo')">🔗 Externos (Netflix etc)</button>
+<button class="tab" onclick="filterApps('hls')">🎥 HLS / m3u8</button>
 </div>
 <div class="main">
-<div id="infoBox" class="info">
-<strong id="infoTitle">🔵 Modo Silk - Fire TV Nativo</strong><br>
-<span id="infoDesc">Abre direto no Silk. Compatível com 80% dos apps. Sem instalar nada. Ideal pra testar agora.</span>
-</div>
 <div class="grid" id="grid"></div>
-<div class="status" id="status">CENTRAL+ Apps Premium Travado • Lendo data/apps.json...</div>
+<div class="info">
+<strong>📡 Como hospedar um streaming na aba Apps:</strong><br><br>
+Edite <b>data/apps.json</b> e adicione seu streaming assim:<br>
+<div class="code">{
+  "nome": "Meu Canal Belém",
+  "webUrl": "https://seu-stream.com/live.m3u8",
+  "type": "hls", // ou "iframe" para sites
+  "host": "hospedado", // faz abrir no player interno da CENTRAL+
+  "cor": "#00a859",
+  "letter": "MB",
+  "categoria": "Ao Vivo Pará"
+}</div>
+Tipos:<br>
+• <b>type: "hls"</b> = link .m3u8 direto (seu servidor, IPTV legal) → abre com hls.js<br>
+• <b>type: "iframe"</b> = site web (seu player web, YouTube, etc) → abre embedado<br>
+• <b>host: "hospedado"</b> = abre dentro da CENTRAL+ em /player/?url=...<br>
+• <b>host: "externo"</b> = abre fora (Netflix, Disney+ precisam login externo)
+</div>
+<div class="mono" style="margin:16px 24px;font-size:11px;color:var(--muted)" id="status">Carregando data/apps.json...</div>
 </div>
 <script>
-let currentTab='silk';
-let appsData=[];
+let allApps=[];
+let currentFilter='all';
 async function loadJSON(p){try{let r=await fetch(p+'?t='+Date.now()); if(!r.ok) throw 0; return await r.json();}catch{return null}}
-function switchTab(tab){
- currentTab=tab;
+function filterApps(f){
+ currentFilter=f;
  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
- document.getElementById('tab-'+tab).classList.add('active');
- let titles={
-  silk:['🔵 Modo Silk - Fire TV Nativo','Abre direto no Silk. Compatível com 80% dos apps. Sem instalar nada.'],
-  firefox:['🟠 Modo Firefox - Desbloqueia Tudo','Abre no Firefox (quando instalar à noite). Compatível com 100% - Netflix, Disney+, HBO, Globoplay. Recomendado!'],
-  direct:['⚪ Modo Direto - WebView','Abre direto via WebView. Fallback se Silk/Firefox falhar.']
- };
- document.getElementById('infoTitle').textContent=titles[tab][0];
- document.getElementById('infoDesc').textContent=titles[tab][1];
+ event.target.classList.add('active');
  render();
 }
 function render(){
- if(!appsData.length) return;
- let html = appsData.map(app=>{
-  let name = app.nome || app.name || 'App';
-  let url = app.webUrl || app.url || '#';
-  let letter = app.letter || name[0];
-  let sub = app.categoria || app.sub || 'Streaming';
-  let g1 = app.cor || '#5a1de8';
-  let g2 = '#1a1a2e';
-  let badge='';
-  if(currentTab==='firefox') badge='<span class="badge-firefox">FIREFOX</span>';
-  if(currentTab==='silk') badge='<span class="badge-silk">SILK</span>';
-  
-  let finalUrl=url;
-  if(currentTab==='silk') finalUrl=url;
-  if(currentTab==='firefox') finalUrl=url; // Firefox vai abrir, mas instrução pra user
-  if(currentTab==='direct') finalUrl=url;
-  return `<div class="card" tabindex="0" onclick="openApp('${finalUrl}','${name}')">
-    ${badge}
-    <div class="icon" style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,${g1},${g2});display:grid;place-items:center;font-weight:900;font-size:20px">${letter}</div>
+ let list = allApps;
+ if(currentFilter==='hospedado') list = allApps.filter(a=> (a.host||'externo')==='hospedado');
+ if(currentFilter==='externo') list = allApps.filter(a=> (a.host||'externo')==='externo');
+ if(currentFilter==='hls') list = allApps.filter(a=> (a.type||'iframe')==='hls' || (a.webUrl||'').includes('.m3u8'));
+ document.getElementById('grid').innerHTML = list.map(app=>{
+  let name=app.nome||app.name||'App';
+  let url=app.webUrl||app.url||'#';
+  let type=app.type||'iframe';
+  let host=app.host||'externo';
+  let g1=app.cor||'#5a1de8'; let g2='#16162a';
+  let letter=app.letter||name[0];
+  let sub=app.categoria||app.sub||'Streaming';
+  let isHosted = host==='hospedado';
+  return `<div class="card" tabindex="0" onclick="openApp('${name}','${url}','${type}','${host}')">
+    ${isHosted?'<span class="host-badge">HOSPEDADO</span>':''}
+    <div class="icon" style="background:linear-gradient(135deg,${g1},${g2})">${letter}</div>
     <div class="name">${name}</div>
-    <div class="sub">${sub} • ${currentTab.toUpperCase()}</div>
+    <div class="sub">${sub} • ${type.toUpperCase()} • ${isHosted?'📡 Interno':'🔗 Externo'}</div>
   </div>`;
  }).join('');
- document.getElementById('grid').innerHTML=html;
+ document.getElementById('status').textContent=`${list.length} apps • Filtro: ${currentFilter} • Total: ${allApps.length} em data/apps.json`;
 }
-function openApp(url,name){
- if(currentTab==='firefox'){
-  // Tenta abrir, se não tiver Firefox, instrui
-  if(confirm('🟠 MODO FIREFOX\n\nApp: '+name+'\n\nVocê já instalou o Firefox no Fire TV?\n\nOK = Abrir agora (se já instalou)\nCancelar = Ver como instalar')){
-   window.open(url,'_blank');
-  } else {
-   alert('Para instalar Firefox no Fire TV:\n1. Na Home do Fire TV > Pesquisar > Firefox\n2. Instalar\n3. Depois voltar aqui e usar aba Firefox');
-  }
+function openApp(name,url,type,host){
+ if(host==='hospedado'){
+  // Abre no player interno da CENTRAL+
+  window.location.href=`../player/?name=${encodeURIComponent(name)}&url=${encodeURIComponent(url)}&type=${encodeURIComponent(type)}`;
  } else {
   window.open(url,'_blank');
  }
 }
 async function init(){
  let data = await loadJSON('../data/apps.json');
- if(!data || !data.length){
-  document.getElementById('countBadge').textContent='ERRO data/apps.json - usando fallback';
+ if(!data){
   data=[
-   {nome:'Globoplay',webUrl:'https://globoplay.globo.com',cor:'#ff4a00',letter:'G',categoria:'Globo'},
-   {nome:'Disney+',webUrl:'https://www.disneyplus.com/pt-br',cor:'#0a0e8a',letter:'D+',categoria:'Disney'},
-   {nome:'Netflix',webUrl:'https://www.netflix.com/browse',cor:'#e50914',letter:'N',categoria:'Original'},
-   {nome:'Prime Video',webUrl:'https://www.primevideo.com',cor:'#00a8e1',letter:'prime',categoria:'Amazon'},
-   {nome:'HBO Max',webUrl:'https://www.max.com/br/pt',cor:'#5a1de8',letter:'MAX',categoria:'Warner'},
-   {nome:'YouTube',webUrl:'https://www.youtube.com/tv',cor:'#ff0000',letter:'YT',categoria:'Vídeos'}
+   {nome:"Globoplay",webUrl:"https://globoplay.globo.com",type:"iframe",host:"externo",cor:"#ff4a00",letter:"G",categoria:"Globo"},
+   {nome:"Meu Canal Teste (HLS exemplo)",webUrl:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",type:"hls",host:"hospedado",cor:"#00a859",letter:"MB",categoria:"Teste Pará"},
+   {nome:"YouTube Belém",webUrl:"https://www.youtube.com/embed/jfKfPfyJRdk",type:"iframe",host:"hospedado",cor:"#ff0000",letter:"YT",categoria:"Ao Vivo"}
   ];
- } else {
-  document.getElementById('countBadge').textContent = data.length+' APPS • data/apps.json OK ✅';
  }
- appsData=data;
- document.getElementById('status').textContent = `CENTRAL+ Apps Premium Travado v2 • ${data.length} apps • Modo: ${currentTab} • Travado lendo data/apps.json • Silk + Firefox + Trakt`;
+ allApps=data;
  render();
 }
 init();
