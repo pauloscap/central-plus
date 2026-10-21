@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CENTRAL+ • Home Travada Premium</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a14;--card:#15151F;--purple:#8b5cf6;--muted:#9A9AB5}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:#fff;font-family:'Space Grotesk',system-ui,sans-serif;min-height:100vh;overflow-x:hidden}
+.mono{font-family:'JetBrains Mono',monospace}
+header{position:sticky;top:0;z-index:40;backdrop-filter:blur(20px);background:rgba(10,10,20,.9);border-bottom:1px solid rgba(255,255,255,.08);height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 24px}
+.logo{font-weight:900;font-size:22px;letter-spacing:-.02em;display:flex;align-items:center;gap:10px}
+.logo b{width:36px;height:36px;background:#fff;color:#000;display:grid;place-items:center;border-radius:10px}
+.badge{font-size:10px;padding:4px 10px;border-radius:20px;background:rgba(139,92,246,.2);border:1px solid rgba(139,92,246,.3);color:#c4b5fd}
+.banner{position:relative;height:58vh;min-height:460px;max-height:760px;background:linear-gradient(135deg,#1a0a2e,#3b1a6a,#0a0a14);border-radius:0;overflow:hidden;margin:0 0 24px}
+@media(min-width:768px){.banner{border-radius:24px;margin:24px}}
+.banner-bg{position:absolute;inset:0;background:radial-gradient(circle at 60% 40%,rgba(139,92,246,.6),transparent 60%)}
+.banner-content{position:relative;z-index:10;padding:40px 24px;height:100%;display:flex;flex-direction:column;justify-content:flex-end;max-width:700px}
+@media(min-width:768px){.banner-content{padding:0 80px;justify-content:center}}
+.banner-title{font-size:42px;font-weight:900;line-height:.9;letter-spacing:-.04em;text-shadow:0 2px 20px rgba(0,0,0,.8);margin-bottom:12px}
+@media(min-width:768px){.banner-title{font-size:72px}}
+.banner-meta{font-size:11px;color:rgba(255,255,255,.6);letter-spacing:.05em;margin-bottom:12px}
+.banner-desc{font-size:15px;line-height:1.4;color:rgba(255,255,255,.8);margin-bottom:24px}
+.btn-white{background:#fff;color:#000;border-radius:999px;padding:12px 28px;font-weight:700;font-size:14px;border:0;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.section{margin:32px 0;padding:0 16px}
+@media(min-width:768px){.section{padding:0 24px}}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.section-title{font-size:18px;font-weight:700}
+.scroller{display:flex;gap:16px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory}
+.scroller::-webkit-scrollbar{display:none}
+.card{scroll-snap-align:start;flex-shrink:0;border-radius:16px;background:#16162a;border:1px solid rgba(255,255,255,.1);overflow:hidden;transition:.2s;cursor:pointer}
+.card:hover{border-color:rgba(139,92,246,.4);transform:translateY(-2px);box-shadow:0 0 30px rgba(139,92,246,.25)}
+.card:focus-visible{outline:2px solid #fff;outline-offset:2px;box-shadow:0 0 0 4px rgba(139,92,246,.6)}
+.app-card{width:150px;height:112px;padding:1px;background:linear-gradient(135deg,var(--g1),var(--g2));border-radius:16px}
+.app-card-inner{width:100%;height:100%;background:linear-gradient(135deg,var(--g1),var(--g2));border-radius:15px;padding:14px;display:flex;flex-direction:column;justify-content:space-between}
+.filme-card{width:44vw;max-width:220px}
+.filme-card .poster{height:300px;background:linear-gradient(to bottom,var(--g1),var(--g2));padding:16px;display:flex;flex-direction:column;justify-content:flex-end}
+.live-card{width:280px}
+.live-poster{height:156px;background:linear-gradient(135deg,var(--g1),var(--g2));padding:16px;position:relative}
+.news-card{width:78vw;max-width:320px}
+.news-poster{height:168px;background:linear-gradient(135deg,var(--g1),var(--g2));display:grid;place-items:center;font-size:48px;font-weight:900;opacity:.3;position:relative}
+.status{margin:24px;background:#111;border-radius:12px;padding:12px;font-family:monospace;font-size:11px;color:#9A9AB5;white-space:pre-wrap}
+.dot{width:8px;height:8px;background:#ff0033;border-radius:50%;display:inline-block;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+</style>
+</head>
+<body>
+<header>
+<div class="logo"><b>+</b> CENTRAL+</div>
+<div class="badge" id="badge">Travado • Lendo ../data/ • Premium (home/)</div>
+</header>
+<div class="banner" id="banner">
+<div class="banner-bg"></div>
+<div class="banner-content">
+<div class="mono" style="font-size:10px;letter-spacing:.18em;padding:4px 10px;border-radius:20px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);display:inline-block;margin-bottom:12px" id="bannerTag">ORIGINAL CENTRAL+</div>
+<div class="banner-title" id="bannerTitle">ECHOES</div>
+<div class="banner-meta mono" id="bannerMeta">SCI-FI • 14 • 2023 • 2H 05M • IMAX</div>
+<div class="banner-desc" id="bannerDesc">Três linhas do tempo. Um mesmo apartamento. O amor como uma anomalia que dobra o espaço.</div>
+<button class="btn-white" onclick="document.getElementById('filmes').scrollIntoView({behavior:'smooth'})">▶ Assistir Agora</button>
+</div>
+</div>
+<div class="section">
+<div class="section-head"><div class="section-title">Notícias • Ao Vivo <span class="dot"></span></div><div class="mono" style="font-size:10px;color:#10b981">● TEMPO REAL • data/noticias.json</div></div>
+<div class="scroller" id="noticias"></div>
+</div>
+<div class="section">
+<div class="section-head"><div class="section-title">Aplicativos Recentes</div><div class="mono" style="font-size:10px;color:#9A9AB5" id="appsCount">12 APPS • data/apps.json</div></div>
+<div class="scroller" id="apps"></div>
+</div>
+<div class="section" id="filmes">
+<div class="section-head"><div class="section-title">Filmes • Destaques</div><div class="mono" style="font-size:10px;padding:4px 8px;border-radius:20px;background:rgba(139,92,246,.2);border:1px solid rgba(139,92,246,.3);color:#ddd6fe">DOLBY VISION • data/filmes.json</div></div>
+<div class="scroller" id="filmesGrid"></div>
+</div>
+<div class="section">
+<div class="section-head"><div class="section-title">Séries • Em alta</div></div>
+<div class="scroller" id="seriesGrid"></div>
+</div>
+<div class="section">
+<div class="section-head"><div class="section-title">Ao Vivo • Pará <span style="background:#ff0033;color:#fff;font-size:10px;padding:2px 8px;border-radius:20px;margin-left:8px">● LIVE</span></div><div class="mono" style="font-size:10px;color:#9A9AB5" id="aovivoCount">9 CANAIS • data/aovivo.json</div></div>
+<div class="scroller" id="aovivoGrid"></div>
+</div>
+<div class="status" id="status">CENTRAL+ Premium Travada • Iniciando...
+Lendo data/apps.json, data/filmes.json, data/series.json, data/aovivo.json, data/noticias.json
+</div>
+<script>
+async function loadJSON(p){try{let r=await fetch(p+'?t='+Date.now()); if(!r.ok) throw 0; return await r.json();}catch{return null}}
+const fallbackApps=[
+{name:"Globoplay",gradient:["#ff4a00","#ff8a00"],letter:"G",sub:"Globo",url:"https://globoplay.globo.com"},
+{name:"Disney+",gradient:["#0a0e8a","#113ccf"],letter:"D+",sub:"Disney",url:"https://www.disneyplus.com/pt-br"},
+{name:"HBO Max",gradient:["#5a1de8","#8b5cf6"],letter:"MAX",sub:"Warner",url:"https://www.max.com/br/pt"},
+{name:"Pluto TV",gradient:["#ffcc00","#ff9500"],letter:"PLUTO",sub:"Grátis",url:"https://pluto.tv/live-tv"},
+{name:"Mubi",gradient:["#0a0a0a","#444"],letter:"MUBI",sub:"Cult",url:"https://mubi.com/pt"},
+{name:"Prime Video",gradient:["#00a8e1","#0f79af"],letter:"prime",sub:"Amazon",url:"https://www.primevideo.com"},
+{name:"Netflix",gradient:["#e50914","#b81d24"],letter:"N",sub:"Original",url:"https://www.netflix.com/browse"},
+{name:"YouTube",gradient:["#ff0000","#cc0000"],letter:"YT",sub:"Vídeos",url:"https://www.youtube.com/tv"},
+{name:"Apple TV+",gradient:["#000","#2c2c2e"],letter:"tv+",sub:"Apple",url:"https://tv.apple.com/br"}
+];
+async function init(){
+ let apps = await loadJSON('../data/apps.json');
+ let filmes = await loadJSON('../data/filmes.json');
+ let series = await loadJSON('../data/series.json');
+ let aovivo = await loadJSON('../data/aovivo.json');
+ let noticias = await loadJSON('../data/noticias.json');
+ let appsList = apps && apps.length ? apps : fallbackApps;
+ document.getElementById('apps').innerHTML = appsList.map(a=>{
+   let g1 = a.gradient ? (a.gradient[0] || '#5a1de8') : (a.cor || '#5a1de8');
+   let g2 = a.gradient ? (a.gradient[1] || '#8b5cf6') : '#8b5cf6';
+   let letter = a.letter || (a.nome? a.nome[0] : 'A');
+   let sub = a.sub || a.categoria || 'App';
+   let name = a.name || a.nome || 'App';
+   let url = a.url || a.webUrl || '#';
+   return `<div class="card app-card" style="--g1:${g1};--g2:${g2}" tabindex="0" onclick="window.open('${url}','_blank')">
+     <div class="app-card-inner">
+       <div class="mono" style="font-size:10px;letter-spacing:.18em;color:rgba(255,255,255,.7)">${sub.toUpperCase()} • ABRIR</div>
+       <div><div style="font-size:20px;font-weight:900">${letter}</div><div style="font-size:12px;opacity:.9;margin-top:4px">${name}</div></div>
+     </div>
+   </div>`;
+ }).join('');
+ document.getElementById('appsCount').textContent = (appsList.length)+' APPS • data/apps.json ' + (apps ? 'OK ✅' : 'FALLBACK');
+ let filmesList = filmes && filmes.length ? filmes : [
+   {titulo:"DUNA 2",ano:"2024 • 2h46",meta:"IMAX • SCI-FI",gradient:["#431407","#000"]},
+   {titulo:"ECHOES",ano:"2023 • 2h05",meta:"ORIGINAL • SCI-FI",gradient:["#2e1065","#000"]},
+   {titulo:"Oppenheimer",ano:"2023 • 3h00",meta:"DRAMA • IMAX",gradient:["#1c1917","#000"]}
+ ];
+ document.getElementById('filmesGrid').innerHTML = filmesList.map(f=>`
+   <div class="card filme-card" tabindex="0">
+     <div class="poster" style="--g1:${(f.gradient&&f.gradient[0])||'#2e1065'};--g2:${(f.gradient&&f.gradient[1])||'#000'}">
+       ${f.poster ? `<img src="${f.poster}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.6">` : ''}
+       <div style="position:relative;z-index:2">
+         <div style="font-size:20px;font-weight:900">${f.titulo||f.title||'Filme'}</div>
+         <div class="mono" style="font-size:10px;color:rgba(255,255,255,.6);margin-top:4px">${f.ano||f.year||f.meta||''}</div>
+       </div>
+     </div>
+   </div>
+ `).join('');
+ let seriesList = series && series.length ? series : [
+   {titulo:"Stranger Things",ano:"2016 • 4 Temp",meta:"SCI-FI",gradient:["#450a0a","#000"]},
+   {titulo:"The Last of Us",ano:"2023 • S1",meta:"DRAMA",gradient:["#052e16","#000"]},
+   {titulo:"Ruptura",ano:"2022 • S2",meta:"THRILLER",gradient:["#1e293b","#000"]}
+ ];
+ document.getElementById('seriesGrid').innerHTML = seriesList.map(s=>`
+   <div class="card filme-card" tabindex="0">
+     <div class="poster" style="--g1:${(s.gradient&&s.gradient[0])||'#1e293b'};--g2:${(s.gradient&&s.gradient[1])||'#000'};height:280px">
+       <div style="position:relative;z-index:2">
+         <div style="font-size:18px;font-weight:700">${s.titulo||s.nome||'Série'}</div>
+         <div class="mono" style="font-size:10px;color:rgba(255,255,255,.5);margin-top:4px">${s.ano||s.year||''}</div>
+       </div>
+     </div>
+   </div>
+ `).join('');
+ let aovivoList = aovivo && aovivo.length ? aovivo : [
+   {nome:"SBT Pará",regiao:"Belém • Ch 05",gradient:["#0066cc","#003d7a"],viewers:"2.3k"},
+   {nome:"TV Liberal",regiao:"Globo • Ch 07",gradient:["#ff6600","#cc5200"],viewers:"8.1k"},
+   {nome:"Record Pará",regiao:"RBA TV • Ch 13",gradient:["#00a859","#006633"],viewers:"4.5k"}
+ ];
+ document.getElementById('aovivoGrid').innerHTML = aovivoList.map(a=>`
+   <div class="card live-card" tabindex="0">
+     <div class="live-poster" style="--g1:${(a.gradient&&a.gradient[0])||'#0066cc'};--g2:${(a.gradient&&a.gradient[1])||'#003d7a'}">
+       <div style="display:flex;justify-content:space-between"><span style="background:#ff0033;color:#fff;font-size:10px;padding:2px 8px;border-radius:20px">● LIVE</span><span class="mono" style="font-size:10px;background:rgba(0,0,0,.5);padding:2px 8px;border-radius:20px">${a.viewers||'AO VIVO'}</span></div>
+       <div style="position:absolute;bottom:16px;left:16px"><div style="font-weight:700">${a.nome||a.name||'Canal'}</div><div class="mono" style="font-size:10px;color:rgba(255,255,255,.7)">${a.regiao||a.region||''}</div></div>
+       <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;border:1px solid rgba(255,255,255,.3)">▶</div>
+     </div>
+   </div>
+ `).join('');
+ document.getElementById('aovivoCount').textContent = aovivoList.length+' CANAIS • data/aovivo.json '+(aovivo?'OK ✅':'FALLBACK');
+ let noticiasList = noticias && noticias.length ? noticias : [
+   {title:"Globoplay anuncia nova série original gravada em Belém",source:"G1",time:"há 12m",color:["#dc2626","#ea580c"],image:"G1"},
+   {title:"Filmes mais esperados de 2025 dominam buscas",source:"OMELETE",time:"há 37m",color:["#eab308","#d97706"],image:"OM"}
+ ];
+ document.getElementById('noticias').innerHTML = noticiasList.map(n=>`
+   <div class="card news-card" tabindex="0">
+     <div class="news-poster" style="--g1:${(n.color&&n.color[0])||'#dc2626'};--g2:${(n.color&&n.color[1])||'#000'};background:linear-gradient(135deg,var(--g1),var(--g2))">
+       <div>${n.image||n.source||'NEWS'}</div>
+       <div style="position:absolute;top:12px;left:12px;display:flex;gap:8px"><span style="background:#fff;color:#000;font-size:10px;padding:2px 8px;border-radius:20px;font-weight:700">${n.source||'G1'}</span><span style="background:#ff0033;color:#fff;font-size:10px;padding:2px 8px;border-radius:20px">AO VIVO</span></div>
+       <div style="position:absolute;bottom:12px;right:12px;background:rgba(0,0,0,.6);font-size:10px;padding:2px 8px;border-radius:20px" class="mono">${n.time||''}</div>
+       <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.8),transparent)"></div>
+     </div>
+     <div style="padding:16px"><div style="font-size:13px;line-height:1.35;min-height:36px">${n.title||n.titulo||'Notícia'}</div><div class="mono" style="margin-top:12px;font-size:10px;color:rgba(255,255,255,.4)">RSS2JSON • data/noticias.json</div></div>
+   </div>
+ `).join('');
+ document.getElementById('status').textContent = `CENTRAL+ Premium Travada v2 • Online ✅
+- data/apps.json: ${apps?apps.length+' OK':'fallback'}
+- data/filmes.json: ${filmes?filmes.length+' OK':'fallback'}
+- data/series.json: ${series?series.length+' OK':'fallback'}
+- data/aovivo.json: ${aovivo?aovivo.length+' OK':'fallback'}
+- data/noticias.json: ${noticias?noticias.length+' OK':'fallback'}
+Home travada premium: NUNCA MAIS edita esse arquivo. Só edita pasta data/
+Layout: Apple TV Moderno • Purple Glow • TV Remote Focus
+`;
+}
+init();
+</script>
+</body>
+</html>
