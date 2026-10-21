@@ -1,22 +1,24 @@
 [
   {
-    "id": "【entity-netflix¦canonical_name=Netflix】",
-    "nome": "【entity-Netflix¦canonical_name=Netflix】",
+    "id": "netflix",
+    "nome": "Netflix",
     "logo": "🔴",
     "cor": "#E50914",
     "webUrl": "https://www.netflix.com/browse",
-    "androidPackage": "com.【entity-netflix¦canonical_name=Netflix】.ninja",
-    "fireTvIntent": "amzn://apps/android?p=com.【entity-netflix¦canonical_name=Netflix】.ninja",
-    "deepLink": "【entity-netflix¦canonical_name=Netflix】://",
-    "trakt_id": "【entity-netflix¦canonical_name=Netflix】",
+    "androidPackage": "com.netflix.ninja",
+    "fireTvIntent": "amzn://apps/android?p=com.netflix.ninja",
+    "deepLink": "netflix://",
+    "trakt_id": "netflix",
     "categoria": "streaming",
     "drm": true,
     "host": "externo",
-    "type": "iframe"
+    "type": "iframe",
+    "player": "externo - precisa login DRM",
+    "letter": "🔴"
   },
   {
     "id": "prime",
-    "nome": "【entity-Prime Video¦canonical_name=Prime Video】",
+    "nome": "Prime Video",
     "logo": "📦",
     "cor": "#00A8E1",
     "webUrl": "https://www.primevideo.com",
@@ -27,7 +29,9 @@
     "categoria": "streaming",
     "drm": true,
     "host": "externo",
-    "type": "iframe"
+    "type": "iframe",
+    "player": "externo - precisa login DRM",
+    "letter": "📦"
   },
   {
     "id": "disney",
@@ -42,22 +46,26 @@
     "categoria": "streaming",
     "drm": true,
     "host": "externo",
-    "type": "iframe"
+    "type": "iframe",
+    "player": "externo - precisa login DRM",
+    "letter": "✨"
   },
   {
-    "id": "【entity-globoplay¦canonical_name=Globoplay】",
-    "nome": "【entity-Globoplay¦canonical_name=Globoplay】",
+    "id": "globoplay",
+    "nome": "Globoplay",
     "logo": "▶",
     "cor": "#FF4D00",
     "webUrl": "https://globoplay.globo.com",
-    "androidPackage": "com.globo.【entity-globoplay¦canonical_name=Globoplay】",
-    "fireTvIntent": "amzn://apps/android?p=com.globo.【entity-globoplay¦canonical_name=Globoplay】",
-    "deepLink": "【entity-globoplay¦canonical_name=Globoplay】://",
-    "trakt_id": "【entity-globoplay¦canonical_name=Globoplay】",
+    "androidPackage": "com.globo.globoplay",
+    "fireTvIntent": "amzn://apps/android?p=com.globo.globoplay",
+    "deepLink": "globoplay://",
+    "trakt_id": "globoplay",
     "categoria": "streaming",
     "drm": true,
     "host": "externo",
-    "type": "iframe"
+    "type": "iframe",
+    "player": "externo - precisa login DRM",
+    "letter": "▶"
   },
   {
     "id": "max",
@@ -72,7 +80,9 @@
     "categoria": "streaming",
     "drm": true,
     "host": "externo",
-    "type": "iframe"
+    "type": "iframe",
+    "player": "externo - precisa login DRM",
+    "letter": "🎬"
   },
   {
     "id": "appletv",
@@ -87,22 +97,9 @@
     "categoria": "streaming",
     "drm": true,
     "host": "externo",
-    "type": "iframe"
-  },
-  {
-    "id": "【entity-mubi¦canonical_name=MUBI】",
-    "nome": "【entity-MUBI¦canonical_name=MUBI】",
-    "logo": "🎞️",
-    "cor": "#000000",
-    "webUrl": "https://mubi.com/pt",
-    "androidPackage": "com.【entity-mubi¦canonical_name=MUBI】",
-    "fireTvIntent": "amzn://apps/android?p=com.【entity-mubi¦canonical_name=MUBI】",
-    "deepLink": "【entity-mubi¦canonical_name=MUBI】://",
-    "trakt_id": "【entity-mubi¦canonical_name=MUBI】",
-    "categoria": "streaming",
-    "drm": true,
-    "host": "externo",
-    "type": "iframe"
+    "type": "iframe",
+    "player": "externo - precisa login DRM",
+    "letter": "🍎"
   },
   {
     "id": "paramount",
@@ -117,22 +114,9 @@
     "categoria": "streaming",
     "drm": true,
     "host": "externo",
-    "type": "iframe"
-  },
-  {
-    "id": "pluto",
-    "nome": "【entity-Pluto TV¦canonical_name=Pluto TV】",
-    "logo": "🪐",
-    "cor": "#FFCC00",
-    "webUrl": "https://pluto.tv/live-tv",
-    "androidPackage": "tv.pluto.android",
-    "fireTvIntent": "amzn://apps/android?p=tv.pluto.android",
-    "deepLink": "pluto://",
-    "trakt_id": "pluto-tv",
-    "categoria": "gratis",
-    "drm": false,
-    "host": "hospedado",
-    "type": "iframe"
+    "type": "iframe",
+    "player": "externo - precisa login DRM",
+    "letter": "⛰"
   },
   {
     "id": "youtube",
@@ -147,22 +131,26 @@
     "categoria": "video",
     "drm": false,
     "host": "hospedado",
-    "type": "iframe"
+    "type": "iframe",
+    "player": "interno - CENTRAL+ player",
+    "letter": "▶"
   },
   {
-    "id": "【entity-spotify¦canonical_name=Spotify】",
-    "nome": "【entity-Spotify¦canonical_name=Spotify】",
+    "id": "spotify",
+    "nome": "Spotify",
     "logo": "🎵",
     "cor": "#1DB954",
     "webUrl": "https://open.spotify.com",
-    "androidPackage": "com.【entity-spotify¦canonical_name=Spotify】.tv.android",
-    "fireTvIntent": "amzn://apps/android?p=com.【entity-spotify¦canonical_name=Spotify】.tv.android",
-    "deepLink": "【entity-spotify¦canonical_name=Spotify】://",
-    "trakt_id": "【entity-spotify¦canonical_name=Spotify】",
+    "androidPackage": "com.spotify.tv.android",
+    "fireTvIntent": "amzn://apps/android?p=com.spotify.tv.android",
+    "deepLink": "spotify://",
+    "trakt_id": "spotify",
     "categoria": "musica",
     "drm": false,
     "host": "hospedado",
-    "type": "iframe"
+    "type": "iframe",
+    "player": "interno - CENTRAL+ player",
+    "letter": "🎵"
   },
   {
     "id": "deezer",
@@ -177,7 +165,9 @@
     "categoria": "musica",
     "drm": false,
     "host": "hospedado",
-    "type": "iframe"
+    "type": "iframe",
+    "player": "interno - CENTRAL+ player",
+    "letter": "🎧"
   },
   {
     "id": "sbt",
@@ -192,6 +182,76 @@
     "categoria": "aberta",
     "drm": false,
     "host": "hospedado",
-    "type": "iframe"
+    "type": "iframe",
+    "player": "interno - CENTRAL+ player",
+    "letter": "📺"
+  },
+  {
+    "id": "tvcultura_belem",
+    "nome": "TV Cultura Belém (Teste HLS)",
+    "logo": "📡",
+    "cor": "#00A859",
+    "webUrl": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+    "type": "hls",
+    "host": "hospedado",
+    "player": "interno HLS - CENTRAL+ player",
+    "androidPackage": "com.cultura.belem",
+    "fireTvIntent": "",
+    "deepLink": "",
+    "trakt_id": "cultura-belem",
+    "categoria": "aovivo",
+    "drm": false,
+    "letter": "📡"
+  },
+  {
+    "id": "radio_belem",
+    "nome": "Rádio Belém Ao Vivo",
+    "logo": "🎙️",
+    "cor": "#8b5cf6",
+    "webUrl": "https://www.youtube.com/embed/jfKfPfyJRdk",
+    "type": "iframe",
+    "host": "hospedado",
+    "player": "interno iframe - CENTRAL+ player",
+    "androidPackage": "",
+    "fireTvIntent": "",
+    "deepLink": "",
+    "trakt_id": "radio-belem",
+    "categoria": "aovivo",
+    "drm": false,
+    "letter": "🎙️"
+  },
+  {
+    "id": "mubi",
+    "nome": "MUBI",
+    "logo": "🎞️",
+    "cor": "#000000",
+    "webUrl": "https://mubi.com/pt",
+    "androidPackage": "com.mubi",
+    "fireTvIntent": "amzn://apps/android?p=com.mubi",
+    "deepLink": "mubi://",
+    "trakt_id": "mubi",
+    "categoria": "streaming",
+    "drm": true,
+    "host": "externo",
+    "type": "iframe",
+    "player": "externo - precisa login DRM",
+    "letter": "🎞️"
+  },
+  {
+    "id": "pluto",
+    "nome": "Pluto TV",
+    "logo": "🪐",
+    "cor": "#FFCC00",
+    "webUrl": "https://pluto.tv/live-tv",
+    "androidPackage": "tv.pluto.android",
+    "fireTvIntent": "amzn://apps/android?p=tv.pluto.android",
+    "deepLink": "pluto://",
+    "trakt_id": "pluto-tv",
+    "categoria": "gratis",
+    "drm": false,
+    "host": "hospedado",
+    "type": "iframe",
+    "player": "interno - CENTRAL+ player - Grátis",
+    "letter": "🪐"
   }
 ]
