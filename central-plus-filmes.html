@@ -79,7 +79,7 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
 /* Destaque cinematográfico: faixa panorâmica com fotografia e carrossel funcional. */
 .films-page .film-feature{
   width:calc(100% + var(--gutter) + var(--gutter));
-  margin-left:calc(-1 * var(--gutter));
+  margin-left:calc(0px - var(--gutter));
   min-height:clamp(470px,48vw,650px);
   height:clamp(470px,48vw,650px);
   border-radius:0;
@@ -98,7 +98,10 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
 }
 .films-page .film-feature-art:before,
 .films-page .film-feature-art:after{content:none!important;display:none!important}
-.films-page .film-feature-art.is-changing{opacity:.08;transform:scale(1.07)}
+.films-page .film-feature-art{opacity:0;transition:opacity .8s ease,transform 1.1s ease}
+.films-page .film-feature-art.is-active{opacity:1;transform:scale(1)}
+.films-page .film-feature-content{transition:opacity .22s ease,transform .22s ease}
+.films-page .film-feature-content.is-changing{opacity:0;transform:translateY(8px)}
 .films-page .film-feature-shade{
   background:linear-gradient(90deg,rgba(5,7,12,.96) 0%,rgba(5,7,12,.84) 29%,rgba(5,7,12,.47) 55%,rgba(5,7,12,.08) 100%),linear-gradient(0deg,rgba(5,7,12,.78) 0%,transparent 48%);
 }
@@ -208,7 +211,8 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
   <section class="content-section films-page" id="filmes">
     <div class="films-intro"><div class="films-overline"><span class="eyebrow-mark"></span> CENTRAL+ CINEMA</div><h1>Histórias que <span>ficam com você.</span></h1><p>Descubra seu próximo filme favorito. Uma seleção para cada momento, humor e vontade de explorar novos mundos.</p></div>
         <div class="film-feature" id="film-feature" role="region" aria-roledescription="carrossel" aria-label="Filmes em destaque">
-      <div class="film-feature-art art-dune" id="film-feature-art" aria-hidden="true"></div>
+      <div class="film-feature-art art-dune is-active" id="film-feature-art-a" aria-hidden="true"></div>
+      <div class="film-feature-art" id="film-feature-art-b" aria-hidden="true"></div>
       <div class="film-feature-shade"></div>
       <div class="film-feature-content" aria-live="polite">
         <div class="film-feature-kicker" id="film-feature-kicker">ESCOLHA CENTRAL+ <span>·</span> FILME EM DESTAQUE</div>
@@ -376,7 +380,7 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
     if(save)save.addEventListener('click',()=>notify('Título demonstrativo: sua lista ainda não é sincronizada.'));
   }
 
-  // Carrossel cinematográfico: imagem panorâmica, transição suave e avanço automático.
+  // Carrossel cinematográfico: troca automática com transição cruzada entre imagens.
   const filmFeature = document.getElementById('film-feature');
   if (filmFeature) {
     const featureFilms = [
@@ -384,59 +388,103 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
         title:'DUNA', subtitle:'PARTE DOIS', year:'2024', runtime:'2h 46min',
         genre:'Ficção científica', quality:'4K',
         description:'Em meio a alianças e conflitos em Arrakis, Paul Atreides enfrenta o destino que pode transformar o futuro de toda uma civilização.',
-        art:'dune',
-        image:'https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=2200&q=85'
+        art:'dune', position:'center 58%',
+        image:'https://images.unsplash.com/photo-1621795307430-3ff25aa08945?auto=format&fit=crop&w=2400&q=85'
       },
       {
         title:'INTERESTELAR', subtitle:'ALÉM DAS ESTRELAS', year:'2014', runtime:'2h 49min',
         genre:'Ficção científica · Drama', quality:'4K',
         description:'Uma missão para além dos limites conhecidos coloca o amor, o tempo e a sobrevivência da humanidade em rota de colisão.',
-        art:'orbit',
-        image:'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=2200&q=85'
+        art:'orbit', position:'center',
+        image:'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=2400&q=85'
       },
       {
         title:'BLADE RUNNER', subtitle:'2049', year:'2017', runtime:'2h 44min',
         genre:'Ficção científica · Drama', quality:'4K',
         description:'Em um futuro de memórias fabricadas e segredos enterrados, um agente descobre uma verdade capaz de mudar a sociedade.',
-        art:'night',
-        image:'https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=2200&q=85'
+        art:'night', position:'center 48%',
+        image:'https://images.unsplash.com/photo-1587065324113-40b9611a50fb?auto=format&fit=crop&w=2400&q=85'
       }
     ];
-    const featureArt = document.getElementById('film-feature-art');
+
+    const featureArtLayers = [
+      document.getElementById('film-feature-art-a'),
+      document.getElementById('film-feature-art-b')
+    ];
+    const featureContent = filmFeature.querySelector('.film-feature-content');
     const featureTitle = document.getElementById('film-feature-title');
     const featureDots = [...filmFeature.querySelectorAll('[data-feature-slide]')];
     const featureReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let featureIndex = 0;
+    let activeArtIndex = 0;
     let featureTimer = null;
     let featureFadeTimer = null;
     let featurePaused = false;
 
-    function renderFeature(index) {
-      featureIndex = (index + featureFilms.length) % featureFilms.length;
-      const item = featureFilms[featureIndex];
-      featureArt.classList.add('is-changing');
-      if (featureFadeTimer) clearTimeout(featureFadeTimer);
-      featureFadeTimer = setTimeout(() => {
-        featureArt.className = 'film-feature-art art-' + item.art;
-        featureArt.style.backgroundImage =
-          'linear-gradient(90deg,rgba(5,7,12,.90) 0%,rgba(5,7,12,.48) 48%,rgba(5,7,12,.08) 100%),' +
-          'linear-gradient(0deg,rgba(5,7,12,.30),transparent 55%),url("' + item.image + '")';
-        featureTitle.innerHTML = item.title + '<span>' + item.subtitle + '</span>';
-        document.getElementById('film-feature-year').textContent = item.year;
-        document.getElementById('film-feature-runtime').textContent = item.runtime;
-        document.getElementById('film-feature-genre').textContent = item.genre;
-        document.getElementById('film-feature-quality').textContent = item.quality;
-        document.getElementById('film-feature-description').textContent = item.description;
-        document.getElementById('film-feature-index-number').textContent = String(featureIndex + 1).padStart(2, '0');
-        featureDots.forEach((dot, dotIndex) => {
-          const active = dotIndex === featureIndex;
-          dot.classList.toggle('active', active);
-          dot.setAttribute('aria-current', active ? 'true' : 'false');
-        });
-      }, featureReducedMotion.matches ? 0 : 250);
+    function setFeatureArt(layer, item) {
+      layer.className = 'film-feature-art art-' + item.art;
+      layer.style.backgroundColor = '#10131b';
+      layer.style.backgroundImage = 'url("' + item.image + '")';
+      layer.style.backgroundSize = 'cover';
+      layer.style.backgroundPosition = item.position;
     }
+
+    function updateFeatureText(item, index) {
+      featureTitle.innerHTML = item.title + '<span>' + item.subtitle + '</span>';
+      document.getElementById('film-feature-year').textContent = item.year;
+      document.getElementById('film-feature-runtime').textContent = item.runtime;
+      document.getElementById('film-feature-genre').textContent = item.genre;
+      document.getElementById('film-feature-quality').textContent = item.quality;
+      document.getElementById('film-feature-description').textContent = item.description;
+      document.getElementById('film-feature-index-number').textContent = String(index + 1).padStart(2, '0');
+      featureDots.forEach((dot, dotIndex) => {
+        const active = dotIndex === index;
+        dot.classList.toggle('active', active);
+        dot.setAttribute('aria-current', active ? 'true' : 'false');
+      });
+    }
+
+    function renderFeature(index, immediate = false) {
+      const nextIndex = (index + featureFilms.length) % featureFilms.length;
+      const item = featureFilms[nextIndex];
+      if (featureFadeTimer) {
+        clearTimeout(featureFadeTimer);
+        featureFadeTimer = null;
+      }
+      if (immediate) {
+        setFeatureArt(featureArtLayers[0], item);
+        featureArtLayers[0].classList.add('is-active');
+        featureArtLayers[1].classList.remove('is-active');
+        activeArtIndex = 0;
+        featureIndex = nextIndex;
+        updateFeatureText(item, nextIndex);
+        return;
+      }
+      if (nextIndex === featureIndex) {
+        featureContent.classList.remove('is-changing');
+        return;
+      }
+
+      const nextArtIndex = 1 - activeArtIndex;
+      const nextArt = featureArtLayers[nextArtIndex];
+      setFeatureArt(nextArt, item);
+      featureContent.classList.add('is-changing');
+      featureFadeTimer = setTimeout(() => {
+        nextArt.classList.add('is-active');
+        featureArtLayers[activeArtIndex].classList.remove('is-active');
+        activeArtIndex = nextArtIndex;
+        featureIndex = nextIndex;
+        updateFeatureText(item, nextIndex);
+        featureContent.classList.remove('is-changing');
+        featureFadeTimer = null;
+      }, featureReducedMotion.matches ? 0 : 220);
+    }
+
     function stopFeatureTimer() {
-      if (featureTimer) { clearInterval(featureTimer); featureTimer = null; }
+      if (featureTimer) {
+        clearInterval(featureTimer);
+        featureTimer = null;
+      }
     }
     function startFeatureTimer() {
       stopFeatureTimer();
@@ -444,16 +492,35 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
         featureTimer = setInterval(() => renderFeature(featureIndex + 1), 8000);
       }
     }
-    function chooseFeature(index) { renderFeature(index); startFeatureTimer(); }
+    function chooseFeature(index) {
+      renderFeature(index);
+      startFeatureTimer();
+    }
 
     featureDots.forEach(dot => dot.addEventListener('click', () => chooseFeature(Number(dot.dataset.featureSlide))));
     document.getElementById('film-feature-prev').addEventListener('click', () => chooseFeature(featureIndex - 1));
     document.getElementById('film-feature-next').addEventListener('click', () => chooseFeature(featureIndex + 1));
-    filmFeature.addEventListener('mouseenter', () => { featurePaused = true; stopFeatureTimer(); });
-    filmFeature.addEventListener('mouseleave', () => { featurePaused = false; startFeatureTimer(); });
-    filmFeature.addEventListener('focusin', () => { featurePaused = true; stopFeatureTimer(); });
+    filmFeature.addEventListener('mouseenter', () => {
+      featurePaused = true;
+      stopFeatureTimer();
+    });
+    filmFeature.addEventListener('mouseleave', () => {
+      featurePaused = false;
+      startFeatureTimer();
+    });
+    filmFeature.addEventListener('focusin', () => {
+      featurePaused = true;
+      stopFeatureTimer();
+    });
     filmFeature.addEventListener('focusout', event => {
-      if (!filmFeature.contains(event.relatedTarget)) { featurePaused = false; startFeatureTimer(); }
+      if (!filmFeature.contains(event.relatedTarget)) {
+        featurePaused = false;
+        startFeatureTimer();
+      }
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stopFeatureTimer();
+      else startFeatureTimer();
     });
     document.getElementById('film-feature-play').addEventListener('click', () =>
       notify('A reprodução de “' + featureFilms[featureIndex].title + '” será conectada quando o Central+ integrar o serviço de streaming.')
@@ -461,7 +528,8 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
     document.getElementById('film-feature-details').addEventListener('click', () =>
       notify('Detalhes de “' + featureFilms[featureIndex].title + '”: ficha demonstrativa do catálogo Central+.')
     );
-    renderFeature(0);
+
+    renderFeature(0, true);
     startFeatureTimer();
   }
 
