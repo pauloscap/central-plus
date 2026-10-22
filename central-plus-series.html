@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
-<title>Central+ — Navegação em novas abas v1.4</title>
+<title>Central+ — Séries | Catálogo cinematográfico</title>
 <style>
 :root{--bg:#07080c;--surface:#11131a;--surface-2:#191c25;--text:#f7f7fa;--muted:#a2a6b2;--line:rgba(255,255,255,.1);--accent:#d9dce5;--focus:#fff;--gutter:clamp(24px,4.1vw,76px);--radius:18px}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:92px}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:16px;overflow-x:hidden}button,a{font:inherit;color:inherit}button{cursor:pointer}a{text-decoration:none}.app{min-height:100vh;background:radial-gradient(ellipse at 75% 0%,rgba(54,61,88,.18),transparent 35%),var(--bg)}
@@ -224,7 +224,7 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
     </div>
     <div class="series-feature-index"><span id="series-feature-index-number">01</span><span class="series-feature-index-line"></span><span>EM DESTAQUE</span></div>
   </div>
-  <div class="series-toolbar"><div><h2>Explore o catálogo</h2><p>Filtre por gênero e descubra sua próxima maratona.</p></div><div class="series-count"><span id="series-count">16</span> séries</div></div>
+  <div class="series-toolbar"><div><h2>Explore o catálogo</h2><p>Filtre por gênero e descubra sua próxima maratona.</p></div><div class="series-count"><span id="series-count">17</span> séries</div></div>
   <div class="series-filters" role="group" aria-label="Filtrar séries por gênero">
     <button class="series-filter active" data-series-filter="todos" type="button" data-focusable aria-pressed="true">Todas</button>
     <button class="series-filter" data-series-filter="ficcao" type="button" data-focusable aria-pressed="false">Ficção científica</button>
@@ -272,7 +272,7 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
   </div></section>
   <section class="content-section" id="favoritos"><div class="section-head"><div><h2 class="section-title">Minha lista</h2><p class="section-subtitle">Os títulos que você quer guardar para depois.</p></div></div><div class="rail" id="favorites-rail"><div style="color:#858a97;font-size:13px;padding:18px 0">Use o ícone de marcador nos cards para adicionar seus títulos favoritos.</div></div></section>
 </main>
-<footer class="footer"><div><strong>central<span style="color:#b8c1d5">+</span></strong><div style="margin-top:7px">Uma experiência para descobrir o que assistir.</div></div><div>Protótipo visual v1 · Carrossel demonstrativo · Não publicado</div></footer>
+<footer class="footer"><div><strong>central<span style="color:#b8c1d5">+</span></strong><div style="margin-top:7px">Uma experiência para descobrir o que assistir.</div></div><div>Central+ Séries · Catálogo demonstrativo interativo</div></footer>
 </div>
 <div class="search-panel" id="search-panel" role="dialog" aria-modal="true" aria-label="Buscar conteúdo"><div class="search-box"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10.8" cy="10.8" r="6.7"/><path d="m16 16 4.4 4.4"/></svg><input id="search-input" type="search" placeholder="Filmes, séries, apps..." aria-label="Buscar filmes, séries e aplicativos"><button class="search-close" id="search-close" data-focusable>Fechar · Esc</button></div></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -317,7 +317,7 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
     }
     if(e.key==='Escape'&&document.activeElement!==document.body){document.activeElement.blur()}
   });
-  // Cada item do menu abre uma nova guia com uma rota independente (?page=...).
+  // Navegação por páginas do app: os links mantêm a mesma guia.
   const appRoot=document.getElementById('home');
   const pageIds=['home','filmes','series','apps','noticias','ao-vivo','favoritos'];
   const pageLabels={home:'Home',filmes:'Filmes',series:'Séries',apps:'Apps',noticias:'Notícias','ao-vivo':'Ao vivo',favoritos:'Favoritos'};
