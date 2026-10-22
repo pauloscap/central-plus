@@ -84,24 +84,64 @@ function firstLink(xml) {
   return textOnly(getTag(xml, "link"));
 }
 
-function getImage(xml, description) {
-  const candidates = [
-    /<(?:media:content|media:thumbnail|enclosure)\b[^>]*>/i,
-    /<image\b[\s\S]*?<url\b[^>]*>[\s\S]*?<\/url>/i
-  ];
-  for (const expression of candidates) {
-    const match = xml.match(expression);
-    if (match) {
-      const url = getAttribute(match[0], "url") || textOnly(getTag(match[0], "url"));
-      if (/^https?:\/\//i.test(url)) return url;
+function getImage(xml, descriptions) {
+  // RSS e Atom publicam imagens em formatos diferentes: tags media:*, enclosure,
+  // links Atom e imagens embutidas no HTML da descrição/conteúdo.
+  const mediaTags = xml.match(/<(?:media:thumbnail|media:content|enclosure)\b[^>]*\/?>/gi) || [];
+  for (const tag of mediaTags) {
+    const url = getAttribute(tag, "url");
+    if (!url) continue;
+    const type = getAttribute(tag, "type").toLowerCase();
+    const medium = getAttribute(tag, "medium").toLowerCase();
+    if (/^(video|audio)\//.test(type) || medium === "video" || medium === "audio") continue;
+    if (type && !type.startsWith("image/")) continue;
+    if (/<enclosure\b/i.test(tag) && !type.startsWith("image/")) continue;
+    return url;
+  }
+
+  const atomLinks = xml.match(/<(?:[\w.-]+:)?link\b[^>]*\/?>/gi) || [];
+  for (const tag of atomLinks) {
+    const rel = getAttribute(tag, "rel").toLowerCase();
+    const type = getAttribute(tag, "type").toLowerCase();
+    if (rel === "enclosure" && type.startsWith("image/")) {
+      const href = getAttribute(tag, "href");
+      if (href) return href;
     }
   }
-  const decoded = decodeEntities(description);
-  const img = decoded.match(/<img\b[^>]*(?:src|data-src)\s*=\s*['"]([^'"]+)['"][^>]*>/i);
-  if (img && /^https?:\/\//i.test(img[1])) return img[1];
+
+  const imageBlock = xml.match(/<(?:[\w.-]+:)?image\b[\s\S]*?<\/(?:[\w.-]+:)?image\s*>/i);
+  if (imageBlock) {
+    const url = textOnly(getTag(imageBlock[0], "url"));
+    if (url) return url;
+  }
+
+  const fragments = Array.isArray(descriptions) ? descriptions : [descriptions];
+  for (const fragment of fragments) {
+    const decoded = decodeEntities(fragment);
+    const imgTags = decoded.match(/<img\b[^>]*>/gi) || [];
+    for (const img of imgTags) {
+      const url = getAttribute(img, "src") ||
+        getAttribute(img, "data-src") ||
+        getAttribute(img, "data-original") ||
+        getAttribute(img, "data-lazy-src");
+      if (url) return url;
+      const srcset = getAttribute(img, "srcset") || getAttribute(img, "data-srcset");
+      if (srcset) {
+        const first = srcset.split(",")[0].trim().split(/\s+/)[0];
+        if (first) return first;
+      }
+    }
+    const sourceTags = decoded.match(/<source\b[^>]*>/gi) || [];
+    for (const source of sourceTags) {
+      const srcset = getAttribute(source, "srcset");
+      if (srcset) {
+        const first = srcset.split(",")[0].trim().split(/\s+/)[0];
+        if (first) return first;
+      }
+    }
+  }
   return "";
 }
-
 function normalizeUrl(value, base) {
   const candidate = decodeEntities(value).trim();
   if (!candidate) return "";
@@ -138,7 +178,7 @@ function parseItems(xml, feed) {
       summary = summary.slice(0, cutoff > 150 ? cutoff : 235).trimEnd() + "…";
     }
     const rawDate = getTag(entry, "pubDate") || getTag(entry, "published") || getTag(entry, "updated") || getTag(entry, "dc:date") || getTag(entry, "date");
-    const image = getImage(entry, rawSummary);
+    const image = normalizeUrl(getImage(entry, [getTag(entry, "description"), getTag(entry, "summary"), getTag(entry, "content:encoded"), getTag(entry, "content")]), feed.site);
     results.push({
       id: feed.source.toLowerCase().replace(/[^a-z0-9]+/g, "-") + "-" + Buffer.from(url).toString("base64url").slice(0, 18),
       title: title,
