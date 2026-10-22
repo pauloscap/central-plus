@@ -89,14 +89,20 @@
     const isSeriesPage=path.includes("central-plus-series")||path==="/series"||path==="/series/";
     if(isFilmPage||isSeriesPage){
       const type=isSeriesPage?"tv":"movie";
-      try{
-        const [items,featured]=await Promise.all([fetchItems(type,"trending"),fetchItems(type,"popular",false)]);
-        renderCatalogGrid(items,type);updateFeature(featured[0]||items[0],type);
-        const dots=$(isSeriesPage?".series-feature-dots":".film-feature-dots");if(dots)dots.innerHTML="";
-      }catch(error){
-        const grid=$(isSeriesPage?"#series-grid":"#film-grid");
-        if(grid){const note=document.createElement("p");note.className="cp-api-status";note.textContent="O catálogo automático precisa da chave TMDB nas variáveis da Vercel. "+error.message;grid.prepend(note)}
+      const grid=$(isSeriesPage?"#series-grid":"#film-grid");
+      try {
+        const items = await fetchItems(type,"trending");
+        renderCatalogGrid(items,type);
+      } catch(error) {
+        if(grid){const note=document.createElement("p");note.className="cp-api-status";note.textContent="Não foi possível carregar o catálogo: "+error.message;grid.prepend(note)}
       }
+      try {
+        const featured = await fetchItems(type,"popular",false);
+        updateFeature(featured[0] || [],type);
+      } catch(error) {
+        console.warn("Central+ destaque TMDB:",error);
+      }
+      const dots=$(isSeriesPage?".series-feature-dots":".film-feature-dots");if(dots)dots.innerHTML="";
       return;
     }
     if(path.includes("central-plus-detalhe-filme")||path.includes("central-plus-detalhe-serie")){
@@ -123,17 +129,74 @@
       }
       return;
     }
-    // Home React shell: add API-fed rails after the app, without disturbing its existing state tree.
-    if($("#root")){
-      const root=$("#root"),mount=document.createElement("div");mount.id="cp-api-home";
-      root.insertAdjacentElement("afterend",mount);
-      mount.innerHTML='<section class="cp-api-live"><h2>Filmes em alta</h2><div class="cp-api-sub">Atualizado pelo TMDB · catálogo de filmes</div><div class="cp-api-rails" id="cp-api-home-movies"><span class="cp-api-status">Carregando filmes…</span></div></section><section class="cp-api-live"><h2>Séries em alta</h2><div class="cp-api-sub">Atualizado pelo TMDB · catálogo de séries</div><div class="cp-api-rails" id="cp-api-home-series"><span class="cp-api-status">Carregando séries…</span></div></section><section class="cp-api-live"><h2>Novidades para descobrir</h2><div class="cp-api-sub">Filmes e séries recentes para explorar</div><div class="cp-api-rails" id="cp-api-home-new"><span class="cp-api-status">Carregando novidades…</span></div></section><div class="cp-api-sub" style="padding:10px 24px 24px">This product uses the TMDB API but is not endorsed or certified by TMDB.</div>';
-      try{
-        const [movies,series,newMovies,newSeries]=await Promise.all([fetchItems("movie","trending"),fetchItems("tv","trending"),fetchItems("movie","now_playing",false),fetchItems("tv","upcoming",false)]);
-        $("#cp-api-home-movies",mount).innerHTML=movies.slice(0,18).map(x=>card(x,"home")).join("");
-        $("#cp-api-home-series",mount).innerHTML=series.slice(0,18).map(x=>card(x,"home")).join("");
-        $("#cp-api-home-new",mount).innerHTML=newMovies.slice(0,8).concat(newSeries.slice(0,8)).map(x=>card(x,"home")).join("");
-      }catch(error){mount.querySelectorAll(".cp-api-rails").forEach(el=>el.innerHTML='<div class="cp-api-status">Para carregar pôsteres e metadados atualizados, configure TMDB_BEARER_TOKEN nas variáveis de ambiente da Vercel.</div>')}
+    // Rebuild the home as a unified cinematic experience instead of appending rails to the legacy React artifact.
+    const root=$("#root");
+    if(root){
+      root.style.display="none";
+      document.body.classList.add("cp-home-mode");
+      const mount=document.createElement("main");mount.id="cp-api-home";root.insertAdjacentElement("afterend",mount);
+      const homeStyles=document.createElement("style");homeStyles.id="cp-home-redesign";
+      homeStyles.textContent=`
+        body.cp-home-mode{margin:0;background:#07080d;color:#f5f6fa;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}
+        body.cp-home-mode #cp-api-home{min-height:100vh;background:radial-gradient(ellipse at 75% 0%,rgba(69,77,110,.2),transparent 38%),#07080d}
+        .cp-home-nav{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:32px;padding:0 clamp(20px,4.5vw,76px);height:76px;background:rgba(7,8,13,.82);backdrop-filter:blur(22px);border-bottom:1px solid #ffffff12}
+        .cp-home-brand{font-size:25px;font-weight:850;letter-spacing:-1.2px;white-space:nowrap}.cp-home-brand span{display:inline-grid;place-items:center;width:30px;height:30px;margin-right:8px;border-radius:9px;background:#f4f5f8;color:#090a10;font-size:20px}
+        .cp-home-links{display:flex;align-items:center;gap:clamp(16px,2.3vw,34px)}.cp-home-links a{font-size:12px;color:#b7bdcb;text-decoration:none}.cp-home-links a:hover{color:#fff}
+        .cp-home-status{margin-left:auto;color:#7f8799;font-size:10px;letter-spacing:.15em;text-transform:uppercase}
+        .cp-home-hero{position:relative;min-height:clamp(540px,76vh,760px);display:flex;align-items:flex-end;overflow:hidden;background:#11141d}
+        .cp-home-hero-art{position:absolute;inset:0;background-size:cover;background-position:center 30%;opacity:.82;transform:scale(1.02)}
+        .cp-home-hero-art:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#07080df7 0%,rgba(7,8,13,.88) 25%,rgba(7,8,13,.35) 62%,rgba(7,8,13,.12) 100%),linear-gradient(0deg,#07080d 0%,transparent 50%),linear-gradient(180deg,rgba(7,8,13,.35),transparent 35%)}
+        .cp-home-hero-copy{position:relative;z-index:1;padding:80px clamp(20px,5vw,84px) 72px;max-width:780px}
+        .cp-home-eyebrow{display:flex;align-items:center;gap:10px;color:#d0d5e2;font-size:10px;font-weight:800;letter-spacing:.2em;text-transform:uppercase}.cp-home-eyebrow:before{content:"";width:3px;height:18px;border-radius:3px;background:#e9ebf2}
+        .cp-home-hero h1{font-size:clamp(48px,7vw,94px);line-height:.91;letter-spacing:-.07em;margin:23px 0 18px;font-weight:850;max-width:760px;text-wrap:balance}
+        .cp-home-hero-meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;color:#e0e3eb;font-size:12px}.cp-home-chip{border:1px solid #ffffff42;border-radius:4px;padding:5px 8px;font-size:9px;letter-spacing:.1em;text-transform:uppercase}
+        .cp-home-hero p{font-size:14px;line-height:1.8;color:#c2c7d3;max-width:580px;margin:18px 0 24px;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+        .cp-home-actions{display:flex;gap:10px;flex-wrap:wrap}.cp-home-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:47px;padding:0 18px;border-radius:8px;background:#f4f5f8;color:#101219;font-size:12px;font-weight:800;text-decoration:none}.cp-home-btn.secondary{background:#ffffff13;border:1px solid #ffffff25;color:#fff;backdrop-filter:blur(10px)}
+        .cp-home-section{padding:35px clamp(20px,4.5vw,76px) 6px}.cp-home-section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:16px}.cp-home-section h2{font-size:clamp(20px,2.2vw,28px);font-weight:780;letter-spacing:-.045em;margin:0}.cp-home-section-head p{font-size:11px;color:#8f96a8;margin:6px 0 0}.cp-home-seeall{font-size:11px;color:#c8cdda;text-decoration:none;white-space:nowrap}.cp-home-seeall:hover{color:#fff}
+        .cp-home-rail{display:flex;gap:15px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 20px;scrollbar-width:thin;scrollbar-color:#343846 transparent}
+        .cp-home-rail .cp-api-card{flex:0 0 clamp(132px,13vw,182px);scroll-snap-align:start}.cp-home-rail .cp-api-poster{border-radius:12px;aspect-ratio:2/3;background:#161a24;overflow:hidden;border:1px solid #ffffff14}.cp-home-rail .cp-api-poster img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s}.cp-home-rail .cp-api-card:hover img{transform:scale(1.04)}
+        .cp-home-rail .cp-api-title{font-size:12px;line-height:1.3;margin-top:9px;font-weight:750}.cp-home-rail .cp-api-meta,.cp-home-rail .cp-api-provider{font-size:10px;color:#9da5b5;margin-top:5px}
+        .cp-home-footer{padding:28px clamp(20px,4.5vw,76px) 34px;border-top:1px solid #ffffff12;color:#737b8d;font-size:10px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:38px}
+        .cp-home-error{padding:16px 0;color:#c6cad5;font-size:12px}
+        @media(max-width:650px){.cp-home-nav{height:auto;min-height:68px;flex-wrap:wrap;gap:8px;padding-top:12px;padding-bottom:10px}.cp-home-brand{font-size:22px}.cp-home-links{order:3;width:100%;gap:20px;overflow:auto;padding:5px 0}.cp-home-links a{font-size:11px}.cp-home-status{font-size:8px}.cp-home-hero{min-height:600px}.cp-home-hero-copy{padding:70px 22px 52px}.cp-home-hero h1{font-size:clamp(44px,12vw,66px)}.cp-home-hero p{-webkit-line-clamp:3}.cp-home-section{padding:27px 20px 0}.cp-home-rail .cp-api-card{flex-basis:132px}.cp-home-section-head{align-items:center}}
+      `;
+      document.head.appendChild(homeStyles);
+      mount.innerHTML=`
+        <nav class="cp-home-nav"><a class="cp-home-brand" href="/"><span>+</span>Central+</a><div class="cp-home-links"><a href="/">Início</a><a href="/central-plus-filmes.html">Filmes</a><a href="/central-plus-series.html">Séries</a><a href="/central-plus-filmes.html?section=now_playing">Novidades</a></div><div class="cp-home-status">Seu próximo universo começa aqui</div></nav>
+        <section class="cp-home-hero"><div class="cp-home-hero-art" id="cp-home-hero-art"></div><div class="cp-home-hero-copy"><div class="cp-home-eyebrow">Em destaque · catálogo atualizado</div><h1 id="cp-home-hero-title">Descubra sua próxima história</h1><div class="cp-home-hero-meta" id="cp-home-hero-meta"><span class="cp-home-chip">Central+ seleção</span></div><p id="cp-home-hero-overview">Filmes e séries para sua próxima maratona.</p><div class="cp-home-actions"><a class="cp-home-btn" id="cp-home-hero-details" href="/central-plus-filmes.html">＋ Explorar título</a><a class="cp-home-btn secondary" href="/central-plus-filmes.html">Explorar catálogo <span>↗</span></a></div></div></section>
+        <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Filmes em alta</h2><p>Histórias que estão chamando atenção</p></div><a class="cp-home-seeall" href="/central-plus-filmes.html">Ver todos ↗</a></div><div class="cp-home-rail" id="cp-api-home-movies"><span class="cp-api-status">Carregando filmes…</span></div></section>
+        <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Séries em alta</h2><p>Encontre sua próxima série favorita</p></div><a class="cp-home-seeall" href="/central-plus-series.html">Ver todas ↗</a></div><div class="cp-home-rail" id="cp-api-home-series"><span class="cp-api-status">Carregando séries…</span></div></section>
+        <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Novidades para descobrir</h2><p>Uma seleção para sair do óbvio</p></div><a class="cp-home-seeall" href="/central-plus-filmes.html">Explorar ↗</a></div><div class="cp-home-rail" id="cp-api-home-new"><span class="cp-api-status">Carregando novidades…</span></div></section>
+        <footer class="cp-home-footer"><span>Central+ · Descubra o que assistir</span><span>Metadados e imagens fornecidos pelo TMDB. A Central+ não é endossada pelo TMDB.</span></footer>`;
+      const loadRail=async(id,type,section,limit=18)=>{
+        const rail=$("#"+id,mount);
+        try{
+          const items=await fetchItems(type,section);
+          rail.innerHTML=items.slice(0,limit).map(x=>card(x,"home")).join("")||'<div class="cp-home-error">Nenhum título encontrado nesta seleção.</div>';
+          return items;
+        }catch(error){
+          rail.innerHTML='<div class="cp-home-error">Não foi possível carregar esta seleção. <a href="/api/catalog?type='+type+'&section='+section+'" style="text-decoration:underline">Ver resposta da API</a></div>';
+          console.error("Central+ home catalog:",id,error);
+          return [];
+        }
+      };
+      const [movies,series,newMovies,newSeries]=await Promise.all([
+        loadRail("cp-api-home-movies","movie","trending",18),
+        loadRail("cp-api-home-series","tv","trending",18),
+        loadRail("cp-api-home-new","movie","now_playing",8),
+        fetchItems("tv","upcoming").catch(error=>{console.warn("Central+ upcoming:",error);return []})
+      ]);
+      const combined=newMovies.slice(0,8).concat(newSeries.slice(0,8));
+      $("#cp-api-home-new",mount).innerHTML=combined.map(x=>card(x,"home")).join("")||'<div class="cp-home-error">Novidades indisponíveis no momento.</div>';
+      const feature=movies[0]||series[0];
+      if(feature){
+        const hero=$("#cp-home-hero-art",mount);if(hero)hero.style.backgroundImage='url("'+(feature.backdrop_url||feature.poster_url||"")+'")';
+        const title=$("#cp-home-hero-title",mount);if(title)title.textContent=feature.title;
+        const meta=$("#cp-home-hero-meta",mount);if(meta)meta.innerHTML='<span class="cp-home-chip">'+esc(year(feature)||"Em destaque")+'</span><span>'+esc((feature.genres||[]).slice(0,3).join(" · "))+'</span><span>★ '+esc(feature.rating||"—")+'</span>';
+        const overview=$("#cp-home-hero-overview",mount);if(overview)overview.textContent=feature.overview||"Descubra mais sobre este título no catálogo Central+.";
+        const detail=$("#cp-home-hero-details",mount);if(detail)detail.href=detailHref(feature);
+      }
+    }
     }
   }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",fillPage,{once:true});else fillPage();
