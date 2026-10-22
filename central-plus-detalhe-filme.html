@@ -108,4 +108,5 @@ const optionsBtn=document.getElementById('watchOptionsBtn');optionsBtn.href=serv
 document.getElementById('trailerBtn').href='https://www.youtube.com/results?search_query='+encodeURIComponent(m.search+' trailer oficial');
 const favKey='centralplus-favoritos';function getFavs(){try{return JSON.parse(localStorage.getItem(favKey)||'[]')}catch(e){return []}}function isFav(){return getFavs().includes(key)}const fav=document.getElementById('favoriteBtn');function updateFav(){fav.textContent=isFav()?'✓ Na minha lista':'♡ Adicionar aos favoritos'}updateFav();fav.addEventListener('click',()=>{let arr=getFavs();if(arr.includes(key)){arr=arr.filter(x=>x!==key);showToast('Filme removido dos favoritos')}else{arr.push(key);showToast('Filme adicionado aos favoritos')}try{localStorage.setItem(favKey,JSON.stringify(arr))}catch(e){showToast('O navegador não permitiu salvar favoritos')}updateFav()});function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
 })();
-</script></body></html>
+</script>  <script src="/central-plus-catalog.js" defer></script>
+</body></html>
