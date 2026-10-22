@@ -66,6 +66,78 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
 .apps-rail .app-card .app-note{font-size:10px;color:#aeb4c2}
 @media(max-width:760px){.apps-rail .card{flex-basis:220px}.apps-rail .app-tile{aspect-ratio:16/10}.apps-rail .app-logo{width:78%;height:72%;margin:0 0 7% 8%}.apps-rail .app-logo .logo-fallback{font-size:32px}}
 
+
+/* Séries — a mesma linguagem cinematográfica do catálogo de filmes. */
+.series-page{padding-left:var(--gutter);padding-right:var(--gutter);max-width:1800px;margin-left:auto;margin-right:auto}
+.series-intro{padding:4px 0 26px}
+.series-overline{display:flex;align-items:center;gap:10px;font-size:10px;font-weight:750;letter-spacing:.2em;color:#cfd4df}
+.series-intro h1{font-size:clamp(38px,5vw,66px);line-height:.96;letter-spacing:-.067em;margin:18px 0 13px;font-weight:800}
+.series-intro h1 span{display:block;font-weight:330;color:#c4cad8}
+.series-intro p{max-width:650px;color:#aeb5c5;font-size:14px;line-height:1.7;margin:0}
+.series-feature{height:clamp(470px,44vw,620px);min-height:470px;position:relative;overflow:hidden;isolation:isolate;margin:0 calc(-1 * var(--gutter)) 36px;background:#10131b;border-top:1px solid #ffffff12;border-bottom:1px solid #ffffff12;box-shadow:0 26px 70px #0005}
+.series-feature-art{position:absolute;inset:0;background-size:cover;background-position:center 42%;transform:scale(1.025);filter:saturate(1.05) contrast(1.02);transition:opacity .5s ease,transform 1s ease;will-change:opacity,transform}
+.series-feature-art.is-changing{opacity:.06;transform:scale(1.07)}
+.series-feature-shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,7,12,.96) 0%,rgba(5,7,12,.82) 31%,rgba(5,7,12,.40) 60%,rgba(5,7,12,.06) 100%),linear-gradient(0deg,rgba(5,7,12,.82) 0%,transparent 53%),linear-gradient(180deg,rgba(5,7,12,.28),transparent 27%)}
+.series-feature-content{position:absolute;z-index:2;left:0;top:0;bottom:0;width:min(760px,68%);display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:clamp(38px,6.2vw,88px) var(--gutter) 120px}
+.series-feature-kicker{font-size:10px;letter-spacing:.2em;color:#d2d7e4;font-weight:750;text-transform:uppercase}
+.series-feature-kicker span{padding:0 6px;color:#7c879b}
+.series-feature h2{font-size:clamp(48px,7vw,94px);line-height:.87;letter-spacing:-.075em;margin:24px 0 19px;font-weight:850;text-wrap:balance}
+.series-feature h2 span{display:block;font-weight:300;color:#c5ccdb;margin-top:9px}
+.series-feature-meta{display:flex;align-items:center;flex-wrap:wrap;gap:10px;color:#e0e4ec;font-size:11px}
+.series-feature-meta i{width:3px;height:3px;background:#929bad;border-radius:50%}
+.series-feature-meta b{font-size:9px;letter-spacing:.08em;border:1px solid #ffffff4d;border-radius:4px;padding:4px 7px}
+.series-feature-content p{max-width:530px;font-size:clamp(13px,1.15vw,16px);line-height:1.75;color:#c7ccd7;margin:18px 0 26px}
+.series-feature-actions{display:flex;gap:10px;flex-wrap:wrap}
+.series-feature-actions .primary-btn,.series-feature-actions .secondary-btn{min-height:48px;padding:0 21px;font-size:13px}
+.series-feature-bottom{position:absolute;z-index:4;left:var(--gutter);bottom:25px;display:flex;align-items:center;gap:17px}
+.series-feature-dots{display:flex;align-items:center;gap:7px}
+.series-feature-dot{height:3px;width:22px;padding:0;border:0;border-radius:99px;background:#ffffff68;transition:width .25s,background .25s}
+.series-feature-dot.active{width:40px;background:#fff}
+.series-feature-controls{display:flex;gap:7px}
+.series-feature-arrow{display:grid;place-items:center;width:36px;height:36px;border:1px solid #ffffff50;border-radius:50%;background:#090b1280;color:#fff;font-size:26px;line-height:1;backdrop-filter:blur(10px);transition:background .2s,transform .2s}
+.series-feature-arrow:hover{background:#ffffff25;transform:scale(1.06)}
+.series-feature-index{position:absolute;z-index:3;right:var(--gutter);bottom:29px;display:flex;align-items:center;gap:10px;color:#c5cad5;font-size:9px;letter-spacing:.17em}
+.series-feature-index>span:first-child{font-size:22px;letter-spacing:-.05em;color:#fff}
+.series-feature-index-line{height:1px;width:36px;background:#ffffff88}
+.series-toolbar{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:17px}
+.series-toolbar h2{font-size:clamp(22px,2vw,28px);font-weight:720;letter-spacing:-.045em;margin:0}
+.series-toolbar p{font-size:12px;color:#a2a8b7;margin:6px 0 0}
+.series-count{font-size:11px;color:#aeb4c2;white-space:nowrap}.series-count span{color:#f5f6fa;font-weight:750}
+.series-filters{display:flex;gap:8px;overflow-x:auto;padding:2px 0 19px;scrollbar-width:none}
+.series-filters::-webkit-scrollbar{display:none}
+.series-filter{flex-shrink:0;border:1px solid #ffffff1c;border-radius:999px;background:#141720;color:#c0c4cf;padding:10px 15px;font-size:11px;white-space:nowrap;transition:all .18s}
+.series-filter:hover,.series-filter.active{background:#f2f3f7;color:#101116;border-color:#f2f3f7}
+.series-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 15px}
+.series-tile{display:block;min-width:0;color:inherit;text-decoration:none;border-radius:12px;transition:transform .2s,filter .2s;scroll-snap-align:start}
+.series-tile:hover{transform:translateY(-4px);filter:brightness(1.08)}
+.series-tile:focus-visible{outline:3px solid #fff;outline-offset:4px}
+.series-tile-art{position:relative;isolation:isolate;overflow:hidden;aspect-ratio:16/9;border-radius:12px;border:1px solid #ffffff1c;background-color:#171b25;background-size:cover;background-position:center}
+.series-tile-art:after{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(0deg,rgba(4,5,9,.94) 0%,rgba(4,5,9,.20) 65%,rgba(4,5,9,.08) 100%)}
+.series-tile-copy{position:absolute;z-index:1;left:15px;right:12px;bottom:14px}
+.series-tile-kicker{font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:#d8dce5;margin-bottom:6px}
+.series-tile-title{font-size:clamp(14px,1.35vw,19px);font-weight:760;line-height:1.04;letter-spacing:-.04em}
+.series-tile-meta{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:9px;color:#adb4c3;font-size:10px}
+.series-tile-meta span:last-child{border:1px solid #ffffff20;border-radius:3px;padding:3px 5px;font-size:8px;letter-spacing:.06em;color:#e0e3eb;white-space:nowrap}
+.series-empty{padding:38px 0;color:#aeb4c2;font-size:13px}
+.series-disclaimer{font-size:10px;color:#737a8b;margin:28px 0 10px;line-height:1.6}
+@media(max-width:1150px){.series-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.series-feature-content{width:76%}}
+@media(max-width:760px){
+ .series-page{padding-left:20px;padding-right:20px}.series-intro{padding-top:6px}.series-intro h1{font-size:43px}.series-intro p{font-size:12px}
+ .series-feature{height:530px;min-height:530px;margin-bottom:30px}.series-feature-art{background-position:62% center}
+ .series-feature-shade{background:linear-gradient(90deg,rgba(5,7,12,.91),rgba(5,7,12,.43)),linear-gradient(0deg,rgba(5,7,12,.87),transparent 75%)}
+ .series-feature-content{width:100%;padding:32px 20px 115px;justify-content:center}
+ .series-feature h2{font-size:clamp(45px,12vw,65px);margin:23px 0 18px}
+ .series-feature-content p{font-size:13px;max-width:100%;margin:16px 0 22px}
+ .series-feature-actions{gap:8px}.series-feature-actions .primary-btn,.series-feature-actions .secondary-btn{min-height:44px;padding:0 15px;font-size:12px}
+ .series-feature-bottom{left:20px;bottom:23px;gap:12px}.series-feature-index{right:20px;bottom:26px}
+ .series-toolbar{align-items:start}.series-toolbar h2{font-size:21px}.series-toolbar p{font-size:11px}
+ .series-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 11px}
+ .series-tile-art{border-radius:9px}.series-tile-copy{left:10px;right:8px;bottom:10px}
+ .series-tile-title{font-size:15px}.series-tile-meta{font-size:9px}.series-filter{padding:9px 12px}
+}
+@media(max-width:420px){.series-feature{height:500px;min-height:500px}.series-feature-index{display:none}.series-feature h2{font-size:42px}.series-feature-content{padding-left:16px;padding-right:16px}.series-feature-bottom{left:16px}.series-grid{gap:18px 9px}.series-tile-title{font-size:13px}.series-tile-meta{font-size:8px}.series-tile-kicker{font-size:7px}}
+@media(prefers-reduced-motion:reduce){.series-feature-art,.series-feature-dot,.series-feature-arrow,.series-tile{transition:none}}
+
 </style>
 </head>
 <body>
@@ -119,14 +191,72 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
     <a class="card app-card" href="https://music.amazon.com.br/" data-focusable data-title="Amazon Music"><div class="app-tile"><div class="app-logo"><img loading="lazy" src="https://cdn.simpleicons.org/amazonmusic/FFFFFF" alt="Logomarca Amazon Music" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'"><span class="logo-fallback">amazon music</span></div></div><div class="card-caption"><span>Amazon Music</span><div class="app-note">Música</div></div></a>
     <a class="card app-card" href="https://open.spotify.com/" data-focusable data-title="Spotify"><div class="app-tile"><div class="app-logo"><img loading="lazy" src="https://cdn.simpleicons.org/spotify/06180D" alt="Logomarca Spotify" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'"><span class="logo-fallback">Spotify</span></div></div><div class="card-caption"><span>Spotify</span><div class="app-note">Música</div></div></a>
   </div></section>
-  <section class="content-section" id="series"><div class="section-head"><div><h2 class="section-title">Séries para mergulhar</h2><p class="section-subtitle">Novos mundos, personagens e histórias para acompanhar.</p></div><a class="section-link" href="#series" data-focusable>Explorar séries <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m9 5 7 7-7 7"/></svg></a></div><div class="rail">
-    <a class="card" href="#series" data-focusable data-title="Ruptura"><div class="poster"><div class="poster-art art-severance"></div><span class="poster-badge">Escolha da crítica</span><div class="poster-copy"><div class="poster-kicker">Drama · Suspense</div><div class="poster-title">Ruptura</div></div></div><div class="card-caption"><span>2 temporadas</span><small>2022–</small></div></a>
-    <a class="card" href="#series" data-focusable data-title="Silo"><div class="poster"><div class="poster-art art-silo"></div><div class="poster-copy"><div class="poster-kicker">Sci-fi · Mistério</div><div class="poster-title">Silo</div></div></div><div class="card-caption"><span>2 temporadas</span><small>2023–</small></div></a>
-    <a class="card" href="#series" data-focusable data-title="Constelação"><div class="poster"><div class="poster-art art-orbit"></div><div class="poster-copy"><div class="poster-kicker">Ficção científica</div><div class="poster-title">Constelação</div></div></div><div class="card-caption"><span>1 temporada</span><small>2024</small></div></a>
-    <a class="card" href="#series" data-focusable data-title="A Casa do Dragão"><div class="poster"><div class="poster-art art-wild"></div><div class="poster-copy"><div class="poster-kicker">Fantasia · Drama</div><div class="poster-title">A Casa do Dragão</div></div></div><div class="card-caption"><span>2 temporadas</span><small>2022–</small></div></a>
-    <a class="card" href="#series" data-focusable data-title="Além do Horizonte"><div class="poster"><div class="poster-art art-night"></div><div class="poster-copy"><div class="poster-kicker">Mistério · Drama</div><div class="poster-title">Além do Horizonte</div></div></div><div class="card-caption"><span>Nova série</span><small>2026</small></div></a>
-  </div></section>
-  <section class="content-section" id="filmes"><div class="section-head"><div><h2 class="section-title">Filmes em destaque</h2><p class="section-subtitle">Uma boa história transforma qualquer noite.</p></div><a class="section-link" href="#filmes" data-focusable>Ver catálogo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m9 5 7 7-7 7"/></svg></a></div><div class="rail">
+  <section class="content-section series-page" id="series">
+  <div class="series-intro">
+    <div class="series-overline"><span class="eyebrow-mark"></span> CENTRAL+ SÉRIES</div>
+    <h1>Histórias que <span>você vai querer continuar.</span></h1>
+    <p>Descubra novos universos, acompanhe personagens inesquecíveis e encontre a próxima série para maratonar. Tudo em uma experiência feita para explorar.</p>
+  </div>
+  <div class="series-feature" id="series-feature" role="region" aria-roledescription="carrossel" aria-label="Séries em destaque">
+    <div class="series-feature-art" id="series-feature-art" aria-hidden="true"></div>
+    <div class="series-feature-shade"></div>
+    <div class="series-feature-content" aria-live="polite">
+      <div class="series-feature-kicker" id="series-feature-kicker">ESCOLHA CENTRAL+ <span>·</span> SÉRIE EM DESTAQUE</div>
+      <h2 id="series-feature-title">RUPTURA <span>SEPARAR É SÓ O COMEÇO</span></h2>
+      <div class="series-feature-meta"><span id="series-feature-year">2022–</span><i></i><span id="series-feature-seasons">2 temporadas</span><i></i><span id="series-feature-genre">Drama · Suspense</span><b id="series-feature-platform">Apple TV+</b></div>
+      <p id="series-feature-description">Uma equipe passa por um procedimento que separa suas memórias profissionais das pessoais. O que parece uma solução começa a revelar algo muito maior.</p>
+      <div class="series-feature-actions">
+        <button class="primary-btn" type="button" id="series-feature-play">▶ <span>Ver série</span></button>
+        <button class="secondary-btn" type="button" id="series-feature-details">ⓘ <span>Mais informações</span></button>
+      </div>
+    </div>
+    <div class="series-feature-bottom">
+      <div class="series-feature-dots" role="group" aria-label="Escolher série em destaque">
+        <button class="series-feature-dot active" type="button" data-series-slide="0" aria-label="Ruptura" aria-current="true"></button>
+        <button class="series-feature-dot" type="button" data-series-slide="1" aria-label="A Casa do Dragão" aria-current="false"></button>
+        <button class="series-feature-dot" type="button" data-series-slide="2" aria-label="Fallout" aria-current="false"></button>
+      </div>
+      <div class="series-feature-controls">
+        <button class="series-feature-arrow" type="button" id="series-feature-prev" aria-label="Série anterior">‹</button>
+        <button class="series-feature-arrow" type="button" id="series-feature-next" aria-label="Próxima série">›</button>
+      </div>
+    </div>
+    <div class="series-feature-index"><span id="series-feature-index-number">01</span><span class="series-feature-index-line"></span><span>EM DESTAQUE</span></div>
+  </div>
+  <div class="series-toolbar"><div><h2>Explore o catálogo</h2><p>Filtre por gênero e descubra sua próxima maratona.</p></div><div class="series-count"><span id="series-count">16</span> séries</div></div>
+  <div class="series-filters" role="group" aria-label="Filtrar séries por gênero">
+    <button class="series-filter active" data-series-filter="todos" type="button" aria-pressed="true">Todas</button>
+    <button class="series-filter" data-series-filter="ficcao" type="button" aria-pressed="false">Ficção científica</button>
+    <button class="series-filter" data-series-filter="drama" type="button" aria-pressed="false">Drama</button>
+    <button class="series-filter" data-series-filter="fantasia" type="button" aria-pressed="false">Fantasia</button>
+    <button class="series-filter" data-series-filter="suspense" type="button" aria-pressed="false">Suspense e mistério</button>
+    <button class="series-filter" data-series-filter="comedia" type="button" aria-pressed="false">Comédia</button>
+    <button class="series-filter" data-series-filter="animacao" type="button" aria-pressed="false">Animação</button>
+    <button class="series-filter" data-series-filter="crime" type="button" aria-pressed="false">Crime</button>
+    <button class="series-filter" data-series-filter="aventura" type="button" aria-pressed="false">Aventura</button>
+  </div>
+  <div class="series-grid" id="series-grid">
+    <a class="series-tile" href="central-plus-detalhe-serie.html?serie=ruptura" data-series="ruptura" data-genres="drama suspense ficcao" data-title="Ruptura" data-focusable><div class="series-tile-art" style="background-image:linear-gradient(135deg,#202e39,#0b111b),url('https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1100&q=85')"><div class="series-tile-copy"><div class="series-tile-kicker">Drama · Suspense</div><div class="series-tile-title">Ruptura</div></div></div><div class="series-tile-meta"><span>2022– · 2 temporadas</span><span>Apple TV+</span></div></a>
+    <a class="series-tile" href="central-plus-detalhe-serie.html?serie=silo" data-series="silo" data-genres="ficcao suspense drama" data-title="Silo" data-focusable><div class="series-tile-art" style="background-image:linear-gradient(135deg,#5b372e,#11131b),url('https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1100&q=85')"><div class="series-tile-copy"><div class="series-tile-kicker">Ficção científica · Mistério</div><div class="series-tile-title">Silo</div></div></div><div class="series-tile-meta"><span>2023– · 2 temporadas</span><span>Apple TV+</span></div></a>
+    <a class="series-tile" href="central-plus-detalhe-serie.html?serie=casa-dragao" data-series="casa-dragao" data-genres="fantasia drama aventura" data-title="A Casa do Dragão" data-focusable><div class="series-tile-art" style="background-image:linear-gradient(135deg,#48303a,#11131b),url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1100&q=85')"><div class="series-tile-copy"><div class="series-tile-kicker">Fantasia · Drama</div><div class="series-tile-title">A Casa do Dragão</div></div></div><div class="series-tile-meta"><span>2022– · 2 temporadas</span><span>HBO Max</span></div></a>
+    <a class="series-tile" href="central-plus-detalhe-serie.html?serie=fallout" data-series="fallout" data-genres="ficcao aventura acao" data-title="Fallout" data-focusable><div class="series-tile-art" style="background-image:linear-gradient(135deg,#6e4c32,#11131b),url('https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=1100&q=85')"><div class="series-tile-copy"><div class="series-tile-kicker">Aventura · Ficção científica</div><div class="series-tile-title">Fallout</div></div></div><div class="series-tile-meta"><span>2024– · 2 temporadas</span><span>Prime Video</span></div></a>
+    <a class="series-tile" href="central-plus-detalhe-serie.html?serie=andor" data-series="andor" data-genres="ficcao drama aventura acao" data-title="Andor" data-focusable><div class="series-tile-art" style="background-image:linear-gradient(135deg,#293b4b,#090d16),url('https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1100&q=85')"><div class="series-tile-copy"><div class="series-tile-kicker">Drama · Ficção científica</div><div class="series-tile-title">Andor</div></div></div><div class="series-tile-meta"><span>2022–2025 · 2 temporadas</span><span>Disney+</span></div></a>
+    <a class="series-tile" href="central-plus-detalhe-serie.html?serie=the-last-of-us" data-series="the-last-of-us" data-genres="drama suspense acao" data-title="The Last of Us" data-focusable><div class="series-tile-art" style="background-image:linear-gradient(135deg,#304334,#090f0e),url('https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1100&q=85')"><div class="series-tile-copy"><div class="series-tile-kicker">Drama · Aventura</div><div class="series-tile-title">The Last of Us</div></div></div><div class="series-tile-meta"><span>2023– · 2 temporadas</span><span>HBO Max</span></div></a>
+    <a class="series-tile" href="central-plus-detalhe-serie.html?serie=the-bear" data-series="the-bear" data-genres="drama comedia" data-title="O Urso" data-focusable><div class="series-tile-art" style="background-image:linear-gradient(135deg,#754532,#11131b),url('https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1100&q=85')"><div class="series-tile-copy"><div class="series-tile-kicker">Drama · Comédia</div><div class="series-tile-title">O Urso</div></div></div><div class="series-tile-meta"><span>2022– · 4 temporadas</span><span>Disney+</span></div></a>
+    <a class="series-tile" href="central-plus-detalhe-serie.html?serie=stranger-things" data-series="stranger-things" data-genres="ficcao drama suspense aventura" data-title="Stranger Things" data-focusable><div class="series-tile-art" style="background-image:linear-gradient(135deg,#55343c,#0c0d17),url('https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1100&q=85')"><div class="series-tile-copy"><div class="series-tile-kicker">Ficção científica · Suspense</div><div class="series-tile-title">Stranger Things</div></div></div><div class="series-tile-meta"><span>2016–2025 · 5 temporadas</span><span>Netflix</span></div></a>
+    <a class="series-tile" href="central-plus-detalhe-serie.html?serie=black-mirror" data-series="black-mirror" data-genres="ficcao suspense drama" data-title="Black Mirror" data-focusable><div class="series-tile-art" style="background-image:linear-gradient(135deg,#34414a,#090b11),url('https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1100&q=85')"><div class="series-tile-copy"><div class="series-tile-kicker">Ficção científica · Antologia</div><div class="series-tile-title">Black Mirror</div></div></div><div class="series-tile-meta"><span>2011– · 7 temporadas</span><span>Netflix</span></div></a>
+    <a class="series-tile" href="central-plus-detalhe-serie.html?serie=the-penguin" data-series="the-penguin" data-genres="crime drama suspense" data-title="Pinguim" data-focusable><div class="series-tile-art" style="background-image:linear-gradient(135deg,#373d49,#080b12),url('https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=1100&q=85')"><div class="series-tile-copy"><div class="series-tile-kicker">Crime · Drama</div><div class="series-tile-title">Pinguim</div></div></div><div class="series-tile-meta"><span>2024 · 1 temporada</span><span>HBO Max</span></div></a>
+    <a class="series-tile" href="central-plus-detalhe-serie.html?serie=arcane" data-series="arcane" data-genres="animacao fantasia acao" data-title="Arcane" data-focusable><div class="series-tile-art" style="background-image:linear-gradient(135deg,#354158,#0a0c15),url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1100&q=85')"><div class="series-tile-copy"><div class="series-tile-kicker">Animação · Fantasia</div><div class="series-tile-title">Arcane</div></div></div><div class="series-tile-meta"><span>2021–2024 · 2 temporadas</span><span>Netflix</span></div></a>
+    <a class="series-tile" href="central-plus-detalhe-serie.html?serie=wednesday" data-series="wednesday" data-genres="fantasia comedia suspense" data-title="Wandinha" data-focusable><div class="series-tile-art" style="background-image:linear-gradient(135deg,#423349,#0b0b13),url('https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1100&q=85')"><div class="series-tile-copy"><div class="series-tile-kicker">Fantasia · Mistério</div><div class="series-tile-title">Wandinha</div></div></div><div class="series-tile-meta"><span>2022– · 2 temporadas</span><span>Netflix</span></div></a>
+    <a class="series-tile" href="central-plus-detalhe-serie.html?serie=white-lotus" data-series="white-lotus" data-genres="drama suspense" data-title="The White Lotus" data-focusable><div class="series-tile-art" style="background-image:linear-gradient(135deg,#315c59,#0c1317),url('https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=1100&q=85')"><div class="series-tile-copy"><div class="series-tile-kicker">Drama · Mistério</div><div class="series-tile-title">The White Lotus</div></div></div><div class="series-tile-meta"><span>2021– · 3 temporadas</span><span>HBO Max</span></div></a>
+    <a class="series-tile" href="central-plus-detalhe-serie.html?serie=mandalorian" data-series="mandalorian" data-genres="ficcao aventura" data-title="The Mandalorian" data-focusable><div class="series-tile-art" style="background-image:linear-gradient(135deg,#59616c,#0b0e13),url('https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1100&q=85')"><div class="series-tile-copy"><div class="series-tile-kicker">Ficção científica · Aventura</div><div class="series-tile-title">The Mandalorian</div></div></div><div class="series-tile-meta"><span>2019– · 3 temporadas</span><span>Disney+</span></div></a>
+    <a class="series-tile" href="central-plus-detalhe-serie.html?serie=handmaids-tale" data-series="handmaids-tale" data-genres="drama ficcao suspense" data-title="O Conto da Aia" data-focusable><div class="series-tile-art" style="background-image:linear-gradient(135deg,#5a272f,#0b0c13),url('https://images.unsplash.com/photo-1490730141103-6cac27aaab94?auto=format&fit=crop&w=1100&q=85')"><div class="series-tile-copy"><div class="series-tile-kicker">Drama · Distopia</div><div class="series-tile-title">O Conto da Aia</div></div></div><div class="series-tile-meta"><span>2017–2025 · 6 temporadas</span><span>Disney+</span></div></a>
+    <a class="series-tile" href="central-plus-detalhe-serie.html?serie=yellowjackets" data-series="yellowjackets" data-genres="drama suspense" data-title="Yellowjackets" data-focusable><div class="series-tile-art" style="background-image:linear-gradient(135deg,#374333,#090e0c),url('https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1100&q=85')"><div class="series-tile-copy"><div class="series-tile-kicker">Suspense · Drama</div><div class="series-tile-title">Yellowjackets</div></div></div><div class="series-tile-meta"><span>2021– · 3 temporadas</span><span>Paramount+</span></div></a>
+    <a class="series-tile" href="central-plus-detalhe-serie.html?serie=invincible" data-series="invincible" data-genres="animacao acao aventura" data-title="Invencível" data-focusable><div class="series-tile-art" style="background-image:linear-gradient(135deg,#665344,#0a0c14),url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1100&q=85')"><div class="series-tile-copy"><div class="series-tile-kicker">Animação · Ação</div><div class="series-tile-title">Invencível</div></div></div><div class="series-tile-meta"><span>2021– · 3 temporadas</span><span>Prime Video</span></div></a>
+  </div>
+  <div class="series-empty" id="series-empty" hidden>Nenhuma série encontrada neste gênero.</div>
+  <p class="series-disclaimer">Catálogo demonstrativo do Central+. Imagens ilustrativas e informações de temporadas e disponibilidade podem variar conforme a região e a atualização de cada serviço.</p>
+</section><section class="content-section" id="filmes"><div class="section-head"><div><h2 class="section-title">Filmes em destaque</h2><p class="section-subtitle">Uma boa história transforma qualquer noite.</p></div><a class="section-link" href="#filmes" data-focusable>Ver catálogo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m9 5 7 7-7 7"/></svg></a></div><div class="rail">
     <a class="card" href="#filmes" data-focusable data-title="Duna: Parte Dois"><div class="poster"><div class="poster-art art-dune"></div><span class="poster-badge">Épico</span><div class="poster-copy"><div class="poster-kicker">Ficção científica</div><div class="poster-title">Duna: Parte Dois</div></div></div><div class="card-caption"><span>2024 · 2h 46min</span><small>4K</small></div></a>
     <a class="card" href="#filmes" data-focusable data-title="Oppenheimer"><div class="poster"><div class="poster-art art-news2"></div><div class="poster-copy"><div class="poster-kicker">Drama · História</div><div class="poster-title">Oppenheimer</div></div></div><div class="card-caption"><span>2023 · 3h</span><small>4K</small></div></a>
     <a class="card" href="#filmes" data-focusable data-title="Interestelar"><div class="poster"><div class="poster-art art-orbit"></div><div class="poster-copy"><div class="poster-kicker">Aventura · Sci-fi</div><div class="poster-title">Interestelar</div></div></div><div class="card-caption"><span>2014 · 2h 49min</span><small>4K</small></div></a>
@@ -230,11 +360,82 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
     });
   });
   document.querySelector('.brand').setAttribute('href','central-plus-home-v1.html');
-  document.querySelector('.brand').setAttribute('target','_blank');
-  document.querySelector('.brand').setAttribute('rel','noopener');
+  document.querySelector('.brand').removeAttribute('target');
+  document.querySelector('.brand').removeAttribute('rel');
   // Keyboard/remote carousel browsing while a card is focused.
   document.querySelectorAll('.rail').forEach(rail=>rail.addEventListener('keydown',e=>{if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;const cards=[...rail.querySelectorAll('[data-focusable]')];const idx=cards.indexOf(document.activeElement);if(idx<0)return;const next=cards[idx+(e.key==='ArrowRight'?1:-1)];if(next){e.preventDefault();next.focus();next.scrollIntoView({block:'nearest',inline:'nearest',behavior:'smooth'})}}));
-  setSlide(0);startCarousel();
+
+  // Série em destaque: carrossel com navegação pela mesma guia.
+  (function(){
+    const feature=document.getElementById('series-feature');
+    if(!feature)return;
+    const slides=[
+      {key:'ruptura',title:'RUPTURA',subtitle:'SEPARAR É SÓ O COMEÇO',year:'2022–',seasons:'2 temporadas',genre:'Drama · Suspense',platform:'Apple TV+',description:'Uma equipe passa por um procedimento que separa suas memórias profissionais das pessoais. O que parece uma solução começa a revelar algo muito maior.',image:'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=2200&q=85'},
+      {key:'casa-dragao',title:'A CASA DO DRAGÃO',subtitle:'O FOGO MUDA TUDO',year:'2022–',seasons:'2 temporadas',genre:'Fantasia · Drama',platform:'HBO Max',description:'Décadas antes de Game of Thrones, disputas de sucessão colocam uma poderosa dinastia diante de uma guerra que ameaça destruir o próprio reino.',image:'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=2200&q=85'},
+      {key:'fallout',title:'FALLOUT',subtitle:'O FUTURO É UM LUGAR ESTRANHO',year:'2024–',seasons:'2 temporadas',genre:'Aventura · Ficção científica',platform:'Prime Video',description:'Duzentos anos após o apocalipse, uma jovem deixa a segurança de um abrigo subterrâneo e encontra um mundo tão perigoso quanto imprevisível.',image:'https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=2200&q=85'}
+    ];
+    const art=document.getElementById('series-feature-art');
+    const title=document.getElementById('series-feature-title');
+    const dots=[...feature.querySelectorAll('[data-series-slide]')];
+    const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+    let index=0,timer=null,fade=null,paused=false;
+    function render(next){
+      index=(next+slides.length)%slides.length;
+      const item=slides[index];
+      art.classList.add('is-changing');
+      if(fade)clearTimeout(fade);
+      fade=setTimeout(()=>{
+        art.style.backgroundImage='linear-gradient(90deg,rgba(5,7,12,.70),rgba(5,7,12,.08)),linear-gradient(0deg,rgba(5,7,12,.32),transparent 55%),url("'+item.image+'")';
+        title.innerHTML=item.title+'<span>'+item.subtitle+'</span>';
+        document.getElementById('series-feature-year').textContent=item.year;
+        document.getElementById('series-feature-seasons').textContent=item.seasons;
+        document.getElementById('series-feature-genre').textContent=item.genre;
+        document.getElementById('series-feature-platform').textContent=item.platform;
+        document.getElementById('series-feature-description').textContent=item.description;
+        document.getElementById('series-feature-index-number').textContent=String(index+1).padStart(2,'0');
+        dots.forEach((dot,n)=>{dot.classList.toggle('active',n===index);dot.setAttribute('aria-current',n===index?'true':'false')});
+        art.classList.remove('is-changing');
+      },reduced.matches?0:220);
+    }
+    function openFeature(){window.location.href='central-plus-detalhe-serie.html?serie='+slides[index].key}
+    function stop(){if(timer){clearInterval(timer);timer=null}}
+    function start(){stop();if(!paused&&!reduced.matches)timer=setInterval(()=>render(index+1),8000)}
+    dots.forEach(dot=>dot.addEventListener('click',()=>{render(Number(dot.dataset.seriesSlide));start()}));
+    document.getElementById('series-feature-prev').addEventListener('click',()=>{render(index-1);start()});
+    document.getElementById('series-feature-next').addEventListener('click',()=>{render(index+1);start()});
+    document.getElementById('series-feature-play').addEventListener('click',openFeature);
+    document.getElementById('series-feature-details').addEventListener('click',openFeature);
+    feature.addEventListener('mouseenter',()=>{paused=true;stop()});
+    feature.addEventListener('mouseleave',()=>{paused=false;start()});
+    feature.addEventListener('focusin',()=>{paused=true;stop()});
+    feature.addEventListener('focusout',event=>{if(!feature.contains(event.relatedTarget)){paused=false;start()}});
+    render(0);start();
+  })();
+  // Filtros de gênero funcionam tanto por controle remoto quanto por mouse/toque.
+  (function(){
+    const grid=document.getElementById('series-grid');
+    if(!grid)return;
+    const tiles=[...grid.querySelectorAll('.series-tile')];
+    const filters=[...document.querySelectorAll('[data-series-filter]')];
+    const count=document.getElementById('series-count');
+    const empty=document.getElementById('series-empty');
+    function applyFilter(value){
+      let visible=0;
+      tiles.forEach(tile=>{
+        const genres=(tile.dataset.genres||'').split(/\s+/);
+        const show=value==='todos'||genres.includes(value);
+        tile.hidden=!show;
+        if(show)visible++;
+      });
+      filters.forEach(button=>{const active=button.dataset.seriesFilter===value;button.classList.toggle('active',active);button.setAttribute('aria-pressed',active?'true':'false')});
+      count.textContent=String(visible);
+      empty.hidden=visible>0;
+    }
+    filters.forEach(button=>button.addEventListener('click',()=>applyFilter(button.dataset.seriesFilter)));
+    applyFilter('todos');
+  })();
+
+    setSlide(0);startCarousel();
 })();
 </script>
 </body>
