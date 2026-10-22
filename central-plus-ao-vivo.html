@@ -146,31 +146,45 @@ main{padding-top:82px}.live-hero{position:relative;isolation:isolate;overflow:hi
   localChannels.forEach(channel=>localGrid.appendChild(createCard(channel)));
   nationalChannels.forEach(channel=>nationalGrid.appendChild(createCard(channel)));
 
+  let previewLoading=false;
   async function loadChannelPreviews(){
+    if(previewLoading)return;
+    previewLoading=true;
     try{
       const response=await fetch("/api/live-previews",{method:"GET",headers:{"Accept":"application/json"},cache:"no-store"});
       if(!response.ok)throw new Error("HTTP "+response.status);
       const data=await response.json();
       if(!Array.isArray(data.items))throw new Error("Formato de prévias inesperado");
       data.items.forEach(item=>{
-        if(!item||!item.id||!Array.isArray(item.images)||!item.images.length)return;
+        if(!item||!item.id||!Array.isArray(item.images))return;
         const card=document.querySelector('[data-preview-id="'+item.id+'"]');
         if(!card)return;
         const image=card.querySelector(".channel-preview");
         const status=card.querySelector(".channel-preview-status");
         const art=card.querySelector(".channel-art");
         if(!image||!status||!art)return;
-        image.hidden=true;
-        art.classList.remove("has-preview");
         const candidates=item.images.filter(url=>{try{return ["https:","http:"].includes(new URL(url).protocol)}catch(_){return false}});
+        if(!candidates.length){
+          image.hidden=true;image.removeAttribute("src");delete image.dataset.previewUrl;
+          art.classList.remove("has-preview");status.hidden=true;status.classList.remove("is-live");
+          return;
+        }
+        if(!image.hidden&&image.dataset.previewUrl===candidates[0]){
+          status.hidden=false;status.classList.toggle("is-live",item.kind==="live");
+          status.textContent=item.kind==="live"?"Prévia ao vivo":"Imagem oficial";
+          return;
+        }
+        image.hidden=true;art.classList.remove("has-preview");
         let index=0;
         const tryCandidate=()=>{
-          if(index>=candidates.length){image.hidden=true;art.classList.remove("has-preview");status.hidden=true;return}
+          if(index>=candidates.length){
+            image.hidden=true;image.removeAttribute("src");delete image.dataset.previewUrl;
+            art.classList.remove("has-preview");status.hidden=true;status.classList.remove("is-live");return;
+          }
           image.onerror=()=>{index++;tryCandidate()};
           image.onload=()=>{
-            image.hidden=false;
-            art.classList.add("has-preview");
-            status.hidden=false;
+            image.hidden=false;image.dataset.previewUrl=candidates[index];
+            art.classList.add("has-preview");status.hidden=false;
             status.classList.toggle("is-live",item.kind==="live");
             status.textContent=item.kind==="live"?"Prévia ao vivo":"Imagem oficial";
           };
@@ -180,7 +194,7 @@ main{padding-top:82px}.live-hero{position:relative;isolation:isolate;overflow:hi
       });
     }catch(error){
       console.warn("Central+ live previews:",error&&error.message?error.message:error);
-    }
+    }finally{previewLoading=false}
   }
   loadChannelPreviews();
   setInterval(()=>{if(!document.hidden)loadChannelPreviews()},5*60*1000);
