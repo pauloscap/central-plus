@@ -155,6 +155,7 @@
         .cp-home-news-title{font-size:clamp(14px,1.2vw,17px);line-height:1.15;font-weight:800;text-shadow:0 2px 12px #000}
         .cp-home-news-summary{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:11px;line-height:1.5;color:#aeb5c4;margin-top:9px}
         .cp-home-news-link{font-size:10px;color:#e1e4ec;margin-top:7px}
+        .cp-home-news-actions{display:flex;align-items:center;gap:8px}.cp-home-news-control{display:grid;place-items:center;width:30px;height:30px;border:1px solid #ffffff25;border-radius:50%;background:#ffffff08;color:#f5f6fb;font-size:21px;line-height:1;cursor:pointer}.cp-home-news-control:hover{background:#ffffff18;border-color:#ffffff55}.cp-home-news-control:focus-visible{outline:2px solid #fff;outline-offset:3px}.cp-home-news{scroll-behavior:smooth;scrollbar-width:none}.cp-home-news::-webkit-scrollbar{display:none}
         .cp-home-progress{height:3px;border-radius:4px;background:#ffffff20;margin-top:10px;overflow:hidden}.cp-home-progress span{display:block;height:100%;width:35%;background:#f4f5f8}
         .cp-home-empty{display:flex;align-items:center;gap:14px;min-width:260px;padding:18px 20px;border:1px dashed #ffffff24;border-radius:12px;color:#9da5b5;font-size:12px;line-height:1.6}.cp-home-empty strong{display:block;color:#e3e6ee;font-size:13px;margin-bottom:3px}
         .cp-home-inline-action{font-size:11px;color:#c8cdda;text-decoration:none;white-space:nowrap}.cp-home-inline-action:hover{color:#fff}
@@ -179,7 +180,7 @@
       mount.innerHTML=`
         <nav class="cp-home-nav"><a class="cp-home-brand" href="/"><span>+</span>Central+</a><div class="cp-home-links"><a href="/" aria-current="page">Home</a><a href="/central-plus-filmes.html">Filmes</a><a href="/central-plus-series.html">Séries</a><a href="/central-plus-apps.html">Apps</a><a href="/central-plus-noticias.html">Notícias</a><a href="/central-plus-ao-vivo.html">Ao vivo</a><a href="/central-plus-favoritos.html">Favoritos</a></div><div class="cp-home-status">Seu próximo universo começa aqui</div></nav>
         <section class="cp-home-hero"><div class="cp-home-hero-art" id="cp-home-hero-art"></div><div class="cp-home-slide-controls"><button class="cp-home-slide-btn" id="cp-home-prev" aria-label="Destaque anterior">‹</button><span class="cp-home-slide-count" id="cp-home-slide-count">01 / 06</span><button class="cp-home-slide-btn" id="cp-home-next" aria-label="Próximo destaque">›</button></div><div class="cp-home-hero-copy"><div class="cp-home-eyebrow">Em destaque · catálogo atualizado</div><h1 id="cp-home-hero-title">Descubra sua próxima história</h1><div class="cp-home-hero-meta" id="cp-home-hero-meta"><span class="cp-home-chip">Central+ seleção</span></div><p id="cp-home-hero-overview">Filmes e séries para sua próxima maratona.</p><div class="cp-home-actions"><a class="cp-home-btn" id="cp-home-hero-details" href="/central-plus-filmes.html">＋ Explorar título</a><a class="cp-home-btn secondary" href="/central-plus-filmes.html">Explorar catálogo <span>↗</span></a></div></div></section>
-        <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Notícias atualizadas</h2><p>Novos títulos e lançamentos do universo do entretenimento</p></div><a class="cp-home-seeall" href="/central-plus-noticias.html">Ver notícias ↗</a></div><div class="cp-home-rail cp-home-news" id="cp-api-home-news"><span class="cp-api-status">Carregando atualizações…</span></div></section>
+        <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Notícias atualizadas</h2><p>Novos títulos e lançamentos do universo do entretenimento</p></div><div class="cp-home-news-actions"><button class="cp-home-news-control" id="cp-home-news-prev" type="button" aria-label="Notícias anteriores">‹</button><button class="cp-home-news-control" id="cp-home-news-next" type="button" aria-label="Próximas notícias">›</button><a class="cp-home-seeall" href="/central-plus-noticias.html">Ver notícias ↗</a></div></div><div class="cp-home-rail cp-home-news" id="cp-api-home-news"><span class="cp-api-status">Carregando atualizações…</span></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Continue assistindo</h2><p>Retome sua próxima maratona</p></div><a class="cp-home-inline-action" href="/central-plus-favoritos.html">Sua lista ↗</a></div><div class="cp-home-rail cp-home-continue" id="cp-api-home-continue"><div class="cp-home-empty"><div><strong>Sua jornada começa aqui</strong>Abra um filme ou série para começar a montar seu histórico.</div></div></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Apps recentes</h2><p>Seus serviços de streaming em um só lugar</p></div><a class="cp-home-seeall" href="/central-plus-apps.html">Ver apps ↗</a></div><div class="cp-home-rail" id="cp-api-home-apps"><a class="cp-api-card" href="/central-plus-apps.html"><div class="cp-api-poster" style="display:grid;place-items:center;font-size:34px;color:#e8eaf1">▶</div><div class="cp-api-title">Explorar aplicativos</div><div class="cp-api-meta">Seus serviços de streaming</div></a><a class="cp-api-card" href="/central-plus-apps.html"><div class="cp-api-poster" style="display:grid;place-items:center;font-size:30px;color:#e8eaf1">＋</div><div class="cp-api-title">Adicionar serviços</div><div class="cp-api-meta">Personalize sua Central+</div></a></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Séries</h2><p>Séries populares para sua próxima maratona</p></div><a class="cp-home-seeall" href="/central-plus-series.html">Ver todas ↗</a></div><div class="cp-home-rail" id="cp-api-home-series"><span class="cp-api-status">Carregando séries…</span></div></section>
@@ -222,6 +223,31 @@
           const summary=esc((item.summary||"Leia a matéria completa diretamente no portal de origem.").trim()),date=newsDate(item.publishedAt);
           return '<a class="cp-home-news-card" href="'+link+'" aria-label="Ler notícia: '+title+'"><div class="cp-home-news-art"'+(image!=="#"? ' style="background-image:linear-gradient(0deg,rgba(4,5,9,.95),rgba(4,5,9,.08) 88%),url(&quot;'+esc(image)+'&quot;)"':"")+'><span class="cp-home-news-badge">'+category+'</span><div class="cp-home-news-copy"><div class="cp-home-news-source">'+source+(date?" · "+esc(date):"")+'</div><div class="cp-home-news-title">'+title+'</div></div></div><div class="cp-home-news-summary">'+summary+'</div><div class="cp-home-news-link">Ler matéria original ↗</div></a>';
         }).join("")||'<div class="cp-home-error">As manchetes aparecerão aqui quando o feed estiver disponível.</div>';
+        if(newsItems.length>1){
+          const reduceMotion=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          let pauseUntil=0;
+          const pauseAuto=(duration=8000)=>{pauseUntil=Date.now()+duration;};
+          const newsStep=()=>{
+            const firstCard=newsRail.querySelector(".cp-home-news-card");
+            if(!firstCard)return;
+            const gap=parseFloat(getComputedStyle(newsRail).gap)||15;
+            const step=firstCard.getBoundingClientRect().width+gap;
+            const atEnd=newsRail.scrollLeft+newsRail.clientWidth>=newsRail.scrollWidth-12;
+            newsRail.scrollTo({left:atEnd?0:newsRail.scrollLeft+step,behavior:reduceMotion?"auto":"smooth"});
+          };
+          const newsPrev=$("#cp-home-news-prev",mount),newsNext=$("#cp-home-news-next",mount);
+          if(newsPrev)newsPrev.onclick=()=>{pauseAuto();const first=newsRail.querySelector(".cp-home-news-card");const gap=parseFloat(getComputedStyle(newsRail).gap)||15;newsRail.scrollBy({left:-((first?first.getBoundingClientRect().width:320)+gap),behavior:reduceMotion?"auto":"smooth"});};
+          if(newsNext)newsNext.onclick=()=>{pauseAuto();newsStep();};
+          newsRail.addEventListener("pointerenter",()=>pauseAuto(60000));
+          newsRail.addEventListener("pointerleave",()=>pauseAuto(2500));
+          newsRail.addEventListener("focusin",()=>pauseAuto(60000));
+          newsRail.addEventListener("focusout",()=>pauseAuto(2500));
+          newsRail.addEventListener("touchstart",()=>pauseAuto(60000),{passive:true});
+          newsRail.addEventListener("touchend",()=>pauseAuto(5000),{passive:true});
+          newsRail.addEventListener("wheel",()=>pauseAuto(8000),{passive:true});
+          newsRail.addEventListener("scroll",()=>pauseAuto(7000),{passive:true});
+          if(!reduceMotion)window.setInterval(()=>{if(!document.hidden&&Date.now()>=pauseUntil)newsStep();},5000);
+        }
       }catch(error){
         newsRail.innerHTML='<div class="cp-home-error">Não foi possível carregar as notícias agora. <a href="/central-plus-noticias.html">Abrir a central de notícias ↗</a></div>';
         console.warn("Central+ live news:",error);
