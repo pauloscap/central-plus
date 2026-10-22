@@ -158,7 +158,7 @@
         .cp-home-hero h1{font-size:clamp(48px,7vw,94px);line-height:.91;letter-spacing:-.07em;margin:23px 0 18px;font-weight:850;max-width:760px;text-wrap:balance}
         .cp-home-hero-meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;color:#e0e3eb;font-size:12px}.cp-home-chip{border:1px solid #ffffff42;border-radius:4px;padding:5px 8px;font-size:9px;letter-spacing:.1em;text-transform:uppercase}
         .cp-home-hero p{font-size:14px;line-height:1.8;color:#c2c7d3;max-width:580px;margin:18px 0 24px;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
-        .cp-home-actions{display:flex;gap:10px;flex-wrap:wrap}.cp-home-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:47px;padding:0 18px;border-radius:8px;background:#f4f5f8;color:#101219;font-size:12px;font-weight:800;text-decoration:none}.cp-home-btn.secondary{background:#ffffff13;border:1px solid #ffffff25;color:#fff;backdrop-filter:blur(10px)}
+        .cp-home-slide-controls{position:absolute;right:clamp(20px,4.5vw,76px);bottom:35px;z-index:3;display:flex;align-items:center;gap:8px}.cp-home-slide-btn{width:42px;height:42px;border-radius:50%;border:1px solid #ffffff45;background:#090a10aa;color:#fff;font-size:18px;cursor:pointer}.cp-home-slide-btn:hover{background:#fff;color:#111}.cp-home-slide-count{font-size:10px;letter-spacing:.12em;color:#d4d8e2;padding:0 6px}.cp-home-actions{display:flex;gap:10px;flex-wrap:wrap}.cp-home-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:47px;padding:0 18px;border-radius:8px;background:#f4f5f8;color:#101219;font-size:12px;font-weight:800;text-decoration:none}.cp-home-btn.secondary{background:#ffffff13;border:1px solid #ffffff25;color:#fff;backdrop-filter:blur(10px)}
         .cp-home-section{padding:35px clamp(20px,4.5vw,76px) 6px}.cp-home-section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:16px}.cp-home-section h2{font-size:clamp(20px,2.2vw,28px);font-weight:780;letter-spacing:-.045em;margin:0}.cp-home-section-head p{font-size:11px;color:#8f96a8;margin:6px 0 0}.cp-home-seeall{font-size:11px;color:#c8cdda;text-decoration:none;white-space:nowrap}.cp-home-seeall:hover{color:#fff}
         .cp-home-rail{display:flex;gap:15px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 20px;scrollbar-width:thin;scrollbar-color:#343846 transparent}
         .cp-home-rail .cp-api-card{flex:0 0 clamp(132px,13vw,182px);scroll-snap-align:start}.cp-home-rail .cp-api-poster{border-radius:12px;aspect-ratio:2/3;background:#161a24;overflow:hidden;border:1px solid #ffffff14}.cp-home-rail .cp-api-poster img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s}.cp-home-rail .cp-api-card:hover img{transform:scale(1.04)}
@@ -170,7 +170,7 @@
       document.head.appendChild(homeStyles);
       mount.innerHTML=`
         <nav class="cp-home-nav"><a class="cp-home-brand" href="/"><span>+</span>Central+</a><div class="cp-home-links"><a href="/" aria-current="page">Home</a><a href="/central-plus-filmes.html">Filmes</a><a href="/central-plus-series.html">Séries</a><a href="/central-plus-apps.html">Apps</a><a href="/central-plus-noticias.html">Notícias</a><a href="/central-plus-ao-vivo.html">Ao vivo</a><a href="/central-plus-favoritos.html">Favoritos</a></div><div class="cp-home-status">Seu próximo universo começa aqui</div></nav>
-        <section class="cp-home-hero"><div class="cp-home-hero-art" id="cp-home-hero-art"></div><div class="cp-home-hero-copy"><div class="cp-home-eyebrow">Em destaque · catálogo atualizado</div><h1 id="cp-home-hero-title">Descubra sua próxima história</h1><div class="cp-home-hero-meta" id="cp-home-hero-meta"><span class="cp-home-chip">Central+ seleção</span></div><p id="cp-home-hero-overview">Filmes e séries para sua próxima maratona.</p><div class="cp-home-actions"><a class="cp-home-btn" id="cp-home-hero-details" href="/central-plus-filmes.html">＋ Explorar título</a><a class="cp-home-btn secondary" href="/central-plus-filmes.html">Explorar catálogo <span>↗</span></a></div></div></section>
+        <section class="cp-home-hero"><div class="cp-home-hero-art" id="cp-home-hero-art"></div><div class="cp-home-slide-controls"><button class="cp-home-slide-btn" id="cp-home-prev" aria-label="Destaque anterior">‹</button><span class="cp-home-slide-count" id="cp-home-slide-count">01 / 06</span><button class="cp-home-slide-btn" id="cp-home-next" aria-label="Próximo destaque">›</button></div><div class="cp-home-hero-copy"><div class="cp-home-eyebrow">Em destaque · catálogo atualizado</div><h1 id="cp-home-hero-title">Descubra sua próxima história</h1><div class="cp-home-hero-meta" id="cp-home-hero-meta"><span class="cp-home-chip">Central+ seleção</span></div><p id="cp-home-hero-overview">Filmes e séries para sua próxima maratona.</p><div class="cp-home-actions"><a class="cp-home-btn" id="cp-home-hero-details" href="/central-plus-filmes.html">＋ Explorar título</a><a class="cp-home-btn secondary" href="/central-plus-filmes.html">Explorar catálogo <span>↗</span></a></div></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Notícias atualizadas</h2><p>Novos títulos e lançamentos do universo do entretenimento</p></div><a class="cp-home-seeall" href="/central-plus-noticias.html">Ver notícias ↗</a></div><div class="cp-home-rail cp-home-news" id="cp-api-home-news"><span class="cp-api-status">Carregando atualizações…</span></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Continue assistindo</h2><p>Retome sua próxima maratona</p></div><a class="cp-home-inline-action" href="/central-plus-favoritos.html">Sua lista ↗</a></div><div class="cp-home-rail cp-home-continue" id="cp-api-home-continue"><div class="cp-home-empty"><div><strong>Sua jornada começa aqui</strong>Abra um filme ou série para começar a montar seu histórico.</div></div></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Apps recentes</h2><p>Seus serviços de streaming em um só lugar</p></div><a class="cp-home-seeall" href="/central-plus-apps.html">Ver apps ↗</a></div><div class="cp-home-rail" id="cp-api-home-apps"><a class="cp-api-card" href="/central-plus-apps.html"><div class="cp-api-poster" style="display:grid;place-items:center;font-size:34px;color:#e8eaf1">▶</div><div class="cp-api-title">Explorar aplicativos</div><div class="cp-api-meta">Seus serviços de streaming</div></a><a class="cp-api-card" href="/central-plus-apps.html"><div class="cp-api-poster" style="display:grid;place-items:center;font-size:30px;color:#e8eaf1">＋</div><div class="cp-api-title">Adicionar serviços</div><div class="cp-api-meta">Personalize sua Central+</div></a></div></section>
@@ -199,13 +199,22 @@
       ]);
       const newsCombined=newMovies.slice(0,8).concat(newSeries.slice(0,8)).sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
       $("#cp-api-home-news",mount).innerHTML=newsCombined.map(x=>card(x,"home")).join("")||'<div class="cp-home-error">Não há atualizações disponíveis no momento.</div>';
-      const feature=movies[0]||series[0];
-      if(feature){
-        const hero=$("#cp-home-hero-art",mount);if(hero)hero.style.backgroundImage='url("'+(feature.backdrop_url||feature.poster_url||"")+'")';
-        const title=$("#cp-home-hero-title",mount);if(title)title.textContent=feature.title;
-        const meta=$("#cp-home-hero-meta",mount);if(meta)meta.innerHTML='<span class="cp-home-chip">'+esc(year(feature)||"Em destaque")+'</span><span>'+esc((feature.genres||[]).slice(0,3).join(" · "))+'</span><span>★ '+esc(feature.rating||"—")+'</span>';
-        const overview=$("#cp-home-hero-overview",mount);if(overview)overview.textContent=feature.overview||"Descubra mais sobre este título no catálogo Central+.";
-        const detail=$("#cp-home-hero-details",mount);if(detail)detail.href=detailHref(feature);
+      const featuredItems=movies.slice(0,6).length?movies.slice(0,6):series.slice(0,6);
+      if(featuredItems.length){
+        let activeSlide=0;
+        const showFeature=(index)=>{
+          activeSlide=(index+featuredItems.length)%featuredItems.length;
+          const feature=featuredItems[activeSlide];
+          const hero=$("#cp-home-hero-art",mount);if(hero)hero.style.backgroundImage='url("'+(feature.backdrop_url||feature.poster_url||"")+'")';
+          const title=$("#cp-home-hero-title",mount);if(title)title.textContent=feature.title;
+          const meta=$("#cp-home-hero-meta",mount);if(meta)meta.innerHTML='<span class="cp-home-chip">'+esc(year(feature)||"Em destaque")+'</span><span>'+esc((feature.genres||[]).slice(0,3).join(" · "))+'</span><span>★ '+esc(feature.rating||"—")+'</span>';
+          const overview=$("#cp-home-hero-overview",mount);if(overview)overview.textContent=feature.overview||"Descubra mais sobre este título no catálogo Central+.";
+          const detail=$("#cp-home-hero-details",mount);if(detail)detail.href=detailHref(feature);
+          const count=$("#cp-home-slide-count",mount);if(count)count.textContent=String(activeSlide+1).padStart(2,"0")+" / "+String(featuredItems.length).padStart(2,"0");
+        };
+        $("#cp-home-prev",mount).onclick=()=>showFeature(activeSlide-1);
+        $("#cp-home-next",mount).onclick=()=>showFeature(activeSlide+1);
+        showFeature(0);
       }
     }
   }
