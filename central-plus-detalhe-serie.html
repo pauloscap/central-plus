@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Central+ | Detalhes da série</title>
+<style>
+:root{color-scheme:dark;--bg:#08090d;--panel:#12151d;--text:#f5f6fa;--muted:#b5bac7;--line:#ffffff20;--gutter:clamp(20px,5vw,76px)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer}
+.topbar{height:76px;display:flex;align-items:center;gap:clamp(18px,2.3vw,34px);padding:0 var(--gutter);border-bottom:1px solid rgba(255,255,255,.09);background:rgba(6,7,12,.88);backdrop-filter:blur(22px);position:sticky;top:0;z-index:20}
+.brand{font-size:23px;font-weight:800;letter-spacing:-1.2px;white-space:nowrap}.brand-mark{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#f7f7fa,#777f95);color:#08090d;font-size:20px;margin-right:8px;box-shadow:0 5px 22px #0007}
+.nav{display:flex;gap:clamp(12px,1.65vw,25px);align-items:center;overflow:auto;white-space:nowrap}.nav a{font-size:12px;color:#b6bbc8;transition:color .2s}.nav a:hover,.nav a.active{color:#fff}.right{margin-left:auto;color:#939aaa;font-size:10px;letter-spacing:.12em;white-space:nowrap}
+.hero{min-height:clamp(620px,82vh,850px);position:relative;display:flex;align-items:end;overflow:hidden;isolation:isolate;background:#151a25}
+.hero-bg{position:absolute;inset:0;background-size:cover;background-position:center 38%;transform:scale(1.035);filter:saturate(1.06) contrast(1.02)}
+.hero-bg:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,6,10,.97) 0%,rgba(5,6,10,.82) 28%,rgba(5,6,10,.36) 61%,rgba(5,6,10,.03) 100%),linear-gradient(0deg,#08090d 0%,rgba(8,9,13,.65) 16%,transparent 58%),linear-gradient(180deg,rgba(5,6,10,.35),transparent 25%)}
+.hero-inner{position:relative;z-index:1;width:100%;display:grid;grid-template-columns:minmax(180px,230px) minmax(0,700px);gap:clamp(26px,4.7vw,68px);align-items:end;padding:clamp(88px,12vh,135px) var(--gutter) 62px;max-width:1600px;margin:0 auto}
+.poster{width:100%;aspect-ratio:2/3;border:1px solid #ffffff24;border-radius:12px;overflow:hidden;box-shadow:0 25px 80px #000a,0 0 0 1px #ffffff12;background:#171c28;background-size:cover;background-position:center;position:relative;display:flex;align-items:end}
+.poster:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#05060cf7,transparent 60%)}
+.poster-title{position:relative;z-index:1;padding:19px;font-weight:850;font-size:clamp(25px,2.7vw,38px);line-height:.93;letter-spacing:-.05em;text-shadow:0 2px 15px #000}
+.eyebrow{display:flex;align-items:center;gap:10px;font-size:10px;color:#d5d9e5;letter-spacing:.21em;font-weight:750}
+.content h1{font-size:clamp(46px,6.6vw,90px);line-height:.92;letter-spacing:-.067em;margin:18px 0 20px;text-wrap:balance}
+.meta{display:flex;flex-wrap:wrap;gap:9px;align-items:center;color:#e2e5ed;font-size:12px}.tag{border:1px solid #ffffff35;border-radius:5px;background:#ffffff0a;padding:5px 8px;font-size:10px}
+.synopsis{font-size:15px;line-height:1.75;color:#d1d5df;max-width:620px;margin:22px 0}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:25px}.btn{border:1px solid #ffffff35;border-radius:8px;padding:0 17px;min-height:46px;background:#ffffff0b;color:#fff;font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:8px;backdrop-filter:blur(12px);transition:background .18s,border-color .18s,transform .18s}
+.btn.primary{background:#f4f5f8;color:#101219;border-color:#f4f5f8}.btn.primary:hover{background:#fff;transform:translateY(-2px)}.btn:hover{transform:translateY(-2px);border-color:#ffffff66;background:#ffffff18}
+.btn.watch-options{border-color:#ffffff28;background:#ffffff09}
+.below{max-width:1500px;margin:0 auto;padding:42px var(--gutter) 30px}
+.section-title{font-size:clamp(21px,2.2vw,28px);font-weight:750;letter-spacing:-.045em;margin:0 0 20px}
+.details-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(240px,.7fr);gap:18px}.panel{background:linear-gradient(145deg,rgba(22,25,35,.94),rgba(12,14,21,.96));border:1px solid #ffffff16;border-radius:14px;padding:25px;box-shadow:0 16px 40px #0002}
+.panel p{color:var(--muted);font-size:13px;line-height:1.8;margin:0}.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.fact-label{font-size:9px;color:#858d9f;text-transform:uppercase;letter-spacing:.16em;margin-bottom:7px}.fact-value{font-size:13px;line-height:1.5;color:#f2f3f7}
+.notice{border-top:1px solid #ffffff12;padding-top:13px;margin-top:18px;color:#858d9f;font-size:10px;line-height:1.6}
+.back{display:inline-flex;margin:24px 0 0;color:#cbd0dc;font-size:12px;align-items:center;gap:8px}.back:hover{color:#fff}
+.related{max-width:1500px;margin:0 auto;padding:10px var(--gutter) 58px}
+.related-head{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:18px}
+.related-head h2{font-size:clamp(21px,2.2vw,28px);font-weight:750;letter-spacing:-.045em;margin:9px 0 0}
+.related-all{font-size:11px;color:#bec4d2;white-space:nowrap}.related-all:hover{color:#fff}
+.related-rail{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:3px 2px 12px}.related-rail::-webkit-scrollbar{display:none}
+.related-card{position:relative;display:flex;flex:0 0 clamp(230px,24vw,340px);aspect-ratio:16/9;align-items:flex-end;overflow:hidden;isolation:isolate;border-radius:12px;border:1px solid #ffffff18;background-color:#151923;background-size:cover;background-position:center;scroll-snap-align:start;transition:transform .2s,border-color .2s}
+.related-card:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,rgba(4,5,9,.93),transparent 75%)}.related-card:hover{transform:translateY(-3px);border-color:#ffffff55}
+.related-card-copy{padding:17px;width:100%}.related-card-title{font-size:15px;font-weight:750;letter-spacing:-.025em;line-height:1.1}.related-card-meta{font-size:10px;color:#c4c9d5;margin-top:7px}
+.footer{padding:23px var(--gutter) 30px;border-top:1px solid #ffffff12;color:#747b8b;font-size:10px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:12px 17px;border-radius:999px;background:#f5f6fa;color:#11131a;font-size:12px;font-weight:700;display:none;z-index:30;box-shadow:0 8px 30px #0008}.toast.show{display:block}
+@media(max-width:900px){.topbar{gap:15px}.nav{gap:12px}.nav a{font-size:11px}.hero-inner{grid-template-columns:minmax(145px,195px) minmax(0,1fr);gap:24px}.content h1{font-size:clamp(40px,6vw,64px)}.details-grid{grid-template-columns:1fr}}
+@media(max-width:760px){.topbar{height:auto;min-height:66px;flex-wrap:wrap;gap:8px;padding-top:10px;padding-bottom:9px}.brand{font-size:21px}.nav{order:3;width:100%;gap:18px;padding:6px 0 2px}.nav a{font-size:12px}.right{font-size:9px}.hero{min-height:0}.hero-bg{background-position:62% center}.hero-bg:after{background:linear-gradient(90deg,rgba(5,6,10,.84),rgba(5,6,10,.34)),linear-gradient(0deg,#08090d 0%,rgba(8,9,13,.6) 20%,transparent 68%),linear-gradient(180deg,#08090d55,transparent 30%)}.hero-inner{grid-template-columns:88px minmax(0,1fr);gap:17px;padding:76px 20px 34px;align-items:end}.poster{border-radius:7px}.poster-title{font-size:16px;padding:9px}.content h1{font-size:clamp(31px,8.8vw,43px);line-height:.98;margin:9px 0 13px}.eyebrow{font-size:8px;letter-spacing:.15em}.meta{gap:6px;font-size:10px}.tag{font-size:9px;padding:4px 6px}.synopsis{font-size:12px;line-height:1.63;margin:13px 0}.actions{margin-top:15px;gap:7px}.btn{padding:10px 11px;min-height:38px;font-size:10px;border-radius:7px}.below{padding:28px 20px 25px}.panel{padding:18px}.facts{gap:15px}.fact-value{font-size:12px}.related{padding:10px 20px 38px}.related-head{align-items:start}.related-head h2{font-size:20px}.related-card{flex-basis:235px}.related-card-title{font-size:14px}}
+@media(max-width:420px){.hero-inner{grid-template-columns:72px minmax(0,1fr);gap:13px;padding-left:16px;padding-right:16px}.content h1{font-size:29px}.meta{gap:5px}.synopsis{font-size:11px}.actions{display:flex}.btn{flex:1 1 auto}.below{padding-left:16px;padding-right:16px}.facts{grid-template-columns:1fr 1fr}.related{padding-left:16px;padding-right:16px}.related-head{display:block}.related-all{display:inline-flex;margin-top:13px}}
+@media(prefers-reduced-motion:reduce){.related-card,.btn{transition:none}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="central-plus-home-v1.html"><span class="brand-mark">C</span>central+</a>
+  <nav class="nav" aria-label="Navegação principal">
+    <a href="central-plus-home-v1.html">Home</a><a href="central-plus-filmes.html">Filmes</a><a href="central-plus-series.html" class="active" aria-current="page">Séries</a><a href="central-plus-apps.html">Apps</a><a href="central-plus-noticias.html">Notícias</a><a href="central-plus-ao-vivo.html">Ao vivo</a><a href="central-plus-favoritos.html">Favoritos</a>
+  </nav>
+  <div class="right">FICHA DA SÉRIE</div>
+</header>
+<main>
+<section class="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-inner">
+    <div class="poster" id="poster"><div class="poster-title" id="posterTitle">RUPTURA</div></div>
+    <div class="content">
+      <div class="eyebrow">CENTRAL+ / SÉRIES</div>
+      <h1 id="title">Ruptura</h1>
+      <div class="meta"><span id="year">2022–</span><span>•</span><span id="seasons">2 temporadas</span><span>•</span><span id="genre">Drama · Suspense</span><span class="tag" id="rating">16</span><span class="tag">Série</span><span class="tag" id="platformTag">Apple TV+</span></div>
+      <p class="synopsis" id="synopsis">Uma equipe de funcionários passa por um procedimento que separa suas memórias profissionais das pessoais. A rotina misteriosa começa a revelar um experimento perturbador.</p>
+      <div class="actions">
+        <a class="btn primary" id="streamBtn" href="https://tv.apple.com/br">▶ Assistir na plataforma</a>
+        <a class="btn watch-options" id="watchOptionsBtn" href="https://www.justwatch.com/br">▦ Todas as opções</a>
+        <a class="btn" id="trailerBtn" href="https://www.youtube.com/">▷ Ver trailer</a>
+        <button class="btn" id="favoriteBtn" type="button">♡ Adicionar aos favoritos</button>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="below">
+  <h2 class="section-title">Sobre a série</h2>
+  <div class="details-grid">
+    <article class="panel"><div class="fact-label">Sinopse</div><p id="longSynopsis">Uma equipe de funcionários passa por um procedimento que separa suas memórias profissionais das pessoais. A rotina misteriosa começa a revelar um experimento perturbador.</p><div class="notice">Os catálogos e as opções de reprodução variam conforme a região e podem mudar sem aviso. O Central+ direciona para os serviços oficiais ou para uma busca pelo título.</div></article>
+    <article class="panel"><div class="facts">
+      <div><div class="fact-label">Criação</div><div class="fact-value" id="creator">Dan Erickson</div></div>
+      <div><div class="fact-label">Ano</div><div class="fact-value" id="yearFact">2022–</div></div>
+      <div><div class="fact-label">Elenco</div><div class="fact-value" id="cast">Adam Scott, Britt Lower, Patricia Arquette</div></div>
+      <div><div class="fact-label">Gênero</div><div class="fact-value" id="genreFact">Drama, suspense, ficção científica</div></div>
+      <div><div class="fact-label">Temporadas</div><div class="fact-value" id="seasonsFact">2 temporadas</div></div>
+      <div><div class="fact-label">Classificação</div><div class="fact-value" id="ratingFact">16 anos (referência)</div></div>
+      <div><div class="fact-label">Áudio</div><div class="fact-value">Consulte o serviço de streaming</div></div>
+      <div><div class="fact-label">Legendas</div><div class="fact-value">Consulte o serviço de streaming</div></div>
+    </div></article>
+  </div>
+  <a class="back" href="central-plus-series.html">← Voltar ao catálogo de séries</a>
+</section>
+<section class="related">
+  <div class="related-head"><div><div class="eyebrow">CONTINUE EXPLORANDO</div><h2>Mais séries para descobrir</h2></div><a class="related-all" href="central-plus-series.html">Voltar ao catálogo →</a></div>
+  <div class="related-rail" id="relatedRail" aria-label="Séries recomendadas"></div>
+</section>
+</main>
+<footer class="footer"><span>CENTRAL+ · Catálogo demonstrativo.</span><span>Imagens ilustrativas · Disponibilidade sujeita ao serviço e à região.</span></footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(function(){
+const shows={
+'ruptura':{title:'Ruptura',poster:'RUPTURA',year:'2022–',seasons:'2 temporadas',genre:'Drama · Suspense · Ficção científica',genreFact:'Drama, suspense, ficção científica',rating:'16',creator:'Dan Erickson',cast:'Adam Scott, Britt Lower, Patricia Arquette, John Turturro, Christopher Walken',platform:'Apple TV+',type:'apple',synopsis:'Uma equipe de funcionários passa por um procedimento que separa suas memórias profissionais das pessoais. A rotina misteriosa começa a revelar um experimento perturbador e põe em dúvida a própria natureza da identidade.',search:'Ruptura série',art:'linear-gradient(145deg,#8fa8b3,#283d4b 38%,#131b27 78%,#08090d)',posterImage:'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1000&q=85',backdropImage:'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=2200&q=85'},
+'silo':{title:'Silo',poster:'SILO',year:'2023–',seasons:'2 temporadas',genre:'Ficção científica · Mistério',genreFact:'Ficção científica, mistério, drama',rating:'16',creator:'Graham Yost',cast:'Rebecca Ferguson, Common, Tim Robbins, Harriet Walter',platform:'Apple TV+',type:'apple',synopsis:'Em uma comunidade subterrânea que acredita estar protegendo a humanidade, uma engenheira começa a investigar segredos que podem mudar tudo o que os moradores sabem sobre o mundo exterior.',search:'Silo série',art:'linear-gradient(145deg,#c0783e,#5b372e 35%,#171821 80%,#08090d)',posterImage:'https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1000&q=85',backdropImage:'https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=2200&q=85'},
+'casa-dragao':{title:'A Casa do Dragão',poster:'A CASA DO DRAGÃO',year:'2022–',seasons:'2 temporadas',genre:'Fantasia · Drama',genreFact:'Fantasia, drama, aventura',rating:'18',creator:'Ryan Condal, George R. R. Martin',cast:'Emma D’Arcy, Matt Smith, Olivia Cooke, Steve Toussaint',platform:'HBO Max',type:'max',synopsis:'Séculos antes dos acontecimentos de Game of Thrones, a disputa pela sucessão da Casa Targaryen divide uma dinastia poderosa e leva Westeros à beira de uma guerra devastadora.',search:'A Casa do Dragão série',art:'linear-gradient(145deg,#9d644a,#4b2d39 40%,#10131d 80%,#08090d)',posterImage:'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1000&q=85',backdropImage:'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=2200&q=85'},
+'fallout':{title:'Fallout',poster:'FALLOUT',year:'2024–',seasons:'2 temporadas',genre:'Aventura · Ficção científica',genreFact:'Aventura, ficção científica, ação',rating:'16',creator:'Geneva Robertson-Dworet, Graham Wagner',cast:'Ella Purnell, Aaron Moten, Walton Goggins',platform:'Prime Video',type:'prime',synopsis:'Duzentos anos após o apocalipse, uma jovem deixa a segurança de seu abrigo subterrâneo e encontra um mundo imprevisível, violento e repleto de segredos.',search:'Fallout série',art:'linear-gradient(145deg,#c6a46e,#7b563c 38%,#20212b 80%,#08090d)',posterImage:'https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=1000&q=85',backdropImage:'https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=2200&q=85'},
+'andor':{title:'Andor',poster:'ANDOR',year:'2022–2025',seasons:'2 temporadas',genre:'Drama · Ficção científica',genreFact:'Drama, ficção científica, ação',rating:'14',creator:'Tony Gilroy',cast:'Diego Luna, Stellan Skarsgård, Adria Arjona, Genevieve O’Reilly',platform:'Disney+',type:'disney',synopsis:'A história acompanha a transformação de Cassian Andor de um homem comum em uma peça decisiva da rebelião contra o Império, em uma trama de espionagem, sacrifício e resistência.',search:'Andor série',art:'linear-gradient(145deg,#8da6b7,#344a5a 38%,#131b28 80%,#08090d)',posterImage:'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1000&q=85',backdropImage:'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=2200&q=85'},
+'the-last-of-us':{title:'The Last of Us',poster:'THE LAST OF US',year:'2023–',seasons:'2 temporadas',genre:'Drama · Aventura',genreFact:'Drama, ação, aventura',rating:'18',creator:'Craig Mazin, Neil Druckmann',cast:'Pedro Pascal, Bella Ramsey, Kaitlyn Dever, Gabriel Luna',platform:'HBO Max',type:'max',synopsis:'Em um mundo devastado por uma infecção, Joel e Ellie atravessam territórios perigosos enquanto desenvolvem um vínculo que desafia as chances de sobrevivência.',search:'The Last of Us série',art:'linear-gradient(145deg,#8d9b73,#344b37 38%,#121a18 80%,#08090d)',posterImage:'https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1000&q=85',backdropImage:'https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=2200&q=85'},
+'the-bear':{title:'O Urso',poster:'O URSO',year:'2022–',seasons:'4 temporadas',genre:'Drama · Comédia',genreFact:'Drama, comédia',rating:'16',creator:'Christopher Storer',cast:'Jeremy Allen White, Ayo Edebiri, Ebon Moss-Bachrach',platform:'Disney+',type:'disney',synopsis:'Um jovem chef retorna a Chicago para administrar a lanchonete da família. Entre uma cozinha caótica e relações intensas, ele tenta transformar o negócio sem perder a si mesmo.',search:'O Urso série The Bear',art:'linear-gradient(145deg,#c17b4b,#5a382b 38%,#18141a 80%,#08090d)',posterImage:'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1000&q=85',backdropImage:'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=2200&q=85'},
+'stranger-things':{title:'Stranger Things',poster:'STRANGER THINGS',year:'2016–2025',seasons:'5 temporadas',genre:'Ficção científica · Suspense',genreFact:'Ficção científica, suspense, aventura',rating:'16',creator:'Matt Duffer, Ross Duffer',cast:'Millie Bobby Brown, Finn Wolfhard, David Harbour, Winona Ryder',platform:'Netflix',type:'netflix',synopsis:'O desaparecimento de um garoto revela experimentos secretos, forças sobrenaturais e uma dimensão assustadora que ameaça uma pequena cidade americana.',search:'Stranger Things série',art:'linear-gradient(145deg,#9b5558,#4b2935 38%,#14121e 80%,#08090d)',posterImage:'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=85',backdropImage:'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=2200&q=85'},
+'black-mirror':{title:'Black Mirror',poster:'BLACK MIRROR',year:'2011–',seasons:'7 temporadas',genre:'Ficção científica · Suspense',genreFact:'Ficção científica, suspense, antologia',rating:'16',creator:'Charlie Brooker',cast:'Elenco rotativo',platform:'Netflix',type:'netflix',synopsis:'Uma antologia de histórias independentes que examina como a tecnologia, as mídias e os desejos humanos podem alterar a vida cotidiana de maneiras perturbadoras.',search:'Black Mirror série',art:'linear-gradient(145deg,#8295a1,#37434d 38%,#11151c 80%,#08090d)',posterImage:'https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1000&q=85',backdropImage:'https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=2200&q=85'},
+'the-penguin':{title:'Pinguim',poster:'PINGUIM',year:'2024',seasons:'1 temporada',genre:'Crime · Drama',genreFact:'Crime, drama, suspense',rating:'18',creator:'Lauren LeFranc',cast:'Colin Farrell, Cristin Milioti, Rhenzy Feliz',platform:'HBO Max',type:'max',synopsis:'Após a queda de poder em Gotham, Oswald Cobblepot tenta ocupar o espaço deixado pelo antigo submundo do crime e construir o próprio império.',search:'Pinguim série The Penguin',art:'linear-gradient(145deg,#84909e,#3c4554 38%,#11131d 80%,#08090d)',posterImage:'https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=1000&q=85',backdropImage:'https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=2200&q=85'},
+'arcane':{title:'Arcane',poster:'ARCANE',year:'2021–2024',seasons:'2 temporadas',genre:'Animação · Fantasia',genreFact:'Animação, fantasia, ação',rating:'14',creator:'Christian Linke, Alex Yee',cast:'Hailee Steinfeld, Ella Purnell, Kevin Alejandro',platform:'Netflix',type:'netflix',synopsis:'Duas irmãs ficam em lados opostos de um conflito crescente entre uma cidade rica e seu submundo, enquanto novas tecnologias e poderes mudam o equilíbrio da região.',search:'Arcane série',art:'linear-gradient(145deg,#8997b4,#39415e 38%,#171526 80%,#08090d)',posterImage:'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1000&q=85',backdropImage:'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=2200&q=85'},
+'wednesday':{title:'Wandinha',poster:'WANDINHA',year:'2022–',seasons:'2 temporadas',genre:'Fantasia · Mistério',genreFact:'Fantasia, comédia, mistério',rating:'14',creator:'Alfred Gough, Miles Millar',cast:'Jenna Ortega, Emma Myers, Catherine Zeta-Jones',platform:'Netflix',type:'netflix',synopsis:'Na Escola Nunca Mais, Wandinha Addams tenta dominar suas habilidades psíquicas, desvendar uma série de mistérios e lidar com colegas que desafiam sua independência.',search:'Wandinha série Wednesday',art:'linear-gradient(145deg,#7c6f87,#3c3148 38%,#15111b 80%,#08090d)',posterImage:'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=85',backdropImage:'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=2200&q=85'},
+'white-lotus':{title:'The White Lotus',poster:'THE WHITE LOTUS',year:'2021–',seasons:'3 temporadas',genre:'Drama · Mistério',genreFact:'Drama, mistério, sátira',rating:'18',creator:'Mike White',cast:'Elenco rotativo',platform:'HBO Max',type:'max',synopsis:'Em resorts luxuosos, hóspedes e funcionários cruzam interesses, ressentimentos e segredos. A cada temporada, uma nova comunidade revela o lado sombrio do privilégio.',search:'The White Lotus série',art:'linear-gradient(145deg,#84aaa0,#365c57 38%,#12201f 80%,#08090d)',posterImage:'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=1000&q=85',backdropImage:'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=2200&q=85'},
+'mandalorian':{title:'The Mandalorian',poster:'THE MANDALORIAN',year:'2019–',seasons:'3 temporadas',genre:'Ficção científica · Aventura',genreFact:'Ficção científica, aventura',rating:'12',creator:'Jon Favreau',cast:'Pedro Pascal, Katee Sackhoff, Carl Weathers',platform:'Disney+',type:'disney',synopsis:'Um caçador de recompensas solitário cruza a galáxia depois de aceitar uma missão que transforma sua visão de honra, família e pertencimento.',search:'The Mandalorian série',art:'linear-gradient(145deg,#9ca2aa,#48515e 38%,#171b22 80%,#08090d)',posterImage:'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1000&q=85',backdropImage:'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=2200&q=85'},
+'handmaids-tale':{title:'O Conto da Aia',poster:'O CONTO DA AIA',year:'2017–2025',seasons:'6 temporadas',genre:'Drama · Distopia',genreFact:'Drama, ficção científica, suspense',rating:'18',creator:'Bruce Miller',cast:'Elisabeth Moss, Yvonne Strahovski, Ann Dowd',platform:'Disney+',type:'disney',synopsis:'Em uma sociedade autoritária que controla os corpos e a reprodução, uma mulher tenta sobreviver e reencontrar a filha enquanto resiste ao regime.',search:'O Conto da Aia série',art:'linear-gradient(145deg,#a35c59,#5b272e 38%,#171016 80%,#08090d)',posterImage:'https://images.unsplash.com/photo-1490730141103-6cac27aaab94?auto=format&fit=crop&w=1000&q=85',backdropImage:'https://images.unsplash.com/photo-1490730141103-6cac27aaab94?auto=format&fit=crop&w=2200&q=85'},
+'yellowjackets':{title:'Yellowjackets',poster:'YELLOWJACKETS',year:'2021–',seasons:'3 temporadas',genre:'Drama · Suspense',genreFact:'Drama, suspense, mistério',rating:'18',creator:'Ashley Lyle, Bart Nickerson',cast:'Melanie Lynskey, Sophie Thatcher, Christina Ricci',platform:'Paramount+',type:'paramount',synopsis:'Depois de um acidente aéreo, um time de futebol feminino luta para sobreviver em uma região isolada. Anos mais tarde, os segredos daquela experiência continuam assombrando as sobreviventes.',search:'Yellowjackets série',art:'linear-gradient(145deg,#8b9c80,#374734 38%,#131913 80%,#08090d)',posterImage:'https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1000&q=85',backdropImage:'https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=2200&q=85'},
+'invincible':{title:'Invencível',poster:'INVENCÍVEL',year:'2021–',seasons:'3 temporadas',genre:'Animação · Ação',genreFact:'Animação, ação, aventura',rating:'18',creator:'Robert Kirkman',cast:'Steven Yeun, Sandra Oh, J. K. Simmons',platform:'Prime Video',type:'prime',synopsis:'O filho de um super-herói lendário começa a descobrir seus próprios poderes e enfrenta uma verdade que muda tudo o que acreditava sobre sua família e o planeta.',search:'Invencível série animada',art:'linear-gradient(145deg,#b77f54,#64413b 38%,#17121b 80%,#08090d)',posterImage:'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1000&q=85',backdropImage:'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=2200&q=85'}
+};
+const key=(new URLSearchParams(location.search).get('serie')||'ruptura').toLowerCase();
+const m=shows[key]||shows.ruptura;
+const platformTypes={
+ apple:{label:'Apple TV+',url:'https://tv.apple.com/br/search?term='},
+ max:{label:'HBO Max',url:'https://play.max.com/search?q='},
+ prime:{label:'Prime Video',url:'https://www.primevideo.com/search/ref=atv_nb_sr?phrase='},
+ disney:{label:'Disney+',url:'https://www.disneyplus.com/search?q='},
+ netflix:{label:'Netflix',url:'https://www.netflix.com/search?q='},
+ paramount:{label:'Paramount+',url:'https://www.paramountplus.com/search/?query='}
+};
+function byId(id){return document.getElementById(id)}
+function set(id,value){const el=byId(id);if(el)el.textContent=value}
+function serviceSearch(show){return (platformTypes[show.type]||platformTypes.apple).url+encodeURIComponent(show.search)}
+function justWatchSearch(show){return 'https://www.justwatch.com/br/busca?q='+encodeURIComponent(show.search)}
+set('title',m.title);set('posterTitle',m.poster);set('year',m.year);set('yearFact',m.year);set('seasons',m.seasons);set('seasonsFact',m.seasons);set('genre',m.genre);set('genreFact',m.genreFact);set('rating',m.rating);set('ratingFact',m.rating+' anos (referência)');set('creator',m.creator);set('cast',m.cast);set('synopsis',m.synopsis);set('longSynopsis',m.synopsis);set('platformTag',m.platform);document.title='Central+ | '+m.title;
+byId('heroBg').style.backgroundImage='linear-gradient(90deg,rgba(5,6,10,.25),rgba(5,6,10,.05)),'+m.backdropImage&&('linear-gradient(90deg,rgba(5,6,10,.25),rgba(5,6,10,.05)),url("'+m.backdropImage+'")');
+byId('poster').style.backgroundImage='linear-gradient(0deg,#08090d26,#08090d26),url("'+m.posterImage+'")';
+byId('streamBtn').href=serviceSearch(m);byId('streamBtn').textContent='▶ Assistir na '+m.platform;
+byId('watchOptionsBtn').href=justWatchSearch(m);
+byId('trailerBtn').href='https://www.youtube.com/results?search_query='+encodeURIComponent(m.search+' trailer oficial');
+const favoriteKey='centralplus-series-favoritos';
+function favorites(){try{return JSON.parse(localStorage.getItem(favoriteKey)||'[]')}catch(e){return[]}}
+const fav=byId('favoriteBtn');
+function renderFavorite(){fav.textContent=favorites().includes(key)?'✓ Na minha lista':'♡ Adicionar aos favoritos'}
+renderFavorite();
+fav.addEventListener('click',()=>{let all=favorites();if(all.includes(key)){all=all.filter(x=>x!==key);showToast('Série removida da lista')}else{all.push(key);showToast('Série adicionada à lista')}try{localStorage.setItem(favoriteKey,JSON.stringify(all))}catch(e){showToast('Não foi possível salvar a lista neste navegador')}renderFavorite()});
+function showToast(msg){const t=byId('toast');t.textContent=msg;t.classList.add('show');clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>t.classList.remove('show'),2200)}
+const rail=byId('relatedRail');
+Object.entries(shows).filter(([slug])=>slug!==key).slice(0,8).forEach(([slug,show])=>{
+ const card=document.createElement('a');card.className='related-card';card.href='central-plus-detalhe-serie.html?serie='+encodeURIComponent(slug);card.setAttribute('aria-label','Ver detalhes de '+show.title);
+ card.style.backgroundImage='linear-gradient(0deg,rgba(4,5,9,.94),transparent 78%),url("'+show.backdropImage+'")';
+ const copy=document.createElement('div');copy.className='related-card-copy';
+ const title=document.createElement('div');title.className='related-card-title';title.textContent=show.title;
+ const meta=document.createElement('div');meta.className='related-card-meta';meta.textContent=show.year+' · '+show.genreFact;
+ copy.append(title,meta);card.append(copy);rail.append(card);
+});
+})();
+</script>
+</body>
+</html>
