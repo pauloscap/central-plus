@@ -148,6 +148,63 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
   .films-page .film-feature-art,.films-page .film-feature-dot,.films-page .film-feature-arrow{transition:none}
 }
 
+
+/* Catálogo Filmes v2: cards horizontais e fileiras por gênero */
+.films-page .film-catalog{padding:0 0 20px}
+.films-page .film-toolbar{margin:0 0 18px;align-items:end}
+.films-page .film-toolbar .section-title{font-size:clamp(24px,2.4vw,34px);letter-spacing:-.055em}
+.films-page .film-toolbar .section-subtitle{font-size:12px;line-height:1.6}
+.films-page .film-filters{padding:3px 0 20px;gap:9px}
+.films-page .film-row{margin:0 0 32px;min-width:0}
+.films-page .film-row-header{display:flex;align-items:end;justify-content:space-between;gap:18px;margin:0 0 13px}
+.films-page .film-row-heading{min-width:0}
+.films-page .film-row-header h3{font-size:clamp(20px,1.8vw,27px);font-weight:700;letter-spacing:-.045em;line-height:1.2;margin:0}
+.films-page .film-row-header p{font-size:11px;line-height:1.5;color:#969dad;margin:5px 0 0}
+.films-page .film-row-controls{display:flex;gap:7px;flex-shrink:0}
+.films-page .film-row-arrow{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;border:1px solid #ffffff22;background:#ffffff09;color:#f5f6fa;font-size:22px;line-height:1;transition:background .18s,border-color .18s,transform .18s}
+.films-page .film-row-arrow:hover{background:#ffffff1a;border-color:#ffffff50;transform:scale(1.05)}
+.films-page .film-row-rail{display:flex;gap:15px;overflow-x:auto;overflow-y:hidden;padding:4px 2px 18px;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
+.films-page .film-row-rail::-webkit-scrollbar{display:none}
+.films-page .film-row-rail:focus-visible{outline:2px solid #ffffff7a;outline-offset:2px;border-radius:12px}
+.films-page .film-tile{display:block;flex:0 0 clamp(245px,25vw,355px);min-width:0;scroll-snap-align:start;border-radius:14px;transition:transform .2s ease,filter .2s ease}
+.films-page .film-tile:hover{transform:translateY(-4px);filter:brightness(1.07)}
+.films-page .film-tile .poster{position:relative;aspect-ratio:16/9;min-height:0;border-radius:14px;overflow:hidden;background:#151a24;border:1px solid rgba(255,255,255,.13);box-shadow:0 10px 25px rgba(0,0,0,.18);isolation:isolate}
+.films-page .film-tile .poster-art{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.015);transition:transform .35s ease}
+.films-page .film-tile:hover .poster-art{transform:scale(1.06)}
+.films-page .film-tile .poster-art:before,.films-page .film-tile .poster-art:after{content:none!important;display:none!important}
+.films-page .film-card-overlay{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(0deg,rgba(4,5,9,.92) 0%,rgba(4,5,9,.36) 48%,rgba(4,5,9,.04) 100%),linear-gradient(90deg,rgba(3,5,10,.18),transparent 80%)}
+.films-page .film-tile .poster:before{content:none}
+.films-page .film-tile .poster:after{content:none}
+.films-page .film-tile .poster-copy{position:absolute;z-index:2;left:15px;right:50px;bottom:14px}
+.films-page .film-tile .poster-kicker{font-size:9px;letter-spacing:.12em;line-height:1.4;color:#d7dce8;font-weight:750;margin:0 0 5px;text-transform:uppercase}
+.films-page .film-tile .poster-title{font-size:clamp(15px,1.25vw,19px);font-weight:730;letter-spacing:-.035em;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.films-page .film-card-play{position:absolute;z-index:3;right:13px;bottom:13px;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:rgba(245,247,252,.96);color:#11131a;box-shadow:0 3px 15px rgba(0,0,0,.25);opacity:.92;transition:transform .2s,opacity .2s}
+.films-page .film-card-play svg{width:13px;height:13px;margin-left:2px}
+.films-page .film-tile:hover .film-card-play{transform:scale(1.08);opacity:1}
+.films-page .film-tile-meta{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:9px;color:#9da4b4;font-size:10px}
+.films-page .film-tile-meta span:last-child{color:#e0e3eb;border:1px solid #ffffff20;padding:3px 5px;border-radius:3px;font-size:8px;letter-spacing:.08em;flex-shrink:0}
+.films-page .film-row[hidden],.films-page .film-tile[hidden]{display:none!important}
+.films-page .film-empty{padding:32px 0;color:#aeb4c2;font-size:13px}
+@media(max-width:760px){
+  .films-page .film-toolbar{align-items:start}
+  .films-page .film-toolbar .section-title{font-size:24px}
+  .films-page .film-row{margin-bottom:25px}
+  .films-page .film-row-header{gap:10px}
+  .films-page .film-row-header h3{font-size:19px}
+  .films-page .film-row-header p{max-width:270px;font-size:10px}
+  .films-page .film-row-controls{gap:5px}
+  .films-page .film-row-arrow{width:30px;height:30px;font-size:20px}
+  .films-page .film-row-rail{gap:12px;margin-right:-2px;padding-bottom:14px}
+  .films-page .film-tile{flex-basis:min(78vw,310px)}
+  .films-page .film-tile .poster{aspect-ratio:16/9;border-radius:12px}
+  .films-page .film-tile .poster-copy{left:12px;right:45px;bottom:11px}
+  .films-page .film-tile .poster-title{font-size:15px}
+  .films-page .film-tile .poster-kicker{font-size:8px;margin-bottom:4px}
+  .films-page .film-card-play{width:28px;height:28px;right:10px;bottom:10px}
+}
+@media(prefers-reduced-motion:reduce){
+  .films-page .film-tile,.films-page .film-tile .poster-art,.films-page .film-card-play{transition:none}
+}
 </style>
 </head>
 <body>
@@ -239,24 +296,902 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
       </div>
       <div class="film-feature-index"><span id="film-feature-index-number">01</span><span class="film-feature-index-line"></span><span>EM DESTAQUE</span></div>
     </div>
-    <div class="film-toolbar"><div><h2 class="section-title">Explore o catálogo</h2><p class="section-subtitle">Escolha uma categoria e encontre sua próxima história.</p></div><div class="film-count"><span id="film-count">10</span> títulos</div></div>
-    <div class="film-filters" role="group" aria-label="Filtrar filmes">
-      <button class="film-filter active" data-filter="todos" type="button">Todos</button><button class="film-filter" data-filter="ficcao" type="button">Ficção científica</button><button class="film-filter" data-filter="drama" type="button">Drama</button><button class="film-filter" data-filter="acao" type="button">Ação e suspense</button><button class="film-filter" data-filter="animacao" type="button">Animação</button><button class="film-filter" data-filter="aventura" type="button">Aventura</button>
+    <div id="film-catalog" class="film-catalog">
+      <div class="film-toolbar">
+        <div><h2 class="section-title">Explore por categoria</h2><p class="section-subtitle">Fileiras horizontais para descobrir títulos em diferentes estilos.</p></div>
+        <div class="film-count"><span id="film-count">64</span> títulos</div>
+      </div>
+      <div class="film-filters" role="group" aria-label="Filtrar filmes">
+        <button class="film-filter active" data-filter="todos" type="button">Todos</button>
+        <button class="film-filter" data-filter="ficcao" type="button">Ficção científica</button>
+        <button class="film-filter" data-filter="drama" type="button">Drama</button>
+        <button class="film-filter" data-filter="acao" type="button">Ação e suspense</button>
+        <button class="film-filter" data-filter="animacao" type="button">Animação</button>
+        <button class="film-filter" data-filter="aventura" type="button">Aventura</button>
+      </div>
+    <section class="film-row" id="film-row-popular" aria-labelledby="film-row-title-popular">
+      <div class="film-row-header">
+        <div class="film-row-heading">
+          <h3 id="film-row-title-popular">Em alta no Central+</h3>
+          <p>Títulos para colocar na sua próxima sessão de cinema.</p>
+        </div>
+        <div class="film-row-controls">
+          <button class="film-row-arrow" type="button" data-rail-target="film-rail-popular" data-rail-direction="-1" aria-label="Rolar Em alta no Central+ para a esquerda">‹</button>
+          <button class="film-row-arrow" type="button" data-rail-target="film-rail-popular" data-rail-direction="1" aria-label="Rolar Em alta no Central+ para a direita">›</button>
+        </div>
+      </div>
+      <div class="film-row-rail" id="film-rail-popular" tabindex="0" aria-label="Em alta no Central+">
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="ficcao aventura" data-title="Duna: Parte Dois" aria-label="Duna: Parte Dois, 2024, ficção científica">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">FICÇÃO CIENTÍFICA</div>
+                <div class="poster-title">Duna: Parte Dois</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2024 · 2h 46min</span><span>4K</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="drama" data-title="Oppenheimer" aria-label="Oppenheimer, 2023, drama · história">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">DRAMA · HISTÓRIA</div>
+                <div class="poster-title">Oppenheimer</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2023 · 3h</span><span>4K</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="ficcao drama aventura" data-title="Interestelar" aria-label="Interestelar, 2014, ficção científica">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">FICÇÃO CIENTÍFICA</div>
+                <div class="poster-title">Interestelar</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2014 · 2h 49min</span><span>4K</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="ficcao acao" data-title="A Origem" aria-label="A Origem, 2010, ação · suspense">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">AÇÃO · SUSPENSE</div>
+                <div class="poster-title">A Origem</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2010 · 2h 28min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="ficcao drama" data-title="Blade Runner 2049" aria-label="Blade Runner 2049, 2017, ficção científica">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">FICÇÃO CIENTÍFICA</div>
+                <div class="poster-title">Blade Runner 2049</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2017 · 2h 44min</span><span>4K</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="animacao aventura" data-title="Homem-Aranha: Através do Aranhaverso" aria-label="Homem-Aranha: Através do Aranhaverso, 2023, animação · aventura">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">ANIMAÇÃO · AVENTURA</div>
+                <div class="poster-title">Homem-Aranha: Através do Aranhaverso</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2023 · 2h 20min</span><span>4K</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="acao aventura" data-title="Mad Max: Estrada da Fúria" aria-label="Mad Max: Estrada da Fúria, 2015, ação · aventura">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">AÇÃO · AVENTURA</div>
+                <div class="poster-title">Mad Max: Estrada da Fúria</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2015 · 2h</span><span>4K</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="drama aventura" data-title="A Vida Secreta de Walter Mitty" aria-label="A Vida Secreta de Walter Mitty, 2013, aventura · drama">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">AVENTURA · DRAMA</div>
+                <div class="poster-title">A Vida Secreta de Walter Mitty</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2013 · 1h 54min</span><span>HD</span></div>
+          </a>
+      </div>
+    </section>
+    <section class="film-row" id="film-row-scifi" aria-labelledby="film-row-title-scifi">
+      <div class="film-row-header">
+        <div class="film-row-heading">
+          <h3 id="film-row-title-scifi">Ficção científica e mundos impossíveis</h3>
+          <p>Do espaço profundo a futuros que desafiam a imaginação.</p>
+        </div>
+        <div class="film-row-controls">
+          <button class="film-row-arrow" type="button" data-rail-target="film-rail-scifi" data-rail-direction="-1" aria-label="Rolar Ficção científica e mundos impossíveis para a esquerda">‹</button>
+          <button class="film-row-arrow" type="button" data-rail-target="film-rail-scifi" data-rail-direction="1" aria-label="Rolar Ficção científica e mundos impossíveis para a direita">›</button>
+        </div>
+      </div>
+      <div class="film-row-rail" id="film-rail-scifi" tabindex="0" aria-label="Ficção científica e mundos impossíveis">
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="ficcao drama aventura" data-title="Interestelar" aria-label="Interestelar, 2014, viagens espaciais">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">VIAGENS ESPACIAIS</div>
+                <div class="poster-title">Interestelar</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2014 · 2h 49min</span><span>4K</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="ficcao drama" data-title="Blade Runner 2049" aria-label="Blade Runner 2049, 2017, futuro distópico">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">FUTURO DISTÓPICO</div>
+                <div class="poster-title">Blade Runner 2049</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2017 · 2h 44min</span><span>4K</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="ficcao aventura" data-title="Duna: Parte Dois" aria-label="Duna: Parte Dois, 2024, ópera espacial">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">ÓPERA ESPACIAL</div>
+                <div class="poster-title">Duna: Parte Dois</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2024 · 2h 46min</span><span>4K</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="ficcao acao" data-title="Matrix" aria-label="Matrix, 1999, realidade em questão">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">REALIDADE EM QUESTÃO</div>
+                <div class="poster-title">Matrix</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>1999 · 2h 16min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="ficcao aventura" data-title="Perdido em Marte" aria-label="Perdido em Marte, 2015, sobrevivência">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">SOBREVIVÊNCIA</div>
+                <div class="poster-title">Perdido em Marte</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2015 · 2h 24min</span><span>4K</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="ficcao drama" data-title="A Chegada" aria-label="A Chegada, 2016, contato extraterrestre">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">CONTATO EXTRATERRESTRE</div>
+                <div class="poster-title">A Chegada</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2016 · 1h 56min</span><span>4K</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="ficcao drama" data-title="Gravidade" aria-label="Gravidade, 2013, à deriva no espaço">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">À DERIVA NO ESPAÇO</div>
+                <div class="poster-title">Gravidade</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2013 · 1h 31min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="ficcao acao" data-title="No Limite do Amanhã" aria-label="No Limite do Amanhã, 2014, ação temporal">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">AÇÃO TEMPORAL</div>
+                <div class="poster-title">No Limite do Amanhã</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2014 · 1h 53min</span><span>HD</span></div>
+          </a>
+      </div>
+    </section>
+    <section class="film-row" id="film-row-action" aria-labelledby="film-row-title-action">
+      <div class="film-row-header">
+        <div class="film-row-heading">
+          <h3 id="film-row-title-action">Ação e aventura</h3>
+          <p>Grandes missões, perseguições e jornadas de tirar o fôlego.</p>
+        </div>
+        <div class="film-row-controls">
+          <button class="film-row-arrow" type="button" data-rail-target="film-rail-action" data-rail-direction="-1" aria-label="Rolar Ação e aventura para a esquerda">‹</button>
+          <button class="film-row-arrow" type="button" data-rail-target="film-rail-action" data-rail-direction="1" aria-label="Rolar Ação e aventura para a direita">›</button>
+        </div>
+      </div>
+      <div class="film-row-rail" id="film-rail-action" tabindex="0" aria-label="Ação e aventura">
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="acao aventura" data-title="Mad Max: Estrada da Fúria" aria-label="Mad Max: Estrada da Fúria, 2015, ação · distopia">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">AÇÃO · DISTOPIA</div>
+                <div class="poster-title">Mad Max: Estrada da Fúria</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2015 · 2h</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="acao" data-title="John Wick 4: Baba Yaga" aria-label="John Wick 4: Baba Yaga, 2023, ação">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">AÇÃO</div>
+                <div class="poster-title">John Wick 4: Baba Yaga</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2023 · 2h 49min</span><span>4K</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="acao drama" data-title="Top Gun: Maverick" aria-label="Top Gun: Maverick, 2022, aviação · ação">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">AVIAÇÃO · AÇÃO</div>
+                <div class="poster-title">Top Gun: Maverick</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2022 · 2h 10min</span><span>4K</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="acao aventura" data-title="Missão: Impossível — Acerto de Contas" aria-label="Missão: Impossível — Acerto de Contas, 2023, espionagem">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">ESPIONAGEM</div>
+                <div class="poster-title">Missão: Impossível — Acerto de Contas</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2023 · 2h 43min</span><span>4K</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="acao drama" data-title="Gladiador" aria-label="Gladiador, 2000, épico histórico">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">ÉPICO HISTÓRICO</div>
+                <div class="poster-title">Gladiador</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2000 · 2h 35min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="acao aventura" data-title="Pantera Negra" aria-label="Pantera Negra, 2018, heróis · aventura">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">HERÓIS · AVENTURA</div>
+                <div class="poster-title">Pantera Negra</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2018 · 2h 14min</span><span>4K</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="acao drama" data-title="Batman: O Cavaleiro das Trevas" aria-label="Batman: O Cavaleiro das Trevas, 2008, ação · crime">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">AÇÃO · CRIME</div>
+                <div class="poster-title">Batman: O Cavaleiro das Trevas</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2008 · 2h 32min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="aventura ficcao" data-title="Jurassic Park" aria-label="Jurassic Park, 1993, aventura">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">AVENTURA</div>
+                <div class="poster-title">Jurassic Park</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>1993 · 2h 7min</span><span>HD</span></div>
+          </a>
+      </div>
+    </section>
+    <section class="film-row" id="film-row-drama" aria-labelledby="film-row-title-drama">
+      <div class="film-row-header">
+        <div class="film-row-heading">
+          <h3 id="film-row-title-drama">Dramas que ficam com você</h3>
+          <p>Histórias intensas, performances marcantes e grandes emoções.</p>
+        </div>
+        <div class="film-row-controls">
+          <button class="film-row-arrow" type="button" data-rail-target="film-rail-drama" data-rail-direction="-1" aria-label="Rolar Dramas que ficam com você para a esquerda">‹</button>
+          <button class="film-row-arrow" type="button" data-rail-target="film-rail-drama" data-rail-direction="1" aria-label="Rolar Dramas que ficam com você para a direita">›</button>
+        </div>
+      </div>
+      <div class="film-row-rail" id="film-rail-drama" tabindex="0" aria-label="Dramas que ficam com você">
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="drama" data-title="Oppenheimer" aria-label="Oppenheimer, 2023, drama · história">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">DRAMA · HISTÓRIA</div>
+                <div class="poster-title">Oppenheimer</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2023 · 3h</span><span>4K</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="drama" data-title="À Procura da Felicidade" aria-label="À Procura da Felicidade, 2006, superação">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">SUPERAÇÃO</div>
+                <div class="poster-title">À Procura da Felicidade</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2006 · 1h 57min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="drama" data-title="Whiplash: Em Busca da Perfeição" aria-label="Whiplash: Em Busca da Perfeição, 2014, música · drama">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">MÚSICA · DRAMA</div>
+                <div class="poster-title">Whiplash: Em Busca da Perfeição</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2014 · 1h 46min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="drama" data-title="O Poderoso Chefão" aria-label="O Poderoso Chefão, 1972, clássico">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">CLÁSSICO</div>
+                <div class="poster-title">O Poderoso Chefão</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>1972 · 2h 55min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="drama" data-title="A Teoria de Tudo" aria-label="A Teoria de Tudo, 2014, biografia">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">BIOGRAFIA</div>
+                <div class="poster-title">A Teoria de Tudo</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2014 · 2h 3min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="drama" data-title="Forrest Gump" aria-label="Forrest Gump, 1994, drama · clássico">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">DRAMA · CLÁSSICO</div>
+                <div class="poster-title">Forrest Gump</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>1994 · 2h 22min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="drama aventura" data-title="Titanic" aria-label="Titanic, 1997, romance · drama">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">ROMANCE · DRAMA</div>
+                <div class="poster-title">Titanic</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>1997 · 3h 14min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="drama aventura" data-title="O Grande Hotel Budapeste" aria-label="O Grande Hotel Budapeste, 2014, comédia · drama">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">COMÉDIA · DRAMA</div>
+                <div class="poster-title">O Grande Hotel Budapeste</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2014 · 1h 39min</span><span>HD</span></div>
+          </a>
+      </div>
+    </section>
+    <section class="film-row" id="film-row-suspense" aria-labelledby="film-row-title-suspense">
+      <div class="film-row-header">
+        <div class="film-row-heading">
+          <h3 id="film-row-title-suspense">Suspense e mistério</h3>
+          <p>Investigações, reviravoltas e segredos que prendem a atenção.</p>
+        </div>
+        <div class="film-row-controls">
+          <button class="film-row-arrow" type="button" data-rail-target="film-rail-suspense" data-rail-direction="-1" aria-label="Rolar Suspense e mistério para a esquerda">‹</button>
+          <button class="film-row-arrow" type="button" data-rail-target="film-rail-suspense" data-rail-direction="1" aria-label="Rolar Suspense e mistério para a direita">›</button>
+        </div>
+      </div>
+      <div class="film-row-rail" id="film-rail-suspense" tabindex="0" aria-label="Suspense e mistério">
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="ficcao acao" data-title="A Origem" aria-label="A Origem, 2010, suspense">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">SUSPENSE</div>
+                <div class="poster-title">A Origem</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2010 · 2h 28min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="acao drama" data-title="Ilha do Medo" aria-label="Ilha do Medo, 2010, mistério">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">MISTÉRIO</div>
+                <div class="poster-title">Ilha do Medo</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2010 · 2h 18min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="acao drama" data-title="Entre Facas e Segredos" aria-label="Entre Facas e Segredos, 2019, investigação">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">INVESTIGAÇÃO</div>
+                <div class="poster-title">Entre Facas e Segredos</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2019 · 2h 10min</span><span>4K</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="acao drama" data-title="Garota Exemplar" aria-label="Garota Exemplar, 2014, suspense psicológico">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">SUSPENSE PSICOLÓGICO</div>
+                <div class="poster-title">Garota Exemplar</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2014 · 2h 29min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="acao drama" data-title="Corra!" aria-label="Corra!, 2017, terror · suspense">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">TERROR · SUSPENSE</div>
+                <div class="poster-title">Corra!</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2017 · 1h 44min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="drama acao" data-title="Parasita" aria-label="Parasita, 2019, suspense social">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">SUSPENSE SOCIAL</div>
+                <div class="poster-title">Parasita</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2019 · 2h 12min</span><span>4K</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="acao drama" data-title="Os Suspeitos" aria-label="Os Suspeitos, 2013, investigação">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">INVESTIGAÇÃO</div>
+                <div class="poster-title">Os Suspeitos</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2013 · 2h 33min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="drama" data-title="O Show de Truman" aria-label="O Show de Truman, 1998, mistério · drama">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">MISTÉRIO · DRAMA</div>
+                <div class="poster-title">O Show de Truman</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>1998 · 1h 43min</span><span>HD</span></div>
+          </a>
+      </div>
+    </section>
+    <section class="film-row" id="film-row-animation" aria-labelledby="film-row-title-animation">
+      <div class="film-row-header">
+        <div class="film-row-heading">
+          <h3 id="film-row-title-animation">Animação e fantasia</h3>
+          <p>Universos extraordinários para assistir em qualquer idade.</p>
+        </div>
+        <div class="film-row-controls">
+          <button class="film-row-arrow" type="button" data-rail-target="film-rail-animation" data-rail-direction="-1" aria-label="Rolar Animação e fantasia para a esquerda">‹</button>
+          <button class="film-row-arrow" type="button" data-rail-target="film-rail-animation" data-rail-direction="1" aria-label="Rolar Animação e fantasia para a direita">›</button>
+        </div>
+      </div>
+      <div class="film-row-rail" id="film-rail-animation" tabindex="0" aria-label="Animação e fantasia">
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="animacao aventura" data-title="Homem-Aranha: Através do Aranhaverso" aria-label="Homem-Aranha: Através do Aranhaverso, 2023, animação · aventura">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">ANIMAÇÃO · AVENTURA</div>
+                <div class="poster-title">Homem-Aranha: Através do Aranhaverso</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2023 · 2h 20min</span><span>4K</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="animacao aventura" data-title="O Menino e a Garça" aria-label="O Menino e a Garça, 2023, animação · fantasia">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">ANIMAÇÃO · FANTASIA</div>
+                <div class="poster-title">O Menino e a Garça</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2023 · 2h 4min</span><span>4K</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="animacao drama" data-title="Divertida Mente 2" aria-label="Divertida Mente 2, 2024, animação">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">ANIMAÇÃO</div>
+                <div class="poster-title">Divertida Mente 2</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2024 · 1h 36min</span><span>4K</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="animacao aventura" data-title="Gato de Botas 2: O Último Pedido" aria-label="Gato de Botas 2: O Último Pedido, 2022, animação · aventura">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">ANIMAÇÃO · AVENTURA</div>
+                <div class="poster-title">Gato de Botas 2: O Último Pedido</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2022 · 1h 42min</span><span>4K</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="animacao aventura" data-title="A Viagem de Chihiro" aria-label="A Viagem de Chihiro, 2001, fantasia">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">FANTASIA</div>
+                <div class="poster-title">A Viagem de Chihiro</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2001 · 2h 5min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="animacao aventura" data-title="O Castelo Animado" aria-label="O Castelo Animado, 2004, fantasia">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">FANTASIA</div>
+                <div class="poster-title">O Castelo Animado</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2004 · 1h 59min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="animacao aventura" data-title="Como Treinar o Seu Dragão" aria-label="Como Treinar o Seu Dragão, 2010, aventura · fantasia">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">AVENTURA · FANTASIA</div>
+                <div class="poster-title">Como Treinar o Seu Dragão</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2010 · 1h 38min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="animacao aventura" data-title="Shrek" aria-label="Shrek, 2001, animação · comédia">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">ANIMAÇÃO · COMÉDIA</div>
+                <div class="poster-title">Shrek</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2001 · 1h 30min</span><span>HD</span></div>
+          </a>
+      </div>
+    </section>
+    <section class="film-row" id="film-row-classics" aria-labelledby="film-row-title-classics">
+      <div class="film-row-header">
+        <div class="film-row-heading">
+          <h3 id="film-row-title-classics">Clássicos que continuam incríveis</h3>
+          <p>Filmes que atravessam gerações e merecem ser revistos.</p>
+        </div>
+        <div class="film-row-controls">
+          <button class="film-row-arrow" type="button" data-rail-target="film-rail-classics" data-rail-direction="-1" aria-label="Rolar Clássicos que continuam incríveis para a esquerda">‹</button>
+          <button class="film-row-arrow" type="button" data-rail-target="film-rail-classics" data-rail-direction="1" aria-label="Rolar Clássicos que continuam incríveis para a direita">›</button>
+        </div>
+      </div>
+      <div class="film-row-rail" id="film-rail-classics" tabindex="0" aria-label="Clássicos que continuam incríveis">
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="ficcao aventura" data-title="De Volta para o Futuro" aria-label="De Volta para o Futuro, 1985, clássico · aventura">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">CLÁSSICO · AVENTURA</div>
+                <div class="poster-title">De Volta para o Futuro</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>1985 · 1h 56min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="ficcao aventura drama" data-title="E.T. — O Extraterrestre" aria-label="E.T. — O Extraterrestre, 1982, clássico">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">CLÁSSICO</div>
+                <div class="poster-title">E.T. — O Extraterrestre</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>1982 · 1h 55min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="drama" data-title="O Poderoso Chefão" aria-label="O Poderoso Chefão, 1972, drama · clássico">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">DRAMA · CLÁSSICO</div>
+                <div class="poster-title">O Poderoso Chefão</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>1972 · 2h 55min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="drama acao" data-title="Pulp Fiction" aria-label="Pulp Fiction, 1994, crime · clássico">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">CRIME · CLÁSSICO</div>
+                <div class="poster-title">Pulp Fiction</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>1994 · 2h 34min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="aventura ficcao" data-title="Jurassic Park" aria-label="Jurassic Park, 1993, aventura">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">AVENTURA</div>
+                <div class="poster-title">Jurassic Park</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>1993 · 2h 7min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="drama" data-title="O Show de Truman" aria-label="O Show de Truman, 1998, drama · clássico">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">DRAMA · CLÁSSICO</div>
+                <div class="poster-title">O Show de Truman</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>1998 · 1h 43min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="drama" data-title="Forrest Gump" aria-label="Forrest Gump, 1994, drama · clássico">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">DRAMA · CLÁSSICO</div>
+                <div class="poster-title">Forrest Gump</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>1994 · 2h 22min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="drama" data-title="O Fabuloso Destino de Amélie Poulain" aria-label="O Fabuloso Destino de Amélie Poulain, 2001, romance · clássico">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">ROMANCE · CLÁSSICO</div>
+                <div class="poster-title">O Fabuloso Destino de Amélie Poulain</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2001 · 2h 2min</span><span>HD</span></div>
+          </a>
+      </div>
+    </section>
+    <section class="film-row" id="film-row-discover" aria-labelledby="film-row-title-discover">
+      <div class="film-row-header">
+        <div class="film-row-heading">
+          <h3 id="film-row-title-discover">Mais histórias para descobrir</h3>
+          <p>Outras escolhas para salvar na sua lista de próxima sessão.</p>
+        </div>
+        <div class="film-row-controls">
+          <button class="film-row-arrow" type="button" data-rail-target="film-rail-discover" data-rail-direction="-1" aria-label="Rolar Mais histórias para descobrir para a esquerda">‹</button>
+          <button class="film-row-arrow" type="button" data-rail-target="film-rail-discover" data-rail-direction="1" aria-label="Rolar Mais histórias para descobrir para a direita">›</button>
+        </div>
+      </div>
+      <div class="film-row-rail" id="film-rail-discover" tabindex="0" aria-label="Mais histórias para descobrir">
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="drama" data-title="A Vida é Bela" aria-label="A Vida é Bela, 1997, drama · clássico">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">DRAMA · CLÁSSICO</div>
+                <div class="poster-title">A Vida é Bela</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>1997 · 1h 56min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="drama acao" data-title="O Resgate do Soldado Ryan" aria-label="O Resgate do Soldado Ryan, 1998, guerra · drama">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">GUERRA · DRAMA</div>
+                <div class="poster-title">O Resgate do Soldado Ryan</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>1998 · 2h 49min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="drama" data-title="O Fabuloso Destino de Amélie Poulain" aria-label="O Fabuloso Destino de Amélie Poulain, 2001, romance">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">ROMANCE</div>
+                <div class="poster-title">O Fabuloso Destino de Amélie Poulain</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2001 · 2h 2min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="drama aventura" data-title="O Grande Hotel Budapeste" aria-label="O Grande Hotel Budapeste, 2014, comédia · drama">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">COMÉDIA · DRAMA</div>
+                <div class="poster-title">O Grande Hotel Budapeste</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2014 · 1h 39min</span><span>HD</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="ficcao aventura" data-title="Perdido em Marte" aria-label="Perdido em Marte, 2015, ficção científica">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">FICÇÃO CIENTÍFICA</div>
+                <div class="poster-title">Perdido em Marte</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2015 · 2h 24min</span><span>4K</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="ficcao drama" data-title="A Chegada" aria-label="A Chegada, 2016, ficção científica">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">FICÇÃO CIENTÍFICA</div>
+                <div class="poster-title">A Chegada</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2016 · 1h 56min</span><span>4K</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="animacao aventura" data-title="O Menino e a Garça" aria-label="O Menino e a Garça, 2023, animação · fantasia">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">ANIMAÇÃO · FANTASIA</div>
+                <div class="poster-title">O Menino e a Garça</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2023 · 2h 4min</span><span>4K</span></div>
+          </a>
+          <a class="film-tile" href="#film-catalog" data-focusable data-genre="drama" data-title="A Teoria de Tudo" aria-label="A Teoria de Tudo, 2014, biografia">
+            <div class="poster">
+              <div class="poster-art" style="background-image:url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=950&q=82')"></div>
+              <div class="film-card-overlay"></div>
+              <div class="poster-copy">
+                <div class="poster-kicker">BIOGRAFIA</div>
+                <div class="poster-title">A Teoria de Tudo</div>
+              </div>
+              <span class="film-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8c0-.76.82-1.22 1.46-.82l9.14 5.7a1.55 1.55 0 0 1 0 2.64l-9.14 5.7A.96.96 0 0 1 8 18.2z"/></svg></span>
+            </div>
+            <div class="film-tile-meta"><span>2014 · 2h 3min</span><span>HD</span></div>
+          </a>
+      </div>
+    </section>
+      <div class="film-empty" id="film-empty" hidden>Nenhum título nesta categoria por enquanto.</div>
+      <p class="film-disclaimer">Catálogo demonstrativo do protótipo Central+. As imagens ilustram as fileiras e a disponibilidade dos títulos depende de cada serviço de streaming.</p>
     </div>
-    <div class="film-grid" id="film-grid">
-      <a class="film-tile" href="#filmes" data-focusable data-genre="ficcao aventura" data-title="Duna: Parte Dois"><div class="poster"><div class="poster-art art-dune"></div><span class="poster-badge">Escolha Central+</span><div class="poster-copy"><div class="poster-kicker">Ficção científica · Aventura</div><div class="poster-title">Duna: Parte Dois</div></div></div><div class="film-tile-meta"><span>2024 · 2h 46min</span><span>4K</span></div></a>
-      <a class="film-tile" href="#filmes" data-focusable data-genre="drama" data-title="Oppenheimer"><div class="poster"><div class="poster-art art-news2"></div><div class="poster-copy"><div class="poster-kicker">Drama · História</div><div class="poster-title">Oppenheimer</div></div></div><div class="film-tile-meta"><span>2023 · 3h</span><span>4K</span></div></a>
-      <a class="film-tile" href="#filmes" data-focusable data-genre="ficcao aventura" data-title="Interestelar"><div class="poster"><div class="poster-art art-orbit"></div><div class="poster-copy"><div class="poster-kicker">Ficção científica</div><div class="poster-title">Interestelar</div></div></div><div class="film-tile-meta"><span>2014 · 2h 49min</span><span>4K</span></div></a>
-      <a class="film-tile" href="#filmes" data-focusable data-genre="acao" data-title="A Origem"><div class="poster"><div class="poster-art art-city"></div><div class="poster-copy"><div class="poster-kicker">Ação · Suspense</div><div class="poster-title">A Origem</div></div></div><div class="film-tile-meta"><span>2010 · 2h 28min</span><span>HD</span></div></a>
-      <a class="film-tile" href="#filmes" data-focusable data-genre="drama" data-title="O Grande Hotel"><div class="poster"><div class="poster-art art-night"></div><div class="poster-copy"><div class="poster-kicker">Drama · Mistério</div><div class="poster-title">O Grande Hotel</div></div></div><div class="film-tile-meta"><span>Seleção editorial</span><span>4K</span></div></a>
-      <a class="film-tile" href="#filmes" data-focusable data-genre="animacao aventura" data-title="Aranhaverso"><div class="poster"><div class="poster-art art-wild"></div><div class="poster-copy"><div class="poster-kicker">Animação · Aventura</div><div class="poster-title">Aranhaverso</div></div></div><div class="film-tile-meta"><span>Animação</span><span>4K</span></div></a>
-      <a class="film-tile" href="#filmes" data-focusable data-genre="ficcao" data-title="Blade Runner 2049"><div class="poster"><div class="poster-art art-orbit"></div><div class="poster-copy"><div class="poster-kicker">Ficção científica</div><div class="poster-title">Blade Runner 2049</div></div></div><div class="film-tile-meta"><span>2017 · 2h 44min</span><span>4K</span></div></a>
-      <a class="film-tile" href="#filmes" data-focusable data-genre="acao" data-title="O Cavaleiro das Trevas"><div class="poster"><div class="poster-art art-sports"></div><div class="poster-copy"><div class="poster-kicker">Ação · Crime</div><div class="poster-title">O Cavaleiro das Trevas</div></div></div><div class="film-tile-meta"><span>2008 · 2h 32min</span><span>HD</span></div></a>
-      <a class="film-tile" href="#filmes" data-focusable data-genre="aventura drama" data-title="A Vida Secreta de Walter Mitty"><div class="poster"><div class="poster-art art-doc"></div><div class="poster-copy"><div class="poster-kicker">Aventura · Drama</div><div class="poster-title">A Vida Secreta de Walter Mitty</div></div></div><div class="film-tile-meta"><span>2013 · 1h 54min</span><span>HD</span></div></a>
-      <a class="film-tile" href="#filmes" data-focusable data-genre="animacao" data-title="O Menino e a Garça"><div class="poster"><div class="poster-art art-news3"></div><div class="poster-copy"><div class="poster-kicker">Animação · Fantasia</div><div class="poster-title">O Menino e a Garça</div></div></div><div class="film-tile-meta"><span>Fantasia</span><span>4K</span></div></a>
-    </div>
-    <div class="film-empty" id="film-empty" hidden>Nenhum título nesta categoria por enquanto.</div>
-    <p class="film-disclaimer">Catálogo demonstrativo do protótipo Central+. A disponibilidade dos títulos depende de cada serviço de streaming.</p>
   </section>
   <section class="content-section" id="ao-vivo"><div class="section-head"><div><h2 class="section-title">Ao vivo</h2><p class="section-subtitle">A programação em tempo real, em um só lugar.</p></div><a class="section-link" href="#ao-vivo" data-focusable>Ver canais <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m9 5 7 7-7 7"/></svg></a></div><div class="rail live-rail">
     <a class="card" href="#ao-vivo" data-focusable data-title="Central+ Notícias"><div class="poster"><div class="poster-art art-news1"></div><span class="poster-badge"><span class="live-tag">Ao vivo</span></span><div class="poster-copy"><div class="poster-kicker">Informação</div><div class="poster-title">Central+ Notícias</div></div></div><div class="card-caption"><span>Jornalismo e atualidades</span><small>Canal</small></div></a>
@@ -360,24 +1295,41 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
   // Keyboard/remote carousel browsing while a card is focused.
   document.querySelectorAll('.rail').forEach(rail=>rail.addEventListener('keydown',e=>{if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;const cards=[...rail.querySelectorAll('[data-focusable]')];const idx=cards.indexOf(document.activeElement);if(idx<0)return;const next=cards[idx+(e.key==='ArrowRight'?1:-1)];if(next){e.preventDefault();next.focus();next.scrollIntoView({block:'nearest',inline:'nearest',behavior:'smooth'})}}));
 
-  // Interações exclusivas da página Filmes: filtros locais e ações demonstrativas.
+  // Catálogo Filmes: filtros globais, navegação horizontal e seleção demonstrativa.
   const filmFilters=[...document.querySelectorAll('.film-filter')];
   if(filmFilters.length){
     const tiles=[...document.querySelectorAll('.film-tile')];
+    const rows=[...document.querySelectorAll('.film-row')];
     const count=document.getElementById('film-count');
     const empty=document.getElementById('film-empty');
     filmFilters.forEach(button=>button.addEventListener('click',()=>{
       const filter=button.dataset.filter;
       filmFilters.forEach(item=>item.classList.toggle('active',item===button));
       let visible=0;
-      tiles.forEach(tile=>{const genres=(tile.dataset.genre||'').split(' ');const show=filter==='todos'||genres.includes(filter);tile.hidden=!show;if(show)visible++});
+      tiles.forEach(tile=>{
+        const genres=(tile.dataset.genre||'').split(' ');
+        const show=filter==='todos'||genres.includes(filter);
+        tile.hidden=!show;
+        if(show)visible++;
+      });
+      rows.forEach(row=>{
+        row.hidden=!row.querySelector('.film-tile:not([hidden])');
+      });
       if(count)count.textContent=String(visible);
       if(empty)empty.hidden=visible>0;
     }));
-    const explore=document.getElementById('film-feature-explore');
-    if(explore)explore.addEventListener('click',()=>notify('Duna: Parte Dois — ficha demonstrativa do catálogo.'));
-    const save=document.getElementById('film-feature-save');
-    if(save)save.addEventListener('click',()=>notify('Título demonstrativo: sua lista ainda não é sincronizada.'));
+    document.querySelectorAll('[data-rail-target]').forEach(button=>{
+      button.addEventListener('click',()=>{
+        const rail=document.getElementById(button.dataset.railTarget);
+        if(!rail)return;
+        const direction=Number(button.dataset.railDirection)||1;
+        rail.scrollBy({left:direction*Math.max(rail.clientWidth*.78,260),behavior:'smooth'});
+      });
+    });
+    tiles.forEach(tile=>tile.addEventListener('click',event=>{
+      event.preventDefault();
+      notify((tile.dataset.title||'Filme')+' — ficha demonstrativa do catálogo Central+.');
+    }));
   }
 
   // Carrossel cinematográfico: troca automática com transição cruzada entre imagens.
