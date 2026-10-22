@@ -290,7 +290,14 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
   const searchPanel=document.getElementById('search-panel'),searchInput=document.getElementById('search-input');function openSearch(){searchPanel.classList.add('open');searchInput.value='';setTimeout(()=>searchInput.focus(),40)}function closeSearch(){searchPanel.classList.remove('open');document.getElementById('search-open').focus()}
   document.getElementById('search-open').addEventListener('click',openSearch);document.getElementById('search-close').addEventListener('click',closeSearch);searchPanel.addEventListener('click',e=>{if(e.target===searchPanel)closeSearch()});
   searchInput.addEventListener('input',()=>{const q=searchInput.value.trim().toLocaleLowerCase('pt-BR');document.querySelectorAll('.card[data-title]').forEach(c=>{c.dataset.searchMatch=!q||c.dataset.title.toLocaleLowerCase('pt-BR').includes(q)?'1':'0'})});
-  document.querySelectorAll('.card').forEach(card=>{card.addEventListener('click',e=>{if(card.classList.contains('app-card')){notify('Abrindo o serviço oficial: '+card.dataset.title);return;}e.preventDefault();notify('Selecionado: '+(card.dataset.title||'conteúdo')+'. A ficha e reprodução serão conectadas na próxima etapa.');});});
+  function filmSlug(title){
+    const t=(title||'').trim().toLocaleLowerCase('pt-BR').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[’']/g,"'").replace(/\s+/g,' ');
+    const map={'duna: parte dois':'duna','duna parte dois':'duna','oppenheimer':'oppenheimer','interestelar':'interestelar','a origem':'origem','o grande hotel':'hotel','o grande hotel budapeste':'hotel','aranhaverso':'aranhaverso','homem-aranha: atraves do aranhaverso':'aranhaverso','blade runner 2049':'blade-runner','o cavaleiro das trevas':'batman','batman: o cavaleiro das trevas':'batman','a vida secreta de walter mitty':'walter-mitty','o menino e a garca':'menino-garca'};
+    return map[t]||null;
+  }
+  function filmDetailUrl(slug){return 'central-plus-detalhe-filme.html?filme='+encodeURIComponent(slug)}
+  document.querySelectorAll('.film-tile').forEach(tile=>{const slug=filmSlug(tile.dataset.title||tile.querySelector('.poster-title')?.textContent);if(slug){tile.href=filmDetailUrl(slug);tile.target='_blank';tile.rel='noopener noreferrer';tile.setAttribute('aria-label','Ver detalhes de '+(tile.dataset.title||'filme'));}});
+  document.querySelectorAll('.card').forEach(card=>{card.addEventListener('click',e=>{if(card.classList.contains('app-card')){notify('Abrindo o serviço oficial: '+card.dataset.title);return;}const slug=filmSlug(card.dataset.title||card.querySelector('.poster-title')?.textContent);if(slug){e.preventDefault();window.open(filmDetailUrl(slug),'_blank','noopener,noreferrer');return;}e.preventDefault();notify('Selecionado: '+(card.dataset.title||'conteúdo')+'.');});});
   // Add focusable favorite controls to eligible cards; favorites remain local to this prototype session.
   const favs=new Map();document.querySelectorAll('.card:not(.app-card)').forEach((card,index)=>{const poster=card.querySelector('.poster');if(!poster)return;const b=document.createElement('button');b.className='poster-fav';b.type='button';b.dataset.focusable='';b.setAttribute('aria-label','Adicionar à minha lista');b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 4.8A1.8 1.8 0 0 1 7.8 3h8.4A1.8 1.8 0 0 1 18 4.8V21l-6-3.8L6 21z"/></svg>';b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();const key=card.dataset.title||('item-'+index);if(favs.has(key)){favs.delete(key);b.classList.remove('is-fav');b.setAttribute('aria-label','Adicionar à minha lista');notify('Removido da Minha lista.')}else{favs.set(key,card.cloneNode(true));b.classList.add('is-fav');b.setAttribute('aria-label','Remover da minha lista');notify('Adicionado à Minha lista.')}renderFavorites()});poster.appendChild(b)});
   function renderFavorites(){const rail=document.getElementById('favorites-rail');rail.innerHTML='';if(!favs.size){rail.innerHTML='<div style="color:#858a97;font-size:13px;padding:18px 0">Use o ícone de marcador nos cards para adicionar seus títulos favoritos.</div>';return}favs.forEach((node,key)=>{const clone=node.cloneNode(true);clone.querySelectorAll('button').forEach(b=>b.remove());clone.dataset.focusable='';clone.querySelectorAll('[data-focusable]').forEach(el=>el.removeAttribute('data-focusable'));clone.addEventListener('click',e=>{e.preventDefault();notify('Selecionado: '+key)});rail.appendChild(clone)})}
@@ -455,12 +462,10 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
     filmFeature.addEventListener('focusout', event => {
       if (!filmFeature.contains(event.relatedTarget)) { featurePaused = false; startFeatureTimer(); }
     });
-    document.getElementById('film-feature-play').addEventListener('click', () =>
-      notify('A reprodução de “' + featureFilms[featureIndex].title + '” será conectada quando o Central+ integrar o serviço de streaming.')
-    );
-    document.getElementById('film-feature-details').addEventListener('click', () =>
-      notify('Detalhes de “' + featureFilms[featureIndex].title + '”: ficha demonstrativa do catálogo Central+.')
-    );
+    function currentFeatureKey(){const title=featureFilms[featureIndex].title.toLocaleLowerCase('pt-BR');if(title.includes('duna'))return'duna';if(title.includes('interestelar'))return'interestelar';if(title.includes('blade runner'))return'blade-runner';return'duna';}
+    function openFeatureDetail(){window.open('central-plus-detalhe-filme.html?filme='+currentFeatureKey(),'_blank','noopener,noreferrer');}
+    document.getElementById('film-feature-play').addEventListener('click',openFeatureDetail);
+    document.getElementById('film-feature-details').addEventListener('click',openFeatureDetail);
     renderFeature(0);
     startFeatureTimer();
   }
