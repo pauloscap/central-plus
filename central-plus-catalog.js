@@ -245,7 +245,6 @@
           newsRail.addEventListener("touchstart",()=>pauseAuto(60000),{passive:true});
           newsRail.addEventListener("touchend",()=>pauseAuto(5000),{passive:true});
           newsRail.addEventListener("wheel",()=>pauseAuto(8000),{passive:true});
-          newsRail.addEventListener("scroll",()=>pauseAuto(7000),{passive:true});
           if(!reduceMotion)window.setInterval(()=>{if(!document.hidden&&Date.now()>=pauseUntil)newsStep();},5000);
         }
       }catch(error){
