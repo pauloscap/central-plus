@@ -49,6 +49,20 @@
     grid.innerHTML=items.map(item=>card(item,kind)).join("");
     const count=$(type==="tv"?"#series-count":"#film-count");if(count)count.textContent=String(items.length);
     const empty=$(type==="tv"?"#series-empty":"#film-empty");if(empty)empty.hidden=items.length>0;
+    // Rebind filters to the live TMDB cards rather than the prototype cards removed above.
+    const filterSelector=type==="tv"?"[data-series-filter]":"[data-filter]";
+    const filterAttr=type==="tv"?"data-series-filter":"data-filter";
+    const filters=[...document.querySelectorAll(filterSelector)];
+    const applyFilter=value=>{
+      const tiles=[...grid.querySelectorAll(type==="tv"?".series-tile":".film-tile")];
+      let visible=0;
+      tiles.forEach(tile=>{const genres=(type==="tv"?tile.dataset.genres:tile.dataset.genre)||"";const show=value==="todos"||genres.split(/\\s+/).includes(value);tile.hidden=!show;if(show)visible++});
+      filters.forEach(button=>{const active=button.getAttribute(filterAttr)===value;button.classList.toggle("active",active);button.setAttribute("aria-pressed",active?"true":"false")});
+      if(count)count.textContent=String(visible);
+      if(empty)empty.hidden=visible>0;
+    };
+    filters.forEach(button=>{button.onclick=()=>applyFilter(button.getAttribute(filterAttr)||"todos")});
+    applyFilter("todos");
     const disclaimer=$(type==="tv"?".series-disclaimer":".film-disclaimer");
     if(disclaimer)disclaimer.textContent="Metadados, imagens e pôsteres fornecidos pelo TMDB. Serviços de streaming listados para o Brasil quando informados pela fonte; a disponibilidade pode mudar.";
     return true;
