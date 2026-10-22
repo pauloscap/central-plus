@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
-<title>Central+ — Navegação em novas abas v1.4</title>
+<title>Central+ — Aplicativos</title>
 <style>
 :root{--bg:#07080c;--surface:#11131a;--surface-2:#191c25;--text:#f7f7fa;--muted:#a2a6b2;--line:rgba(255,255,255,.1);--accent:#d9dce5;--focus:#fff;--gutter:clamp(24px,4.1vw,76px);--radius:18px}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:92px}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:16px;overflow-x:hidden}button,a{font:inherit;color:inherit}button{cursor:pointer}a{text-decoration:none}.app{min-height:100vh;background:radial-gradient(ellipse at 75% 0%,rgba(54,61,88,.18),transparent 35%),var(--bg)}
@@ -66,10 +66,82 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
 .apps-rail .app-card .app-note{font-size:10px;color:#aeb4c2}
 @media(max-width:760px){.apps-rail .card{flex-basis:220px}.apps-rail .app-tile{aspect-ratio:16/10}.apps-rail .app-logo{width:78%;height:72%;margin:0 0 7% 8%}.apps-rail .app-logo .logo-fallback{font-size:32px}}
 
+
+/* Central+ Apps — grade premium em três colunas */
+.app[data-page="apps"] #apps{padding-right:var(--gutter);margin-bottom:56px}
+.app[data-page="apps"] #apps .section-head{align-items:flex-end;margin-bottom:28px;padding-right:0}
+.app[data-page="apps"] #apps .section-title{font-size:clamp(28px,3vw,40px);letter-spacing:-.055em}
+.app[data-page="apps"] #apps .section-subtitle{font-size:14px;line-height:1.6;max-width:520px}
+.app[data-page="apps"] #apps .section-link{padding:11px 15px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(255,255,255,.045);transition:background .2s,border-color .2s}
+.app[data-page="apps"] #apps .section-link:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.28)}
+.app[data-page="apps"] #apps .apps-rail{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;padding:4px 0 22px;overflow:visible;scroll-snap-type:none}
+.app[data-page="apps"] #apps .app-card{width:100%;min-width:0;flex:none;padding:0 0 18px;border-radius:20px;overflow:hidden;background:linear-gradient(155deg,rgba(255,255,255,.075),rgba(255,255,255,.018) 55%,rgba(255,255,255,.035));border:1px solid rgba(255,255,255,.105);box-shadow:0 14px 36px rgba(0,0,0,.2);transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease,background .25s ease}
+.app[data-page="apps"] #apps .app-card:hover,.app[data-page="apps"] #apps .app-card:focus-visible{transform:translateY(-6px);border-color:rgba(255,255,255,.27);box-shadow:0 22px 50px rgba(0,0,0,.36),0 0 0 1px rgba(255,255,255,.035);background:linear-gradient(155deg,rgba(255,255,255,.105),rgba(255,255,255,.025) 60%,rgba(255,255,255,.045))}
+.app[data-page="apps"] #apps .app-tile{height:auto;aspect-ratio:1.85/1;margin:12px 12px 0;border-radius:15px;border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.1);isolation:isolate}
+.app[data-page="apps"] #apps .app-tile:before{content:"";position:absolute;inset:0;background:var(--brand-art,linear-gradient(135deg,#20232c,#101117));z-index:-1;transition:transform .35s ease,filter .35s ease}
+.app[data-page="apps"] #apps .app-card:hover .app-tile:before{transform:scale(1.045);filter:saturate(1.13)}
+.app[data-page="apps"] #apps .app-tile:after{width:170px;height:170px;right:-38px;top:-65px;background:radial-gradient(circle,rgba(255,255,255,.18),transparent 68%)}
+.app[data-page="apps"] #apps .app-logo{width:76%;height:68px;border-radius:0;background:transparent;box-shadow:none;display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+.app[data-page="apps"] #apps .app-logo img{display:block;max-width:100%;max-height:58px;width:auto;height:auto;object-fit:contain;filter:drop-shadow(0 3px 12px rgba(0,0,0,.22))}
+.app[data-page="apps"] #apps .app-logo .logo-fallback{font-size:clamp(24px,2.5vw,39px);font-weight:850;letter-spacing:-.06em;line-height:1.02;text-align:center;text-wrap:balance;overflow-wrap:anywhere}
+.app[data-page="apps"] #apps .app-card .card-caption{display:block;margin:17px 20px 0;padding:0;line-height:1.4}
+.app[data-page="apps"] #apps .app-card .card-caption>span{display:block;font-size:clamp(16px,1.4vw,20px);font-weight:700;letter-spacing:-.025em}
+.app[data-page="apps"] #apps .app-card .app-note{font-size:12px;line-height:1.5;margin-top:5px;color:#aeb4c2}
+.app[data-page="apps"] #apps .app-card:after{content:"↗";position:absolute;right:19px;bottom:19px;width:28px;height:28px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.16);border-radius:50%;color:#e8eaf0;font-size:15px;opacity:.72;transition:transform .2s,background .2s,opacity .2s}
+.app[data-page="apps"] #apps .app-card:hover:after{transform:translate(2px,-2px);background:rgba(255,255,255,.1);opacity:1}
+@media(max-width:900px){.app[data-page="apps"] #apps .apps-rail{gap:16px}.app[data-page="apps"] #apps .app-card .card-caption{margin-left:16px;margin-right:44px}.app[data-page="apps"] #apps .app-tile{margin:9px 9px 0}}
+@media(max-width:620px){.app[data-page="apps"] #apps .apps-rail{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.app[data-page="apps"] #apps .app-tile{aspect-ratio:1.45/1}.app[data-page="apps"] #apps .app-logo .logo-fallback{font-size:clamp(18px,4.5vw,29px)}.app[data-page="apps"] #apps .app-card .card-caption{margin:13px 12px 0}.app[data-page="apps"] #apps .app-card .card-caption>span{font-size:15px}.app[data-page="apps"] #apps .app-card .app-note{font-size:11px}.app[data-page="apps"] #apps .app-card:after{right:11px;bottom:12px;width:24px;height:24px}.app[data-page="apps"] #apps .section-head{align-items:flex-start}}
+@media(max-width:390px){.app[data-page="apps"] #apps .apps-rail{grid-template-columns:1fr}.app[data-page="apps"] #apps .app-tile{aspect-ratio:2.1/1}}
+
+
+/* Central+ Apps: grade premium real, três cards por fileira */
+.app[data-page="apps"] #apps .apps-rail{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:26px;
+  overflow:visible;
+  overflow-x:visible;
+  padding:8px var(--gutter) 30px 3px;
+  scroll-snap-type:none;
+  align-items:stretch;
+}
+.app[data-page="apps"] #apps .apps-rail .app-card{
+  display:block;
+  width:100%;
+  min-width:0;
+  max-width:none;
+  flex:none !important;
+  scroll-snap-align:none;
+  border-radius:18px;
+  padding:10px;
+  background:linear-gradient(155deg,rgba(255,255,255,.065),rgba(255,255,255,.018));
+  border:1px solid rgba(255,255,255,.09);
+  box-shadow:0 16px 36px rgba(0,0,0,.22);
+  transition:transform .22s ease,border-color .22s ease,background .22s ease;
+}
+.app[data-page="apps"] #apps .apps-rail .app-card:hover,
+.app[data-page="apps"] #apps .apps-rail .app-card:focus-visible{
+  transform:translateY(-5px);
+  border-color:rgba(255,255,255,.25);
+  background:linear-gradient(155deg,rgba(255,255,255,.09),rgba(255,255,255,.025));
+}
+.app[data-page="apps"] #apps .apps-rail .app-tile{width:100%;aspect-ratio:16/10;height:auto;border-radius:13px;}
+.app[data-page="apps"] #apps .apps-rail .card-caption{padding:4px 3px 3px;margin-top:12px;font-size:15px;}
+.app[data-page="apps"] #apps .apps-rail .app-note{font-size:12px;margin-top:5px;}
+@media(max-width:760px){
+ .app[data-page="apps"] #apps .apps-rail{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding-right:var(--gutter);}
+ .app[data-page="apps"] #apps .apps-rail .app-card{padding:7px;border-radius:14px;}
+ .app[data-page="apps"] #apps .apps-rail .card-caption{font-size:13px;}
+}
+@media(max-width:390px){
+ .app[data-page="apps"] #apps .apps-rail{grid-template-columns:1fr;gap:13px;}
+ .app[data-page="apps"] #apps .apps-rail .app-tile{aspect-ratio:2.1/1;}
+}
+
 </style>
 </head>
 <body>
-<div class="app" id="home" data-page="home">
+<div class="app" id="home" data-page="apps">
 <header class="topbar">
   <a class="brand" href="#home" data-focusable aria-label="Central+ início"><span class="brand-mark">C</span><span>central<span class="brand-plus">+</span></span></a>
   <nav class="nav" aria-label="Navegação principal">
@@ -103,7 +175,7 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
     <a class="card" href="#continuar" data-focusable data-title="Planeta Azul"><div class="poster"><div class="poster-art art-sea"></div><span class="poster-badge">Ep. 2</span><div class="poster-copy"><div class="poster-kicker">Documentário</div><div class="poster-title">Planeta Azul</div></div></div><div class="progress"><span style="width:81%"></span></div><div class="card-caption"><span>Planeta Azul</span><small>81%</small></div></a>
     <a class="card" href="#continuar" data-focusable data-title="A Última Fronteira"><div class="poster"><div class="poster-art art-orbit"></div><span class="poster-badge">S1:E4</span><div class="poster-copy"><div class="poster-kicker">Aventura · 51 min</div><div class="poster-title">A Última Fronteira</div></div></div><div class="progress"><span style="width:24%"></span></div><div class="card-caption"><span>A Última Fronteira</span><small>24%</small></div></a>
   </div></section>
-  <section class="content-section" id="apps"><div class="section-head"><div><h2 class="section-title">Seus aplicativos</h2><p class="section-subtitle">14 serviços com acesso direto às plataformas oficiais.</p></div><a class="section-link" href="#apps" data-focusable>Explorar serviços <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m9 5 7 7-7 7"/></svg></a></div><div class="rail apps-rail">
+  <section class="content-section" id="apps"><div class="section-head"><div><h2 class="section-title">Seus aplicativos</h2><p class="section-subtitle">14 serviços em cards premium, com acesso direto às plataformas oficiais.</p></div><a class="section-link" href="#apps" data-focusable>Explorar serviços <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m9 5 7 7-7 7"/></svg></a></div><div class="rail apps-rail">
     <a class="card app-card" href="https://www.netflix.com/browse" data-focusable data-title="Netflix"><div class="app-tile"><div class="app-logo"><img loading="lazy" src="https://cdn.simpleicons.org/netflix/FFFFFF" alt="Logomarca Netflix" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'"><span class="logo-fallback">NETFLIX</span></div></div><div class="card-caption"><span>Netflix</span><div class="app-note">Filmes e séries</div></div></a>
     <a class="card app-card" href="https://www.primevideo.com/" data-focusable data-title="Prime Video"><div class="app-tile"><div class="app-logo"><img loading="lazy" src="https://cdn.simpleicons.org/primevideo/FFFFFF" alt="Logomarca Prime Video" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'"><span class="logo-fallback">prime video</span></div></div><div class="card-caption"><span>Prime Video</span><div class="app-note">Filmes e séries</div></div></a>
     <a class="card app-card" href="https://www.disneyplus.com/" data-focusable data-title="Disney+"><div class="app-tile"><div class="app-logo"><img loading="lazy" src="https://cdn.simpleicons.org/disneyplus/FFFFFF" alt="Logomarca Disney+" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'"><span class="logo-fallback">Disney+</span></div></div><div class="card-caption"><span>Disney+</span><div class="app-note">Filmes e séries</div></div></a>
@@ -186,7 +258,7 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
     }
     if(e.key==='Escape'&&document.activeElement!==document.body){document.activeElement.blur()}
   });
-  // Cada item do menu abre uma nova guia com uma rota independente (?page=...).
+  // Navegação entre páginas na mesma guia.
   const appRoot=document.getElementById('home');
   const pageIds=['home','filmes','series','apps','noticias','ao-vivo','favoritos'];
   const pageLabels={home:'Home',filmes:'Filmes',series:'Séries',apps:'Apps',noticias:'Notícias','ao-vivo':'Ao vivo',favoritos:'Favoritos'};
@@ -212,12 +284,12 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
     if(scroll)window.scrollTo({top:0,behavior:'auto'});
     if(normalized!=='home')stopCarousel();else startCarousel();
   }
-  // Read the query parameter so each new tab renders only its own page.
+  // Este arquivo é dedicado à página Apps.
   const filename=window.location.pathname.split('/').pop().toLowerCase();
   const pageFromFilename=Object.entries({home:'central-plus-home-v1.html',filmes:'central-plus-filmes.html',series:'central-plus-series.html',apps:'central-plus-apps.html',noticias:'central-plus-noticias.html','ao-vivo':'central-plus-ao-vivo.html',favoritos:'central-plus-favoritos.html'}).find(([slug,file])=>file===filename)?.[0]||'home';
-  const requestedPage=new URLSearchParams(window.location.search).get('page')||pageFromFilename;
+  const requestedPage='apps';
   renderPage(requestedPage,false);
-  // In-section links switch the current tab to the requested page, while the top menu opens a new tab.
+  // Links internos permanecem na mesma guia.
   document.querySelectorAll('a[href^="#"]').forEach(link=>{
     const target=link.getAttribute('href').slice(1);
     if(!pageIds.includes(target)||link.closest('.nav'))return;
@@ -230,8 +302,8 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
     });
   });
   document.querySelector('.brand').setAttribute('href','central-plus-home-v1.html');
-  document.querySelector('.brand').setAttribute('target','_blank');
-  document.querySelector('.brand').setAttribute('rel','noopener');
+  document.querySelector('.brand').removeAttribute('target');
+  document.querySelector('.brand').removeAttribute('rel');
   // Keyboard/remote carousel browsing while a card is focused.
   document.querySelectorAll('.rail').forEach(rail=>rail.addEventListener('keydown',e=>{if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;const cards=[...rail.querySelectorAll('[data-focusable]')];const idx=cards.indexOf(document.activeElement);if(idx<0)return;const next=cards[idx+(e.key==='ArrowRight'?1:-1)];if(next){e.preventDefault();next.focus();next.scrollIntoView({block:'nearest',inline:'nearest',behavior:'smooth'})}}));
   setSlide(0);startCarousel();
