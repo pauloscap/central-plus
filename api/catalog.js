@@ -6,7 +6,7 @@ const GENRES = {
   9648:"Mistério",10749:"Romance",878:"Ficção científica",10770:"Cinema",53:"Suspense",
   10752:"Guerra",37:"Faroeste",10759:"Ação e aventura",10762:"Infantil",10763:"Notícias",
   10764:"Reality",10765:"Ficção científica e fantasia",10766:"Novela",10767:"Talk show",
-  10768:"Guerra e política",10768:"Guerra e política"
+  10768:"Guerra e política"
 };
 const PROVIDERS = {
   8:"Netflix",9:"Prime Video",337:"Disney+",350:"Apple TV+",384:"HBO Max",
@@ -79,10 +79,9 @@ module.exports = async function handler(req, res) {
     if (section === "details") {
       const id = Number(q.id);
       if (!Number.isInteger(id) || id <= 0) return res.status(400).json({ error: "ID inválido." });
-      const item = await tmdb("/" + type + "/" + id, { language: lang, append_to_response: "watch/providers" }, auth);
+      const item = await tmdb("/" + type + "/" + id, { language: lang }, auth);
       const normalized = normalize(item, type);
-      const br = item["watch/providers"] && item["watch/providers"].results && item["watch/providers"].results.BR;
-      normalized.provider_names = br ? [...new Set([].concat(br.flatrate || [], br.rent || [], br.buy || []).map(p => p.provider_name).filter(Boolean))].slice(0,5) : await providers(type, id, auth);
+      normalized.provider_names = await providers(type, id, auth);
       normalized.runtime = item.runtime || (item.episode_run_time && item.episode_run_time[0]) || null;
       return res.status(200).json({ item: normalized, source: "TMDB", region: "BR", updatedAt: new Date().toISOString() });
     }
