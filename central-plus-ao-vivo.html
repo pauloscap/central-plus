@@ -79,7 +79,7 @@ main{padding-top:82px}.live-hero{position:relative;isolation:isolate;overflow:hi
     </section>
     <div class="info-note">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
-      <div><strong>Sobre as prévias e a reprodução:</strong> as imagens são buscadas nas páginas oficiais ou em miniaturas públicas de transmissões quando disponíveis e atualizadas periodicamente. Nem toda emissora fornece um frame atual acessível; nesses casos, a Central+ mantém a arte do canal como alternativa. Os cards abrem a transmissão oficial e não retransmitem o sinal.</div>
+      <div><strong>Sobre as prévias e a reprodução:</strong> quando a plataforma disponibiliza uma miniatura pública da transmissão, ela é usada primeiro. Se a emissora não fornece uma miniatura acessível, a Central+ tenta exibir uma captura da página oficial, identificada no próprio card. Essa captura não é necessariamente um frame do vídeo em tempo real. Os cards abrem a transmissão oficial e não retransmitem o sinal.</div>
     </div>
   </div>
 </main>
@@ -146,6 +146,14 @@ main{padding-top:82px}.live-hero{position:relative;isolation:isolate;overflow:hi
   localChannels.forEach(channel=>localGrid.appendChild(createCard(channel)));
   nationalChannels.forEach(channel=>nationalGrid.appendChild(createCard(channel)));
 
+  function updatePreviewBadge(status, itemKind, previewUrl) {
+    const isPageScreenshot = String(previewUrl || "").includes("image.thum.io");
+    const isLiveFrame = itemKind === "live" && !isPageScreenshot;
+    status.hidden = false;
+    status.classList.toggle("is-live", isLiveFrame);
+    status.textContent = isPageScreenshot ? "Página oficial" : (isLiveFrame ? "Prévia ao vivo" : "Imagem oficial");
+  }
+
   let previewLoading=false;
   async function loadChannelPreviews(){
     if(previewLoading)return;
@@ -170,8 +178,7 @@ main{padding-top:82px}.live-hero{position:relative;isolation:isolate;overflow:hi
           return;
         }
         if(!image.hidden&&image.dataset.previewUrl===candidates[0]){
-          status.hidden=false;status.classList.toggle("is-live",item.kind==="live");
-          status.textContent=item.kind==="live"?"Prévia ao vivo":"Imagem oficial";
+          updatePreviewBadge(status,item.kind,candidates[0]);
           return;
         }
         image.hidden=true;art.classList.remove("has-preview");
@@ -184,9 +191,8 @@ main{padding-top:82px}.live-hero{position:relative;isolation:isolate;overflow:hi
           image.onerror=()=>{index++;tryCandidate()};
           image.onload=()=>{
             image.hidden=false;image.dataset.previewUrl=candidates[index];
-            art.classList.add("has-preview");status.hidden=false;
-            status.classList.toggle("is-live",item.kind==="live");
-            status.textContent=item.kind==="live"?"Prévia ao vivo":"Imagem oficial";
+            art.classList.add("has-preview");
+            updatePreviewBadge(status,item.kind,candidates[index]);
           };
           image.src=candidates[index];
         };
