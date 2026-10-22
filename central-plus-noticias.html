@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
-<title>Central+ — Navegação em novas abas v1.4</title>
+<title>Central+ — Notícias | Sua central pessoal</title>
 <style>
 :root{--bg:#07080c;--surface:#11131a;--surface-2:#191c25;--text:#f7f7fa;--muted:#a2a6b2;--line:rgba(255,255,255,.1);--accent:#d9dce5;--focus:#fff;--gutter:clamp(24px,4.1vw,76px);--radius:18px}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:92px}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:16px;overflow-x:hidden}button,a{font:inherit;color:inherit}button{cursor:pointer}a{text-decoration:none}.app{min-height:100vh;background:radial-gradient(ellipse at 75% 0%,rgba(54,61,88,.18),transparent 35%),var(--bg)}
@@ -66,6 +66,78 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
 .apps-rail .app-card .app-note{font-size:10px;color:#aeb4c2}
 @media(max-width:760px){.apps-rail .card{flex-basis:220px}.apps-rail .app-tile{aspect-ratio:16/10}.apps-rail .app-logo{width:78%;height:72%;margin:0 0 7% 8%}.apps-rail .app-logo .logo-fallback{font-size:32px}}
 
+
+/* CENTRAL+ NEWSROOM — personal news discovery hub */
+.news-hub{max-width:1800px;margin:0 auto;padding:6px var(--gutter) 64px}
+.news-intro{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(260px,.7fr);gap:36px;align-items:end;padding:12px 0 28px}
+.news-overline{display:flex;align-items:center;gap:10px;font-size:10px;font-weight:750;letter-spacing:.21em;color:#d3d8e3;text-transform:uppercase}
+.news-intro h1{font-size:clamp(40px,5.5vw,72px);line-height:.94;letter-spacing:-.07em;margin:18px 0 15px;font-weight:820}
+.news-intro h1 span{display:block;color:#c4cad8;font-weight:330}
+.news-intro-copy{font-size:14px;line-height:1.8;color:#b2b8c6;max-width:690px;margin:0}
+.news-intro-aside{border:1px solid #ffffff15;border-radius:15px;background:linear-gradient(140deg,#181d28,#0e1017);padding:22px;position:relative;overflow:hidden}
+.news-intro-aside:after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;right:-72px;top:-86px;background:radial-gradient(circle,#cbd3e524,transparent 70%);pointer-events:none}
+.news-aside-label{font-size:9px;letter-spacing:.19em;color:#9da7bb;font-weight:750}
+.news-aside-title{font-size:19px;letter-spacing:-.04em;font-weight:760;margin:11px 0 7px}
+.news-aside-copy{font-size:11px;line-height:1.65;color:#aeb5c4;margin:0}
+.news-priority{margin:7px 0 36px}
+.news-section-head{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:17px}
+.news-section-head h2{font-size:clamp(21px,2.1vw,28px);letter-spacing:-.045em;margin:0;font-weight:740}
+.news-section-head p{font-size:12px;color:#9da5b5;margin:6px 0 0;line-height:1.6}
+.news-overline-small{font-size:9px;letter-spacing:.19em;font-weight:750;color:#aeb7c9}
+.news-featured-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.news-featured-link{position:relative;min-height:172px;border:1px solid #ffffff18;border-radius:13px;background:linear-gradient(145deg,#171c27,#0f1118);padding:21px;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:20px;overflow:hidden;transition:transform .2s,border-color .2s,background .2s}
+.news-featured-link:after{content:"";position:absolute;right:-45px;top:-65px;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,var(--source-color,#b6c4df) 0,transparent 70%);opacity:.12;pointer-events:none}
+.news-featured-link:hover{transform:translateY(-3px);border-color:#ffffff45;background:linear-gradient(145deg,#202633,#11141c)}
+.news-featured-top{display:flex;width:100%;align-items:center;justify-content:space-between;gap:12px;position:relative;z-index:1}
+.news-brand-mark{width:43px;height:43px;border-radius:11px;display:grid;place-items:center;background:color-mix(in srgb,var(--source-color,#bec8dd) 19%,#11131a);border:1px solid color-mix(in srgb,var(--source-color,#bec8dd) 48%,transparent);color:#f8f9fc;font-weight:850;font-size:14px;letter-spacing:-.06em;flex-shrink:0}
+.news-priority-tag{font-size:8px;color:#dce1eb;letter-spacing:.12em;text-transform:uppercase;border:1px solid #ffffff25;border-radius:999px;padding:6px 8px;white-space:nowrap}
+.news-featured-name{font-size:22px;font-weight:780;letter-spacing:-.045em;margin:15px 0 6px;position:relative;z-index:1}
+.news-featured-desc{font-size:11px;color:#afb6c5;line-height:1.6;margin:0;max-width:370px;position:relative;z-index:1}
+.news-featured-cta{margin-top:auto;font-size:10px;font-weight:700;letter-spacing:.03em;display:flex;align-items:center;gap:8px;color:#e8ebf2;position:relative;z-index:1}
+.news-featured-cta svg{width:14px;height:14px}
+.news-tools{display:flex;align-items:center;gap:14px;justify-content:space-between;margin:24px 0 15px}
+.news-search{display:flex;align-items:center;gap:12px;background:#12151d;border:1px solid #ffffff1d;border-radius:10px;padding:0 14px;min-height:46px;width:min(480px,100%);transition:border-color .2s}
+.news-search:focus-within{border-color:#ffffff62}
+.news-search svg{width:18px;height:18px;color:#aab1bf;flex-shrink:0}
+.news-search input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:#f4f5f8;font:inherit;font-size:12px}
+.news-search input::placeholder{color:#777f90}
+.news-results-count{font-size:10px;color:#9199a9;white-space:nowrap}
+.news-category-tabs{display:flex;gap:8px;overflow-x:auto;padding:3px 0 20px;scrollbar-width:none}
+.news-category-tabs::-webkit-scrollbar{display:none}
+.news-category-tab{flex-shrink:0;border:1px solid #ffffff1d;border-radius:999px;background:#141720;color:#c0c4cf;padding:10px 15px;font-size:10px;white-space:nowrap;transition:all .18s}
+.news-category-tab:hover,.news-category-tab.active{background:#f2f3f7;color:#101116;border-color:#f2f3f7}
+.news-category-tab:focus-visible,.news-source-card:focus-visible,.news-featured-link:focus-visible{outline:3px solid #fff;outline-offset:4px}
+.news-category-section{margin:0 0 35px;scroll-margin-top:112px}
+.news-category-section[hidden]{display:none!important}
+.news-category-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:15px}
+.news-category-title-wrap{display:flex;align-items:center;gap:12px;min-width:0}
+.news-category-symbol{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:#ffffff0b;border:1px solid #ffffff12;color:#dce1eb;flex-shrink:0}
+.news-category-symbol svg{width:17px;height:17px}
+.news-category-title{font-size:18px;letter-spacing:-.035em;font-weight:720;margin:0}
+.news-category-desc{font-size:10px;color:#8f98a9;margin:4px 0 0;line-height:1.5}
+.news-category-count{color:#7e8798;font-size:9px;white-space:nowrap}
+.news-source-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.news-source-card{display:flex;flex-direction:column;gap:0;min-width:0;min-height:172px;border-radius:12px;border:1px solid #ffffff13;background:linear-gradient(145deg,#161a23,#101219);padding:16px;position:relative;overflow:hidden;color:inherit;text-decoration:none;transition:transform .18s,border-color .18s,background .18s}
+.news-source-card[hidden]{display:none!important}
+.news-source-card:before{content:"";position:absolute;inset:0 auto 0 0;width:2px;background:var(--source-color,#c0c8d9);opacity:.75;transform:scaleY(0);transform-origin:bottom;transition:transform .2s}
+.news-source-card:hover{transform:translateY(-3px);border-color:#ffffff35;background:linear-gradient(145deg,#1c212c,#11141b)}
+.news-source-card:hover:before{transform:scaleY(1)}
+.news-source-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:15px}
+.news-source-mark{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:color-mix(in srgb,var(--source-color,#bec8dd) 17%,#11131a);border:1px solid color-mix(in srgb,var(--source-color,#bec8dd) 38%,transparent);font-size:12px;font-weight:850;letter-spacing:-.06em;color:#f5f6fa;flex-shrink:0}
+.news-source-priority{font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:#d9deea;border:1px solid #ffffff1c;border-radius:999px;padding:5px 6px}
+.news-source-name{font-size:14px;font-weight:760;line-height:1.2;letter-spacing:-.025em;margin:0 0 7px}
+.news-source-desc{font-size:10px;line-height:1.65;color:#a5adbd;margin:0 0 17px;flex:1}
+.news-source-bottom{padding-top:10px;border-top:1px solid #ffffff0d;display:flex;align-items:center;justify-content:space-between;gap:8px;color:#d2d7e2;font-size:9px;font-weight:680}
+.news-source-domain{color:#777f90;font-size:8px;font-weight:450;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:rtl}
+.news-empty{display:none;border:1px dashed #ffffff25;border-radius:12px;padding:32px;text-align:center;color:#9ca5b5;font-size:12px;margin:18px 0}
+.news-empty.show{display:block}
+.news-note{font-size:10px;line-height:1.7;color:#788192;border-top:1px solid #ffffff10;padding-top:18px;margin:18px 0 0}
+.news-note strong{color:#c6ccd8}
+@media(max-width:1100px){.news-source-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.news-intro{grid-template-columns:1fr minmax(240px,.55fr);gap:24px}}
+@media(max-width:760px){.news-hub{padding:5px 20px 42px}.news-intro{grid-template-columns:1fr;gap:17px;padding:5px 0 23px}.news-intro h1{font-size:clamp(40px,11vw,54px)}.news-intro-copy{font-size:12px}.news-intro-aside{padding:16px}.news-aside-title{font-size:17px}.news-featured-grid{grid-template-columns:1fr;gap:9px}.news-featured-link{min-height:135px;padding:16px;gap:15px}.news-featured-name{font-size:19px;margin:11px 0 4px}.news-featured-desc{font-size:10px}.news-tools{display:block;margin:21px 0 12px}.news-search{width:100%}.news-results-count{display:block;margin-top:10px}.news-category-tabs{padding-bottom:17px}.news-category-section{margin-bottom:29px}.news-category-title{font-size:16px}.news-category-desc{max-width:300px}.news-source-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.news-source-card{padding:12px;min-height:170px}.news-source-name{font-size:13px}.news-source-desc{font-size:9px}.news-source-mark{width:32px;height:32px;font-size:11px}.news-source-priority{font-size:6px;padding:5px}.news-source-bottom{font-size:8px}.news-source-domain{font-size:7px}.news-section-head{align-items:start}.news-section-head p{font-size:11px}}
+@media(max-width:380px){.news-source-grid{grid-template-columns:1fr}.news-source-card{min-height:0}.news-source-desc{font-size:10px}.news-source-bottom{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.news-featured-link,.news-source-card,.news-source-card:before,.news-category-tab{transition:none}}
+
 </style>
 </head>
 <body>
@@ -89,14 +161,45 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
   <div class="hero-bottom"><div class="hero-controls"><button class="hero-arrow" id="hero-prev" data-focusable aria-label="Destaque anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m15 18-6-6 6-6"/></svg></button><div class="slide-dots" aria-label="Escolher destaque"><button class="slide-dot active" data-slide="0" data-focusable aria-label="Destaque 1"></button><button class="slide-dot" data-slide="1" data-focusable aria-label="Destaque 2"></button><button class="slide-dot" data-slide="2" data-focusable aria-label="Destaque 3"></button></div><button class="hero-arrow" id="hero-next" data-focusable aria-label="Próximo destaque"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 18 6-6-6-6"/></svg></button></div><div class="hero-hint"><span>←</span><span>→</span> novidades dos streamings</div></div>
 </section>
 <main class="main-content">
-  <section class="content-section" id="noticias"><div class="section-head"><div><h2 class="section-title">Agora na Central+</h2><p class="section-subtitle">Histórias, novidades e o que vale sua atenção.</p></div><a class="section-link" href="#noticias" data-focusable>Ver notícias <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m9 5 7 7-7 7"/></svg></a></div>
-  <div class="rail-wrap"><div class="rail news-rail">
-    <a class="card" href="#noticias" data-focusable data-title="O futuro das grandes estreias"><div class="poster"><div class="poster-art art-news1"></div><span class="poster-badge">Em destaque</span><div class="poster-copy"><div class="poster-kicker">Cinema · 4 min</div><div class="poster-title">O futuro das grandes estreias</div></div></div><div class="card-caption"><span>Novidades do cinema</span><small>Hoje</small></div></a>
-    <a class="card" href="#noticias" data-focusable data-title="O streaming está mudando"><div class="poster"><div class="poster-art art-news2"></div><div class="poster-copy"><div class="poster-kicker">Streaming · 6 min</div><div class="poster-title">O streaming está mudando</div></div></div><div class="card-caption"><span>Panorama digital</span><small>Hoje</small></div></a>
-    <a class="card" href="#noticias" data-focusable data-title="Séries que merecem sua próxima maratona"><div class="poster"><div class="poster-art art-news3"></div><div class="poster-copy"><div class="poster-kicker">Séries · 5 min</div><div class="poster-title">Sua próxima grande maratona</div></div></div><div class="card-caption"><span>Seleção editorial</span><small>Ontem</small></div></a>
-    <a class="card" href="#noticias" data-focusable data-title="Por dentro da nova ficção científica"><div class="poster"><div class="poster-art art-news4"></div><div class="poster-copy"><div class="poster-kicker">Universos · 3 min</div><div class="poster-title">Por dentro da nova ficção científica</div></div></div><div class="card-caption"><span>Em análise</span><small>Ontem</small></div></a>
-    <a class="card" href="#noticias" data-focusable data-title="O que assistir neste fim de semana"><div class="poster"><div class="poster-art art-news5"></div><div class="poster-copy"><div class="poster-kicker">Guia Central+ · 4 min</div><div class="poster-title">O que assistir neste fim de semana</div></div></div><div class="card-caption"><span>Guia de programação</span><small>Esta semana</small></div></a>
-  </div></div></section>
+  <section class="content-section news-hub" id="noticias">
+  <div class="news-intro">
+    <div>
+      <div class="news-overline"><span class="eyebrow-mark"></span> CENTRAL+ NEWSROOM</div>
+      <h1>Sua central pessoal <span>de notícias.</span></h1>
+      <p class="news-intro-copy">Jornalismo nacional, Pará, cultura pop, ciência, inteligência artificial e patrimônio em um só lugar. Uma seleção para se manter informado, alimentar a curiosidade e encontrar referências para suas pautas e sua carreira.</p>
+    </div>
+    <aside class="news-intro-aside">
+      <div class="news-aside-label">UM BOM PONTO DE PARTIDA</div>
+      <div class="news-aside-title">Informação, curiosidade e repertório.</div>
+      <p class="news-aside-copy">Não é necessário ler todos os portais todos os dias. Comece por três fontes prioritárias, compare coberturas e explore as outras categorias conforme seu interesse.</p>
+    </aside>
+  </div>
+  <section class="news-priority" aria-labelledby="news-priority-title">
+    <div class="news-section-head"><div><div class="news-overline-small">SELEÇÃO EDITORIAL</div><h2 id="news-priority-title">Comece por aqui</h2><p>Três atalhos para a rotina diária: notícias, entretenimento e tecnologia.</p></div></div>
+    <div class="news-featured-grid" id="news-featured"></div>
+  </section>
+  <div class="news-tools">
+    <label class="news-search" for="news-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.7"/><path d="m16 16 4.4 4.4"/></svg>
+      <input id="news-search" type="search" placeholder="Buscar portal, tema ou categoria..." autocomplete="off">
+    </label>
+    <span class="news-results-count" id="news-results-count" aria-live="polite">49 fontes selecionadas</span>
+  </div>
+  <nav class="news-category-tabs" id="news-category-tabs" aria-label="Categorias de notícias">
+    <button type="button" class="news-category-tab active" data-news-category="todas" aria-pressed="true">Todas as categorias</button>
+    <button type="button" class="news-category-tab" data-news-category="nacionais" aria-pressed="false">Notícias nacionais</button>
+    <button type="button" class="news-category-tab" data-news-category="para" aria-pressed="false">Pará e Belém</button>
+    <button type="button" class="news-category-tab" data-news-category="cinema" aria-pressed="false">Cinema e séries</button>
+    <button type="button" class="news-category-tab" data-news-category="celebridades" aria-pressed="false">Famosos e cultura pop</button>
+    <button type="button" class="news-category-tab" data-news-category="ciencia" aria-pressed="false">Ciência e conhecimento</button>
+    <button type="button" class="news-category-tab" data-news-category="ia" aria-pressed="false">IA e tecnologia</button>
+    <button type="button" class="news-category-tab" data-news-category="jornalismo" aria-pressed="false">Jornalismo e conteúdo</button>
+    <button type="button" class="news-category-tab" data-news-category="patrimonio" aria-pressed="false">História e patrimônio</button>
+  </nav>
+  <div id="news-category-sections"></div>
+  <div class="news-empty" id="news-empty">Nenhum portal encontrado com esse termo. Experimente outra palavra ou selecione outra categoria.</div>
+  <p class="news-note"><strong>Uma rotina equilibrada:</strong> use os portais jornalísticos para acompanhar os fatos, compare enfoques quando o assunto for importante e consulte páginas oficiais para anúncios primários. Os links levam aos sites dos próprios veículos; a atualização e a disponibilidade do conteúdo são responsabilidade de cada portal.</p>
+</section>
   <section class="content-section" id="continuar"><div class="section-head"><div><h2 class="section-title">Continue assistindo</h2><p class="section-subtitle">Volte exatamente de onde você parou.</p></div><a class="section-link" href="#continuar" data-focusable>Ver histórico <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m9 5 7 7-7 7"/></svg></a></div><div class="rail continue-rail">
     <a class="card" href="#continuar" data-focusable data-title="Severance"><div class="poster"><div class="poster-art art-severance"></div><span class="poster-badge">S1:E6</span><div class="poster-copy"><div class="poster-kicker">Drama · 42 min restantes</div><div class="poster-title">Ruptura</div></div></div><div class="progress"><span style="width:62%"></span></div><div class="card-caption"><span>Ruptura</span><small>62%</small></div></a>
     <a class="card" href="#continuar" data-focusable data-title="Silo"><div class="poster"><div class="poster-art art-silo"></div><span class="poster-badge">S1:E3</span><div class="poster-copy"><div class="poster-kicker">Ficção científica</div><div class="poster-title">Silo</div></div></div><div class="progress"><span style="width:38%"></span></div><div class="card-caption"><span>Silo</span><small>38%</small></div></a>
@@ -186,7 +289,142 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
     }
     if(e.key==='Escape'&&document.activeElement!==document.body){document.activeElement.blur()}
   });
-  // Cada item do menu abre uma nova guia com uma rota independente (?page=...).
+
+  // Central pessoal de notícias: fontes agrupadas por interesse, com filtro e pesquisa local.
+  (function(){
+    const root=document.getElementById('noticias');if(!root||!document.getElementById('news-category-sections'))return;
+    const categories=[
+      {id:'nacionais',title:'Grandes portais de notícias',desc:'Panorama diário do Brasil, política, economia e mundo.',symbol:'globe'},
+      {id:'para',title:'Notícias do Pará e de Belém',desc:'Acompanhe a cobertura regional e consulte fontes institucionais.',symbol:'map-pin'},
+      {id:'cinema',title:'Filmes, séries, streaming e cultura pop',desc:'Lançamentos, bastidores, críticas, trailers e universo geek.',symbol:'clapperboard'},
+      {id:'celebridades',title:'Famosos, celebridades e entretenimento',desc:'Televisão, artistas, reality shows e tendências que repercutem.',symbol:'sparkles'},
+      {id:'ciencia',title:'Ciência, curiosidades e conhecimento',desc:'Pesquisas, história, arqueologia, sociedade e explicações acessíveis.',symbol:'telescope'},
+      {id:'ia',title:'Inteligência artificial, tecnologia e mundo digital',desc:'IA, inovação, plataformas e os impactos da tecnologia na sociedade.',symbol:'brain-circuit'},
+      {id:'jornalismo',title:'Jornalismo, comunicação e mercado de conteúdo',desc:'Apuração, mercado editorial, comunicação corporativa e futuro da profissão.',symbol:'newspaper'},
+      {id:'patrimonio',title:'História, arqueologia e patrimônio cultural',desc:'Museus, preservação, arqueologia e políticas culturais.',symbol:'landmark'}
+    ];
+    const sources=[
+      {id:'g1',name:'g1',mark:'g1',category:'nacionais',priority:true,url:'https://g1.globo.com/',desc:'Notícias gerais, política, economia, ciência e cobertura regional.',search:'Brasil política economia Pará notícias gerais'},
+      {id:'uol',name:'UOL Notícias',mark:'UOL',category:'nacionais',priority:true,url:'https://noticias.uol.com.br/',desc:'Notícias, colunistas, comportamento, cultura e assuntos do momento.',search:'notícias colunistas cultura política Brasil'},
+      {id:'estadao',name:'Estadão',mark:'E',category:'nacionais',priority:false,url:'https://www.estadao.com.br/',desc:'Política, economia, negócios e análises para aprofundar a conjuntura.',search:'política economia análise negócios'},
+      {id:'cnn',name:'CNN Brasil',mark:'CNN',category:'nacionais',priority:false,url:'https://www.cnnbrasil.com.br/',desc:'Atualização rápida, entrevistas, vídeos e acontecimentos nacionais e internacionais.',search:'últimas notícias entrevistas vídeo mundo'},
+      {id:'folha',name:'Folha de S.Paulo',mark:'F',category:'nacionais',priority:false,url:'https://www.folha.uol.com.br/',desc:'Reportagens, política, sociedade, investigações e cultura.',search:'reportagens política sociedade investigação cultura'},
+      {id:'bbc',name:'BBC News Brasil',mark:'BBC',category:'nacionais',priority:true,url:'https://www.bbc.com/portuguese',desc:'Jornalismo explicativo, geopolítica, ciência e transformações sociais.',search:'mundo ciência geopolítica explicadores'},
+      {id:'agbrasil',name:'Agência Brasil',mark:'AB',category:'nacionais',priority:false,url:'https://agenciabrasil.ebc.com.br/',desc:'Políticas públicas, informações de interesse público e cobertura institucional.',search:'políticas públicas governo economia legislação'},
+      {id:'poder360',name:'Poder360',mark:'P360',category:'nacionais',priority:false,url:'https://www.poder360.com.br/',desc:'Brasília, Congresso, bastidores do poder e jornalismo de dados.',search:'Brasília Congresso política bastidores poder'},
+      {id:'metropoles',name:'Metrópoles',mark:'M',category:'nacionais',priority:false,url:'https://www.metropoles.com/',desc:'Política, Brasil, cotidiano, cultura e bastidores.',search:'política Brasil cotidiano cultura'},
+      {id:'oglobo',name:'O Globo',mark:'O',category:'nacionais',priority:false,url:'https://oglobo.globo.com/',desc:'Cobertura nacional, política, economia, sociedade e cultura.',search:'notícias Brasil política sociedade economia'},
+      {id:'valor',name:'Valor Econômico',mark:'V',category:'nacionais',priority:false,url:'https://valor.globo.com/',desc:'Economia, empresas, mercado, negócios e conjuntura.',search:'economia mercado empresas negócios'},
+      {id:'nexo',name:'Nexo Jornal',mark:'N',category:'nacionais',priority:true,url:'https://www.nexojornal.com.br/',desc:'Análises e explicações que vão além da manchete.',search:'contexto política história sociedade explicação'},
+      {id:'oliberal',name:'O Liberal',mark:'OL',category:'para',priority:true,url:'https://www.oliberal.com/',desc:'Belém, política paraense, cidades, economia, cultura e cotidiano.',search:'Pará Belém política cidades cultura economia'},
+      {id:'dol',name:'DOL — Diário Online',mark:'DOL',category:'para',priority:false,url:'https://dol.com.br/',desc:'Notícias locais, cotidiano, segurança, entretenimento e repercussão regional.',search:'Pará Belém cotidiano segurança entretenimento'},
+      {id:'agenciapara',name:'Agência Pará',mark:'PA',category:'para',priority:false,url:'https://agenciapara.com.br/',desc:'Obras, infraestrutura, serviços públicos e ações do governo estadual.',search:'Pará obras infraestrutura governo serviços públicos'},
+      {id:'g1para',name:'g1 Pará',mark:'g1 PA',category:'para',priority:true,url:'https://g1.globo.com/pa/para/',desc:'Cobertura regional com a estrutura de jornalismo do g1.',search:'Pará Belém notícias região Amazônia'},
+      {id:'omelete',name:'Omelete',mark:'OM',category:'cinema',priority:true,url:'https://www.omelete.com.br/',desc:'Cinema, séries, Marvel, DC, Star Wars, streaming, trailers e grandes eventos geek.',search:'cinema séries Marvel DC Star Wars trailers streaming'},
+      {id:'adorocinema',name:'AdoroCinema',mark:'AC',category:'cinema',priority:false,url:'https://www.adorocinema.com/',desc:'Estreias, críticas, bilheterias, curiosidades e novidades de filmes e séries.',search:'estreias críticas bilheteria filmes séries'},
+      {id:'minhaserie',name:'Minha Série',mark:'MS',category:'cinema',priority:true,url:'https://www.minhaserie.com.br/',desc:'Renovações, cancelamentos, finais explicados e lançamentos de streaming.',search:'séries streaming renovações cancelamentos finais'},
+      {id:'rapadura',name:'Cinema com Rapadura',mark:'CR',category:'cinema',priority:false,url:'https://cinemacomrapadura.com.br/',desc:'Críticas, análises, podcasts e discussão sobre linguagem cinematográfica.',search:'críticas análises podcasts cinema'},
+      {id:'jovemnerd',name:'Jovem Nerd',mark:'JN',category:'cinema',priority:false,url:'https://jovemnerd.com.br/',desc:'Cultura geek, filmes, séries, jogos, livros e ficção científica.',search:'cultura geek filmes séries games livros sci-fi'},
+      {id:'legiao',name:'Legião dos Heróis',mark:'LH',category:'cinema',priority:false,url:'https://www.legiaodosherois.com.br/',desc:'Super-heróis, HQs, adaptações, Marvel, DC e animações.',search:'super-heróis quadrinhos Marvel DC animações'},
+      {id:'rollingstone',name:'Rolling Stone Brasil',mark:'RS',category:'cinema',priority:false,url:'https://rollingstone.com.br/',desc:'Música, cinema, televisão, celebridades e comportamento cultural.',search:'música cinema televisão celebridades cultura'},
+      {id:'gshow',name:'gshow',mark:'gshow',category:'celebridades',priority:true,url:'https://gshow.globo.com/',desc:'Famosos, novelas, reality shows e repercussão da televisão.',search:'famosos novelas reality televisão'},
+      {id:'quem',name:'Quem',mark:'QUEM',category:'celebridades',priority:false,url:'https://revistaquem.globo.com/',desc:'Artistas, entrevistas, relacionamentos e bastidores do entretenimento.',search:'artistas entrevistas celebridades bastidores'},
+      {id:'splash',name:'Splash UOL',mark:'S',category:'celebridades',priority:true,url:'https://www.uol.com.br/splash/',desc:'Celebridades, televisão, realities e assuntos que geram conversa.',search:'celebridades TV realities famosos viral'},
+      {id:'papelpop',name:'Papelpop',mark:'PP',category:'celebridades',priority:false,url:'https://www.papelpop.com/',desc:'Cultura pop, música, artistas e tendências da internet.',search:'cultura pop música artistas internet tendências'},
+      {id:'super',name:'Superinteressante',mark:'SUPER',category:'ciencia',priority:true,url:'https://super.abril.com.br/',desc:'Ciência, história, comportamento, psicologia e tecnologia em linguagem acessível.',search:'ciência história psicologia tecnologia curiosidades'},
+      {id:'natgeo',name:'National Geographic Brasil',mark:'NG',category:'ciencia',priority:true,url:'https://www.nationalgeographicbrasil.com/',desc:'Arqueologia, civilizações, natureza, meio ambiente, história e patrimônio.',search:'arqueologia civilizações antigas natureza Amazônia patrimônio'},
+      {id:'bbcscience',name:'BBC News Brasil · Ciência',mark:'BBC',category:'ciencia',priority:false,url:'https://www.bbc.com/portuguese',desc:'Pesquisas científicas, meio ambiente e explicações sobre fenômenos atuais.',search:'BBC ciência pesquisas clima meio ambiente'},
+      {id:'fapesp',name:'Pesquisa FAPESP',mark:'FAPESP',category:'ciencia',priority:true,url:'https://revistapesquisa.fapesp.br/',desc:'Pesquisas brasileiras, universidades, arqueologia e ciências humanas.',search:'pesquisa brasileira universidades arqueologia ciência'},
+      {id:'cienciahoje',name:'Ciência Hoje',mark:'CH',category:'ciencia',priority:false,url:'https://cienciahoje.org.br/',desc:'Divulgação científica e debates sobre ciência e sociedade.',search:'divulgação científica sociedade pesquisa'},
+      {id:'nexo-ciencia',name:'Nexo Jornal · Explicadores',mark:'N',category:'ciencia',priority:false,url:'https://www.nexojornal.com.br/',desc:'Contexto sobre história, política, cultura e transformações sociais.',search:'explicadores história cultura sociedade ciência'},
+      {id:'mittech',name:'MIT Technology Review Brasil',mark:'MIT',category:'ia',priority:true,url:'https://mittechreview.com.br/',desc:'Análises sobre inteligência artificial, automação, inovação e seus impactos.',search:'inteligência artificial automação inovação tecnologia sociedade'},
+      {id:'canaltech',name:'Canaltech',mark:'CT',category:'ia',priority:false,url:'https://canaltech.com.br/',desc:'IA, aplicativos, empresas de tecnologia, internet e novidades digitais.',search:'IA aplicativos tecnologia internet empresas'},
+      {id:'tecnoblog',name:'Tecnoblog',mark:'TB',category:'ia',priority:false,url:'https://tecnoblog.net/',desc:'Tecnologia, plataformas, serviços online, privacidade e experiência dos usuários.',search:'tecnologia plataformas privacidade apps internet'},
+      {id:'olhardigital',name:'Olhar Digital',mark:'OD',category:'ia',priority:false,url:'https://olhardigital.com.br/',desc:'Atualizações sobre IA, ciência, tecnologia e tendências digitais.',search:'inteligência artificial ciência tecnologia tendências'},
+      {id:'theverge',name:'The Verge',mark:'VERGE',category:'ia',priority:true,url:'https://www.theverge.com/',desc:'Em inglês: IA, produtos digitais, cultura tecnológica e sociedade.',search:'AI technology products digital culture English'},
+      {id:'openai',name:'OpenAI · Notícias oficiais',mark:'AI',category:'ia',priority:true,url:'https://openai.com/news/',desc:'Anúncios, pesquisas, modelos e ferramentas diretamente da OpenAI.',search:'OpenAI modelos ferramentas pesquisa lançamentos'},
+      {id:'anthropic',name:'Anthropic · News',mark:'A',category:'ia',priority:false,url:'https://www.anthropic.com/news',desc:'Notícias e pesquisas oficiais sobre Claude e inteligência artificial.',search:'Anthropic Claude pesquisa modelos IA'},
+      {id:'deepmind',name:'Google DeepMind',mark:'DM',category:'ia',priority:false,url:'https://deepmind.google/discover/blog/',desc:'Pesquisas e avanços em IA publicados pela equipe do Google DeepMind.',search:'Google DeepMind AI research ciência modelos'},
+      {id:'meioemensagem',name:'Meio & Mensagem',mark:'M&M',category:'jornalismo',priority:true,url:'https://www.meioemensagem.com.br/',desc:'Comunicação corporativa, publicidade, marcas, agências e mercado de conteúdo.',search:'comunicação corporativa publicidade marcas agências conteúdo'},
+      {id:'comuniquese',name:'Comunique-se',mark:'CS',category:'jornalismo',priority:false,url:'https://portal.comunique-se.com.br/',desc:'Mercado jornalístico, comunicação empresarial e assessoria de imprensa.',search:'jornalismo comunicação empresarial assessoria imprensa'},
+      {id:'apublica',name:'Agência Pública',mark:'AP',category:'jornalismo',priority:true,url:'https://apublica.org/',desc:'Jornalismo investigativo, apuração documental e reportagens aprofundadas.',search:'jornalismo investigação reportagens apuração documentos'},
+      {id:'observatorio',name:'Observatório da Imprensa',mark:'OI',category:'jornalismo',priority:false,url:'https://www.observatoriodaimprensa.com.br/',desc:'Mídia, ética, qualidade da informação e práticas jornalísticas.',search:'mídia ética imprensa jornalismo informação'},
+      {id:'knightcenter',name:'Knight Center for Journalism',mark:'KC',category:'jornalismo',priority:false,url:'https://knightcenter.utexas.edu/pt-br/',desc:'Jornalismo digital, inovação, inteligência artificial e formação profissional.',search:'jornalismo digital inovação IA formação'},
+      {id:'iphan',name:'IPHAN',mark:'IPHAN',category:'patrimonio',priority:true,url:'https://www.gov.br/iphan/pt-br',desc:'Patrimônio material e imaterial, arqueologia e políticas de preservação.',search:'patrimônio cultural arqueologia preservação museus Brasil'},
+      {id:'goeldi',name:'Museu Paraense Emílio Goeldi',mark:'MPEG',category:'patrimonio',priority:true,url:'https://www.gov.br/museugoeldi/pt-br',desc:'Referência amazônica em arqueologia, antropologia, biodiversidade e história regional.',search:'Museu Goeldi Amazônia arqueologia antropologia história'},
+      {id:'agbrasilcultura',name:'Agência Brasil · Cultura',mark:'AB',category:'patrimonio',priority:false,url:'https://agenciabrasil.ebc.com.br/cultura',desc:'Museus, patrimônio, políticas culturais, financiamento e ações públicas.',search:'cultura museus patrimônio políticas culturais Brasil'}
+    ];
+    const colors=['#b7c8e5','#a9cad0','#dbb998','#b4a6db','#d1b5bc','#a8c7a8','#c3c8da','#a6b8d1'];
+    const byId=id=>document.getElementById(id);
+    const featured=byId('news-featured'),groups=byId('news-category-sections'),tabs=[...root.querySelectorAll('[data-news-category]')],search=byId('news-search'),empty=byId('news-empty'),count=byId('news-results-count');
+    const glyphs={
+      globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/>',
+      'map-pin':'<path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/>',
+      'clapperboard':'<path d="M4 4h16v16H4zM4 9h16M8 4l-4 5m10-5-4 5m10-5-4 5"/>',
+      sparkles:'<path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3ZM19 16l1.1 2.9L23 20l-2.9 1.1L19 24l-1.1-2.9L15 20l2.9-1.1L19 16Z"/>',
+      telescope:'<path d="m4 5 9-3 2 6-9 3zM11 11l3 9m-8-7-3 4m2-2 4 5m5-10 5-3m-2 2 3 10"/>',
+      'brain-circuit':'<path d="M12 18V5a3 3 0 0 0-5.8-1A4 4 0 0 0 4 11a4 4 0 0 0 2 7h6ZM12 8h4a3 3 0 1 0-3-3M12 13h5a3 3 0 1 1-3 3M7 8h.01M8 14h.01M16 4h.01M18 18h.01"/>',
+      newspaper:'<path d="M4 5h16v15H4zM8 9h8M8 12h8M8 15h5M2 8v10a2 2 0 0 0 2 2"/>',
+      landmark:'<path d="m3 9 9-6 9 6M5 10v8M9 10v8M15 10v8M19 10v8M3 21h18M2 18h20"/>'
+    };
+    function svgIcon(id){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(glyphs[id]||glyphs.globe)+'</svg>'}
+    function markStyle(source){return 'style="--source-color:'+colors[(sources.findIndex(x=>x.id===source.id))%colors.length]+'"'}
+    function featuredCard(source,subtitle,tag){
+      const a=document.createElement('a');a.className='news-featured-link';a.href=source.url;a.setAttribute('style','--source-color:'+colors[sources.findIndex(x=>x.id===source.id)%colors.length]);a.setAttribute('aria-label','Acessar '+source.name);
+      a.innerHTML='<div class="news-featured-top"><span class="news-brand-mark">'+source.mark+'</span><span class="news-priority-tag">'+tag+'</span></div><div><div class="news-featured-name">'+source.name+'</div><p class="news-featured-desc">'+subtitle+'</p></div><div class="news-featured-cta">Acessar portal <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"/></svg></div>';
+      return a;
+    }
+    featured.append(featuredCard(sources.find(s=>s.id==='g1'),'Acompanhe o que acontece no Brasil, na política, na economia e na região.','Notícias'),featuredCard(sources.find(s=>s.id==='omelete'),'Sua referência para estreias, trailers, Marvel, DC e novidades de streaming.','Cultura pop'),featuredCard(sources.find(s=>s.id==='mittech'),'IA, inovação e tecnologia para acompanhar sua transição profissional.','Tecnologia'));
+    categories.forEach((cat,index)=>{
+      const sec=document.createElement('section');sec.className='news-category-section';sec.dataset.category=cat.id;sec.id='news-cat-'+cat.id;
+      const head=document.createElement('div');head.className='news-category-head';
+      const left=document.createElement('div');left.className='news-category-title-wrap';
+      const symbol=document.createElement('span');symbol.className='news-category-symbol';symbol.innerHTML=svgIcon(cat.symbol);
+      const textWrap=document.createElement('div');const title=document.createElement('h2');title.className='news-category-title';title.textContent=cat.title;
+      const desc=document.createElement('p');desc.className='news-category-desc';desc.textContent=cat.desc;textWrap.append(title,desc);left.append(symbol,textWrap);
+      const categoryCount=document.createElement('span');categoryCount.className='news-category-count';categoryCount.dataset.categoryCount=cat.id;head.append(left,categoryCount);
+      const grid=document.createElement('div');grid.className='news-source-grid';grid.dataset.sourceGrid=cat.id;
+      sources.filter(source=>source.category===cat.id).forEach(source=>{
+        const a=document.createElement('a');a.className='news-source-card';a.href=source.url;a.dataset.sourceId=source.id;a.dataset.category=source.category;
+        a.dataset.search=(source.name+' '+source.desc+' '+source.search+' '+cat.title+' '+cat.desc).toLocaleLowerCase('pt-BR');
+        a.setAttribute('aria-label','Acessar '+source.name);
+        a.setAttribute('style','--source-color:'+colors[sources.findIndex(x=>x.id===source.id)%colors.length]);
+        const top=document.createElement('div');top.className='news-source-top';
+        const mark=document.createElement('span');mark.className='news-source-mark';mark.textContent=source.mark;top.append(mark);
+        if(source.priority){const badge=document.createElement('span');badge.className='news-source-priority';badge.textContent='Prioridade';top.append(badge)}
+        const name=document.createElement('h3');name.className='news-source-name';name.textContent=source.name;
+        const summary=document.createElement('p');summary.className='news-source-desc';summary.textContent=source.desc;
+        const bottom=document.createElement('div');bottom.className='news-source-bottom';
+        const action=document.createElement('span');action.textContent='Acessar portal ↗';
+        const domain=document.createElement('span');domain.className='news-source-domain';domain.textContent=source.url.replace(/^https?:\/\//,'').replace(/\/$/,'');
+        bottom.append(action,domain);a.append(top,name,summary,bottom);grid.append(a);
+      });
+      sec.append(head,grid);groups.append(sec);
+      categoryCount.textContent=sources.filter(s=>s.category===cat.id).length+' fontes';
+    });
+    let category='todas';
+    function apply(){
+      const q=search.value.trim().toLocaleLowerCase('pt-BR');let total=0;
+      tabs.forEach(t=>{const active=t.dataset.newsCategory===category;t.classList.toggle('active',active);t.setAttribute('aria-pressed',active?'true':'false')});
+      categories.forEach(cat=>{
+        const section=byId('news-cat-'+cat.id);const inCategory=category==='todas'||category===cat.id;
+        let visible=0;
+        section.querySelectorAll('.news-source-card').forEach(card=>{const show=inCategory&&(!q||card.dataset.search.includes(q));card.hidden=!show;if(show){visible++;total++}});
+        section.hidden=visible===0;
+        const n=section.querySelector('[data-category-count]');if(n)n.textContent=visible+' '+(visible===1?'fonte':'fontes');
+      });
+      const featureVisible=!q&&(category==='todas'||['nacionais','cinema','ia'].includes(category));
+      byId('news-priority-title').textContent=featureVisible?'Comece por aqui':'Fontes em destaque';
+      byId('news-featured').parentElement.hidden=!featureVisible;
+      empty.classList.toggle('show',total===0);
+      count.textContent=total+' '+(total===1?'fonte encontrada':'fontes encontradas');
+    }
+    tabs.forEach(tab=>tab.addEventListener('click',()=>{category=tab.dataset.newsCategory;apply();}));
+    search.addEventListener('input',apply);
+    apply();
+  })();
+
+    // A navegação do app mantém a mesma guia.
   const appRoot=document.getElementById('home');
   const pageIds=['home','filmes','series','apps','noticias','ao-vivo','favoritos'];
   const pageLabels={home:'Home',filmes:'Filmes',series:'Séries',apps:'Apps',noticias:'Notícias','ao-vivo':'Ao vivo',favoritos:'Favoritos'};
@@ -217,7 +455,7 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
   const pageFromFilename=Object.entries({home:'central-plus-home-v1.html',filmes:'central-plus-filmes.html',series:'central-plus-series.html',apps:'central-plus-apps.html',noticias:'central-plus-noticias.html','ao-vivo':'central-plus-ao-vivo.html',favoritos:'central-plus-favoritos.html'}).find(([slug,file])=>file===filename)?.[0]||'home';
   const requestedPage=new URLSearchParams(window.location.search).get('page')||pageFromFilename;
   renderPage(requestedPage,false);
-  // In-section links switch the current tab to the requested page, while the top menu opens a new tab.
+  // Links internos trocam a página mantendo a guia atual; fontes externas também navegam nesta guia.
   document.querySelectorAll('a[href^="#"]').forEach(link=>{
     const target=link.getAttribute('href').slice(1);
     if(!pageIds.includes(target)||link.closest('.nav'))return;
@@ -230,8 +468,8 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
     });
   });
   document.querySelector('.brand').setAttribute('href','central-plus-home-v1.html');
-  document.querySelector('.brand').setAttribute('target','_blank');
-  document.querySelector('.brand').setAttribute('rel','noopener');
+  document.querySelector('.brand').removeAttribute('target');
+  document.querySelector('.brand').removeAttribute('rel');
   // Keyboard/remote carousel browsing while a card is focused.
   document.querySelectorAll('.rail').forEach(rail=>rail.addEventListener('keydown',e=>{if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;const cards=[...rail.querySelectorAll('[data-focusable]')];const idx=cards.indexOf(document.activeElement);if(idx<0)return;const next=cards[idx+(e.key==='ArrowRight'?1:-1)];if(next){e.preventDefault();next.focus();next.scrollIntoView({block:'nearest',inline:'nearest',behavior:'smooth'})}}));
   setSlide(0);startCarousel();
