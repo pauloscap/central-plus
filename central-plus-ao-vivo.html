@@ -154,6 +154,34 @@ main{padding-top:82px}.live-hero{position:relative;isolation:isolate;overflow:hi
     status.textContent = isPageScreenshot ? "Página oficial" : (isLiveFrame ? "Prévia ao vivo" : "Imagem oficial");
   }
 
+  function setPageScreenshotFallback(card) {
+    const image = card.querySelector(".channel-preview");
+    const status = card.querySelector(".channel-preview-status");
+    const art = card.querySelector(".channel-art");
+    const sourceUrl = card.getAttribute("href");
+    if (!image || !status || !art || !sourceUrl) return;
+    const screenshot = "https://image.thum.io/get/width/700/crop/675/noanimate/maxAge/6/" + sourceUrl;
+    if (!image.hidden && image.dataset.previewUrl === screenshot) {
+      updatePreviewBadge(status, "page-preview", screenshot);
+      return;
+    }
+    image.hidden = true;
+    art.classList.remove("has-preview");
+    image.onload = () => {
+      image.hidden = false;
+      image.dataset.previewUrl = screenshot;
+      art.classList.add("has-preview");
+      updatePreviewBadge(status, "page-preview", screenshot);
+    };
+    image.onerror = () => {
+      image.hidden = true;
+      art.classList.remove("has-preview");
+      status.hidden = true;
+    };
+    image.dataset.previewUrl = screenshot;
+    image.src = screenshot;
+  }
+
   let previewLoading=false;
   async function loadChannelPreviews(){
     if(previewLoading)return;
@@ -173,8 +201,7 @@ main{padding-top:82px}.live-hero{position:relative;isolation:isolate;overflow:hi
         if(!image||!status||!art)return;
         const candidates=item.images.filter(url=>{try{return ["https:","http:"].includes(new URL(url).protocol)}catch(_){return false}});
         if(!candidates.length){
-          image.hidden=true;image.removeAttribute("src");delete image.dataset.previewUrl;
-          art.classList.remove("has-preview");status.hidden=true;status.classList.remove("is-live");
+          setPageScreenshotFallback(card);
           return;
         }
         if(!image.hidden&&image.dataset.previewUrl===candidates[0]){
@@ -200,6 +227,8 @@ main{padding-top:82px}.live-hero{position:relative;isolation:isolate;overflow:hi
       });
     }catch(error){
       console.warn("Central+ live previews:",error&&error.message?error.message:error);
+      // Even if the preview API itself is unavailable, try an image of each official destination.
+      document.querySelectorAll(".channel-card").forEach(setPageScreenshotFallback);
     }finally{previewLoading=false}
   }
   loadChannelPreviews();
