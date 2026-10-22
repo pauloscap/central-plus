@@ -10,7 +10,7 @@ const CHANNEL_SOURCES = [
   { id: "cazetv", url: "https://www.youtube.com/@CazeTV/live", kind: "youtube" },
   { id: "tv-brasil", url: "https://tvbrasil.ebc.com.br/webtv/", kind: "page" },
   { id: "canal-gov", url: "https://canalgov.ebc.com.br/ao-vivo", kind: "page" },
-  { id: "sbt-national", url: "https://www.sbt.com.br/ao-vivo", kind: "sbt" }
+  { id: "sbt-national", url: "https://mais.sbt.com.br/", kind: "page" }
 ];
 
 const TIMEOUT_MS = 4200;
@@ -59,21 +59,18 @@ function metaImages(html, base) {
 
 function posterImages(html, base) {
   const results = [];
-  const tags = html.match(/<(?:video|img|meta)\b[^>]*>/gi) || [];
-  for (const tag of tags) {
-    const values = [
-      getAttribute(tag, "poster"),
-      getAttribute(tag, "data-poster"),
-      getAttribute(tag, "data-src"),
-      getAttribute(tag, "data-lazy-src"),
-      getAttribute(tag, "src")
-    ];
-    for (const value of values) {
-      const url = normalizeImage(value, base);
-      if (!url) continue;
-      if (/\.svg(?:[?#]|$)/i.test(url) && !/logo|brand|channel/i.test(url)) continue;
-      if (!results.includes(url)) results.push(url);
-    }
+  // Prefer a video player's explicit poster image over generic page graphics.
+  const videos = html.match(/<video\b[^>]*>/gi) || [];
+  for (const tag of videos) {
+    const url = normalizeImage(getAttribute(tag, "poster") || getAttribute(tag, "data-poster"), base);
+    if (url && !results.includes(url)) results.push(url);
+  }
+  // Common player configuration stores a poster/thumbnail URL in JSON.
+  const configured = html.match(/["'](?:poster|thumbnailUrl|thumbnail_url|previewImage)["']\s*:\s*["']https?:[^"']+["']/gi) || [];
+  for (const match of configured) {
+    const value = match.match(/["'](https?:[^"']+)["']\s*$/i);
+    const url = value ? normalizeImage(value[1], base) : "";
+    if (url && !results.includes(url)) results.push(url);
   }
   return results;
 }
