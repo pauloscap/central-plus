@@ -16,6 +16,11 @@ const CHANNEL_SOURCES = [
 const TIMEOUT_MS = 4200;
 const USER_AGENT = "CentralPlusLivePreview/1.0 (+https://central-plus-roan.vercel.app)";
 
+function pageScreenshotUrl(source) {
+  // Last-resort visual: screenshot of the broadcaster's public page, not a claim of a live video frame.
+  return "https://image.thum.io/get/width/700/crop/675/noanimate/maxAge/6/" + source.url;
+}
+
 function decode(value) {
   return String(value || "")
     .replace(/&amp;/gi, "&")
@@ -157,11 +162,22 @@ async function fetchPage(source) {
       images = posterImages(html, finalUrl).concat(metaImages(html, finalUrl));
     }
 
-    images = [...new Set(images.map(url => normalizeImage(url, finalUrl)).filter(Boolean))].slice(0, 5);
+    images = [...new Set(images.map(url => normalizeImage(url, finalUrl)).filter(Boolean))];
+
+    // Keep the screenshot as the final candidate so the card still has a visual
+    // when the broadcaster blocks scraping or a thumbnail URL is unavailable.
+    const screenshot = normalizeImage(pageScreenshotUrl(source), source.url);
+    if (screenshot) {
+      images = images.filter(url => url !== screenshot).slice(0, 4);
+      images.push(screenshot);
+    } else {
+      images = images.slice(0, 5);
+    }
+
     return {
       id: source.id,
       images,
-      kind: live ? "live" : (images.length ? "official" : "none"),
+      kind: live ? "live" : (images.length ? (images[0] === screenshot ? "page-preview" : "official") : "none"),
       title,
       sourceUrl: finalUrl,
       fetchedAt: new Date().toISOString()
@@ -169,8 +185,8 @@ async function fetchPage(source) {
   } catch (error) {
     return {
       id: source.id,
-      images: [],
-      kind: "none",
+      images: [pageScreenshotUrl(source)],
+      kind: "page-preview",
       error: error && error.message ? error.message : "Fonte indisponível"
     };
   }
