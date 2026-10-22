@@ -78,7 +78,7 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
 
 /* Destaque cinematográfico: faixa panorâmica com fotografia e carrossel funcional. */
 .films-page .film-feature{
-  width:calc(100% + 2 * var(--gutter));
+  width:calc(100% + var(--gutter) + var(--gutter));
   margin-left:calc(-1 * var(--gutter));
   min-height:clamp(470px,48vw,650px);
   height:clamp(470px,48vw,650px);
@@ -226,7 +226,7 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
         <div class="film-feature-dots" role="group" aria-label="Escolher filme em destaque">
           <button class="film-feature-dot active" type="button" data-feature-slide="0" aria-label="Duna: Parte Dois" aria-current="true"></button>
           <button class="film-feature-dot" type="button" data-feature-slide="1" aria-label="Interestelar" aria-current="false"></button>
-          <button class="film-feature-dot" type="button" data-feature-slide="2" aria-label="Andor" aria-current="false"></button>
+          <button class="film-feature-dot" type="button" data-feature-slide="2" aria-label="Blade Runner 2049" aria-current="false"></button>
         </div>
         <div class="film-feature-controls">
           <button class="film-feature-arrow" type="button" id="film-feature-prev" aria-label="Filme anterior">‹</button>
@@ -395,11 +395,11 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
         image:'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=2200&q=85'
       },
       {
-        title:'ANDOR', subtitle:'O PREÇO DA RESISTÊNCIA', year:'2025', runtime:'Série · Temporadas',
-        genre:'Drama · Ficção científica', quality:'4K',
-        description:'Em uma galáxia dominada pelo medo, pequenas escolhas se transformam no começo de uma grande resistência.',
+        title:'BLADE RUNNER', subtitle:'2049', year:'2017', runtime:'2h 44min',
+        genre:'Ficção científica · Drama', quality:'4K',
+        description:'Em um futuro de memórias fabricadas e segredos enterrados, um agente descobre uma verdade capaz de mudar a sociedade.',
         art:'night',
-        image:'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=2200&q=85'
+        image:'https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=2200&q=85'
       }
     ];
     const featureArt = document.getElementById('film-feature-art');
