@@ -513,6 +513,7 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
       {id:'agbrasilcultura',name:'Agência Brasil · Cultura',mark:'AB',category:'patrimonio',priority:false,url:'https://agenciabrasil.ebc.com.br/cultura',desc:'Museus, patrimônio, políticas culturais, financiamento e ações públicas.',search:'cultura museus patrimônio políticas culturais Brasil'}
     ];
         const byId=id=>document.getElementById(id);
+    const colors=['#b7c8e5','#a9cad0','#dbb998','#b4a6db','#d1b5bc','#a8c7a8','#c3c8da','#a6b8d1'];
     const groups=byId('news-category-sections'),tabs=[...root.querySelectorAll('[data-news-category]')],search=byId('news-search'),empty=byId('news-empty'),count=byId('news-results-count');
     const glyphs={
       globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/>',
