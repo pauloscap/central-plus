@@ -201,12 +201,12 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
 
 /* Featured six-latest carousel: dynamic headlines from the news RSS endpoint. */
 .news-carousel{position:relative;isolation:isolate;overflow:hidden;min-height:clamp(360px,39vw,520px);border-radius:17px;border:1px solid #ffffff18;background:#11151e;margin:0 0 35px;box-shadow:0 24px 60px #0004}
-.news-carousel-art{position:absolute;inset:0;z-index:-2;overflow:hidden;background:radial-gradient(ellipse at 70% 25%,#96a9c53a,transparent 40%),linear-gradient(130deg,#273144,#10131b)}
+.news-carousel-art{position:absolute;inset:0;z-index:0;overflow:hidden;background:radial-gradient(ellipse at 70% 25%,#96a9c53a,transparent 40%),linear-gradient(130deg,#273144,#10131b)}
 .news-carousel-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 38%;opacity:0;transform:scale(1.025);transition:opacity .45s,transform 1s;filter:saturate(.9) contrast(1.04)}
 .news-carousel-art.has-image img{opacity:1}
-.news-carousel-art:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,7,12,.96) 0%,rgba(5,7,12,.86) 28%,rgba(5,7,12,.49) 59%,rgba(5,7,12,.18) 100%),linear-gradient(0deg,rgba(5,7,12,.88),transparent 58%),linear-gradient(180deg,rgba(5,7,12,.24),transparent 30%)}
+.news-carousel-art:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,7,12,.92) 0%,rgba(5,7,12,.72) 28%,rgba(5,7,12,.28) 59%,rgba(5,7,12,.06) 100%),linear-gradient(0deg,rgba(5,7,12,.88),transparent 58%),linear-gradient(180deg,rgba(5,7,12,.24),transparent 30%)}
 .news-carousel.is-changing .news-carousel-art img{opacity:.18;transform:scale(1.06)}
-.news-carousel-inner{min-height:inherit;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(23px,4vw,46px);position:relative}
+.news-carousel-inner{min-height:inherit;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(23px,4vw,46px);position:relative;z-index:1}
 .news-carousel-topline{display:flex;align-items:center;justify-content:space-between;gap:14px}
 .news-carousel-overline{display:flex;align-items:center;gap:9px;font-size:9px;font-weight:850;letter-spacing:.18em;color:#f1f3f8}
 .news-carousel-live{font-size:8px;letter-spacing:.14em;color:#dbe1ed;border:1px solid #ffffff38;background:#080b12a3;border-radius:999px;padding:7px 9px;white-space:nowrap}
@@ -301,10 +301,6 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
         <div class="news-carousel-arrows"><button class="news-carousel-arrow" type="button" id="news-carousel-prev" data-focusable aria-label="Notícia anterior">‹</button><button class="news-carousel-arrow" type="button" id="news-carousel-next" data-focusable aria-label="Próxima notícia">›</button></div>
       </div>
     </div>
-  </section>
-  <section class="news-priority" aria-labelledby="news-priority-title">
-    <div class="news-section-head"><div><div class="news-overline-small">SELEÇÃO EDITORIAL</div><h2 id="news-priority-title">Comece por aqui</h2><p>Três atalhos para a rotina diária: notícias, entretenimento e tecnologia.</p></div></div>
-    <div class="news-featured-grid" id="news-featured"></div>
   </section>
   <section class="news-live" id="news-live" aria-labelledby="news-live-title">
     <div class="news-live-head">
@@ -516,9 +512,8 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
       {id:'goeldi',name:'Museu Paraense Emílio Goeldi',mark:'MPEG',category:'patrimonio',priority:true,url:'https://www.gov.br/museugoeldi/pt-br',desc:'Referência amazônica em arqueologia, antropologia, biodiversidade e história regional.',search:'Museu Goeldi Amazônia arqueologia antropologia história'},
       {id:'agbrasilcultura',name:'Agência Brasil · Cultura',mark:'AB',category:'patrimonio',priority:false,url:'https://agenciabrasil.ebc.com.br/cultura',desc:'Museus, patrimônio, políticas culturais, financiamento e ações públicas.',search:'cultura museus patrimônio políticas culturais Brasil'}
     ];
-    const colors=['#b7c8e5','#a9cad0','#dbb998','#b4a6db','#d1b5bc','#a8c7a8','#c3c8da','#a6b8d1'];
-    const byId=id=>document.getElementById(id);
-    const featured=byId('news-featured'),groups=byId('news-category-sections'),tabs=[...root.querySelectorAll('[data-news-category]')],search=byId('news-search'),empty=byId('news-empty'),count=byId('news-results-count');
+        const byId=id=>document.getElementById(id);
+    const groups=byId('news-category-sections'),tabs=[...root.querySelectorAll('[data-news-category]')],search=byId('news-search'),empty=byId('news-empty'),count=byId('news-results-count');
     const glyphs={
       globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/>',
       'map-pin':'<path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/>',
@@ -530,13 +525,6 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
       landmark:'<path d="m3 9 9-6 9 6M5 10v8M9 10v8M15 10v8M19 10v8M3 21h18M2 18h20"/>'
     };
     function svgIcon(id){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(glyphs[id]||glyphs.globe)+'</svg>'}
-    function markStyle(source){return 'style="--source-color:'+colors[(sources.findIndex(x=>x.id===source.id))%colors.length]+'"'}
-    function featuredCard(source,subtitle,tag){
-      const a=document.createElement('a');a.className='news-featured-link';a.href=source.url;a.setAttribute('style','--source-color:'+colors[sources.findIndex(x=>x.id===source.id)%colors.length]);a.setAttribute('aria-label','Acessar '+source.name);
-      a.innerHTML='<div class="news-featured-top"><span class="news-brand-mark">'+source.mark+'</span><span class="news-priority-tag">'+tag+'</span></div><div><div class="news-featured-name">'+source.name+'</div><p class="news-featured-desc">'+subtitle+'</p></div><div class="news-featured-cta">Acessar portal <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"/></svg></div>';
-      return a;
-    }
-    featured.append(featuredCard(sources.find(s=>s.id==='g1'),'Acompanhe o que acontece no Brasil, na política, na economia e na região.','Notícias'),featuredCard(sources.find(s=>s.id==='omelete'),'Sua referência para estreias, trailers, Marvel, DC e novidades de streaming.','Cultura pop'),featuredCard(sources.find(s=>s.id==='mittech'),'IA, inovação e tecnologia para acompanhar sua transição profissional.','Tecnologia'));
     categories.forEach((cat,index)=>{
       const sec=document.createElement('section');sec.className='news-category-section';sec.dataset.category=cat.id;sec.id='news-cat-'+cat.id;
       const head=document.createElement('div');head.className='news-category-head';
@@ -575,9 +563,6 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
         section.hidden=visible===0;
         const n=section.querySelector('[data-category-count]');if(n)n.textContent=visible+' '+(visible===1?'fonte':'fontes');
       });
-      const featureVisible=!q&&(category==='todas'||['nacionais','cinema','ia'].includes(category));
-      byId('news-priority-title').textContent=featureVisible?'Comece por aqui':'Fontes em destaque';
-      byId('news-featured').parentElement.hidden=!featureVisible;
       empty.classList.toggle('show',total===0);
       count.textContent=total+' '+(total===1?'fonte encontrada':'fontes encontradas');
     }
