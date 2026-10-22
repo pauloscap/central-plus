@@ -135,7 +135,7 @@ function set(id,value){const el=byId(id);if(el)el.textContent=value}
 function serviceSearch(show){return (platformTypes[show.type]||platformTypes.apple).url+encodeURIComponent(show.search)}
 function justWatchSearch(show){return 'https://www.justwatch.com/br/busca?q='+encodeURIComponent(show.search)}
 set('title',m.title);set('posterTitle',m.poster);set('year',m.year);set('yearFact',m.year);set('seasons',m.seasons);set('seasonsFact',m.seasons);set('genre',m.genre);set('genreFact',m.genreFact);set('rating',m.rating);set('ratingFact',m.rating+' anos (referência)');set('creator',m.creator);set('cast',m.cast);set('synopsis',m.synopsis);set('longSynopsis',m.synopsis);set('platformTag',m.platform);document.title='Central+ | '+m.title;
-byId('heroBg').style.backgroundImage='linear-gradient(90deg,rgba(5,6,10,.25),rgba(5,6,10,.05)),'+m.backdropImage&&('linear-gradient(90deg,rgba(5,6,10,.25),rgba(5,6,10,.05)),url("'+m.backdropImage+'")');
+byId('heroBg').style.backgroundImage='linear-gradient(90deg,rgba(5,6,10,.25),rgba(5,6,10,.05)),url("'+m.backdropImage+'")';
 byId('poster').style.backgroundImage='linear-gradient(0deg,#08090d26,#08090d26),url("'+m.posterImage+'")';
 byId('streamBtn').href=serviceSearch(m);byId('streamBtn').textContent='▶ Assistir na '+m.platform;
 byId('watchOptionsBtn').href=justWatchSearch(m);
