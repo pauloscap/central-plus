@@ -125,7 +125,7 @@ function parseDate(value) {
 function parseItems(xml, feed) {
   const entries = xml.match(/<(?:item|entry)\b[^>]*>[\s\S]*?<\/(?:item|entry)\s*>/gi) || [];
   const results = [];
-  for (const entry of entries.slice(0, 12)) {
+  for (const entry of entries.slice(0, 8)) {
     const title = textOnly(getTag(entry, "title"));
     if (!title) continue;
     const rawLink = firstLink(entry) || textOnly(getTag(entry, "guid"));
@@ -200,14 +200,25 @@ module.exports = async function handler(req, res) {
     }
 
     const now = Date.now();
-    const items = [...unique.values()].sort((a, b) => {
+    const sortNewest = (a, b) => {
       const da = a.publishedAt ? Date.parse(a.publishedAt) : 0;
       const db = b.publishedAt ? Date.parse(b.publishedAt) : 0;
       return db - da;
-    });
+    };
+    // Balance the catalog across categories so a high-volume feed cannot hide every slower category.
+    const buckets = new Map();
+    for (const item of unique.values()) {
+      if (!buckets.has(item.category)) buckets.set(item.category, []);
+      buckets.get(item.category).push(item);
+    }
+    const balanced = [];
+    for (const categoryItems of buckets.values()) {
+      balanced.push(...categoryItems.sort(sortNewest).slice(0, 12));
+    }
+    const items = balanced.sort(sortNewest);
 
-    const requestedLimit = Number((req.query && req.query.limit) || 72);
-    const limit = Number.isFinite(requestedLimit) ? Math.min(100, Math.max(12, Math.round(requestedLimit))) : 72;
+    const requestedLimit = Number((req.query && req.query.limit) || 96);
+    const limit = Number.isFinite(requestedLimit) ? Math.min(100, Math.max(12, Math.round(requestedLimit))) : 96;
 
     return res.status(200).json({
       updatedAt: new Date(now).toISOString(),
