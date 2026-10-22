@@ -138,6 +138,66 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
 @media(max-width:380px){.news-source-grid{grid-template-columns:1fr}.news-source-card{min-height:0}.news-source-desc{font-size:10px}.news-source-bottom{font-size:9px}}
 @media(prefers-reduced-motion:reduce){.news-featured-link,.news-source-card,.news-source-card:before,.news-category-tab{transition:none}}
 
+
+/* Live headline feed — publisher RSS only; the cards are refreshed as feeds change. */
+.news-live{margin:4px 0 38px;padding:25px;border:1px solid #ffffff12;border-radius:17px;background:linear-gradient(145deg,#11151e,#0c0e14);box-shadow:0 18px 50px #0002}
+.news-live-head{display:flex;align-items:flex-end;justify-content:space-between;gap:22px;margin-bottom:19px}
+.news-live-heading{min-width:0}
+.news-live-label{display:flex;align-items:center;gap:8px;font-size:9px;letter-spacing:.19em;font-weight:800;color:#c5ccda}
+.news-live-pulse{width:6px;height:6px;border-radius:50%;background:#7ce2ab;box-shadow:0 0 12px #7ce2ab75}
+.news-live-heading h2{font-size:clamp(23px,2.5vw,32px);font-weight:780;letter-spacing:-.055em;margin:10px 0 7px}
+.news-live-heading p{font-size:11px;line-height:1.65;color:#939cad;margin:0;max-width:630px}
+.news-live-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap;flex-shrink:0}
+.news-live-updated{font-size:9px;color:#8f98a9;text-align:right;line-height:1.5}
+.news-live-refresh{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:38px;padding:0 13px;border-radius:8px;border:1px solid #ffffff25;background:#ffffff0b;color:#f1f3f8;font-size:10px;font-weight:700;white-space:nowrap;transition:background .18s,border-color .18s}
+.news-live-refresh:hover{background:#ffffff18;border-color:#ffffff45}
+.news-live-refresh:disabled{opacity:.58;cursor:wait}
+.news-live-refresh svg{width:14px;height:14px}
+.news-live-tabs{display:flex;align-items:center;gap:7px;overflow-x:auto;padding:3px 0 18px;scrollbar-width:none}
+.news-live-tabs::-webkit-scrollbar{display:none}
+.news-live-tab{flex-shrink:0;border:1px solid #ffffff1c;border-radius:999px;background:#171a23;color:#b9c0ce;padding:9px 13px;font-size:9px;font-weight:650;white-space:nowrap;transition:background .18s,color .18s,border-color .18s}
+.news-live-tab:hover,.news-live-tab.active{background:#f1f3f7;color:#101218;border-color:#f1f3f7}
+.news-live-tab:focus-visible,.news-live-refresh:focus-visible,.news-load-more:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.news-live-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.news-live-card{display:flex;min-width:0;flex-direction:column;overflow:hidden;border:1px solid #ffffff15;border-radius:12px;background:linear-gradient(150deg,#191d27,#11131a);color:inherit;text-decoration:none;transition:transform .2s,border-color .2s,background .2s}
+.news-live-card:hover{transform:translateY(-3px);border-color:#ffffff3d;background:linear-gradient(150deg,#202633,#12151d)}
+.news-live-card:focus-visible{outline:3px solid #fff;outline-offset:4px}
+.news-live-image{height:auto;aspect-ratio:16/9;position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:flex-start;justify-content:flex-start;background:linear-gradient(135deg,#283347,#11131a)}
+.news-live-image:before{content:"";position:absolute;inset:0;z-index:-2;background:radial-gradient(ellipse at 72% 22%,#b3c7e035,transparent 52%),linear-gradient(145deg,#273143,#11131a)}
+.news-live-image[data-category="para"]:before{background:radial-gradient(ellipse at 70% 20%,#76b7a43b,transparent 48%),linear-gradient(145deg,#203d39,#0e1516)}
+.news-live-image[data-category="cinema"]:before{background:radial-gradient(ellipse at 70% 20%,#b39add3a,transparent 48%),linear-gradient(145deg,#39304b,#12121a)}
+.news-live-image[data-category="celebridades"]:before{background:radial-gradient(ellipse at 70% 20%,#e7a5bf38,transparent 48%),linear-gradient(145deg,#4a2938,#151018)}
+.news-live-image[data-category="ciencia"]:before{background:radial-gradient(ellipse at 70% 20%,#a9c7ab3d,transparent 48%),linear-gradient(145deg,#273d34,#101611)}
+.news-live-image[data-category="ia"]:before{background:radial-gradient(ellipse at 70% 20%,#93bfe63d,transparent 48%),linear-gradient(145deg,#24354a,#10141c)}
+.news-live-image[data-category="jornalismo"]:before{background:radial-gradient(ellipse at 70% 20%,#c9cbd53a,transparent 48%),linear-gradient(145deg,#373d49,#101219)}
+.news-live-image[data-category="patrimonio"]:before{background:radial-gradient(ellipse at 70% 20%,#d4ba843d,transparent 48%),linear-gradient(145deg,#463b2d,#13110e)}
+.news-live-image img{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;transition:transform .45s,opacity .2s}
+.news-live-card:hover .news-live-image img{transform:scale(1.035)}
+.news-live-image.has-image:before{opacity:.12}
+.news-live-image:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(4,5,9,.6),transparent 52%),linear-gradient(180deg,rgba(4,5,9,.26),transparent 40%);pointer-events:none}
+.news-live-source-badge{position:relative;z-index:2;margin:10px;border:1px solid #ffffff35;border-radius:5px;padding:6px 8px;background:#090b10c7;backdrop-filter:blur(10px);font-size:8px;font-weight:780;letter-spacing:.025em;max-width:78%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.news-live-category-badge{position:absolute;right:10px;top:10px;z-index:2;border:1px solid #ffffff30;border-radius:5px;padding:5px 6px;background:#090b109c;color:#e3e6ed;font-size:7px;letter-spacing:.08em;text-transform:uppercase}
+.news-live-copy{display:flex;flex-direction:column;flex:1;padding:15px}
+.news-live-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#8993a5;font-size:9px;margin-bottom:9px}
+.news-live-date{white-space:nowrap;flex-shrink:0}
+.news-live-title{font-size:clamp(14px,1.15vw,17px);font-weight:760;line-height:1.23;letter-spacing:-.027em;margin:0 0 9px}
+.news-live-summary{font-size:10px;line-height:1.7;color:#a6afbf;margin:0 0 15px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;flex:1}
+.news-live-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:11px;border-top:1px solid #ffffff10;color:#dbe0ea;font-size:9px;font-weight:700}
+.news-live-domain{color:#737c8e;font-size:8px;font-weight:450;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.news-live-grid .news-live-card[hidden]{display:none!important}
+.news-live-empty{border:1px dashed #ffffff24;border-radius:10px;padding:30px 20px;text-align:center;font-size:12px;line-height:1.7;color:#9da6b6}
+.news-live-status{font-size:9px;line-height:1.65;color:#7e8798;margin-top:16px}
+.news-load-more-wrap{display:flex;justify-content:center;margin-top:19px}
+.news-load-more{border:1px solid #ffffff25;border-radius:8px;background:#ffffff08;color:#e7eaf1;padding:11px 18px;font-size:10px;font-weight:700}
+.news-load-more:hover{background:#ffffff16}
+.news-directory-heading{margin:0 0 2px;padding:0 0 4px}
+.news-directory-heading h2{font-size:clamp(22px,2.2vw,29px);letter-spacing:-.045em;margin:0;font-weight:750}
+.news-directory-heading p{font-size:11px;color:#9da5b5;line-height:1.6;margin:7px 0 0}
+@media(max-width:1080px){.news-live{padding:20px}.news-live-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.news-live-title{font-size:15px}}
+@media(max-width:760px){.news-live{padding:15px;margin-bottom:30px}.news-live-head{align-items:flex-start;flex-direction:column;gap:15px}.news-live-heading h2{font-size:25px}.news-live-actions{width:100%;justify-content:space-between}.news-live-updated{text-align:left}.news-live-refresh{min-height:36px}.news-live-tabs{padding-bottom:14px}.news-live-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.news-live-copy{padding:11px}.news-live-meta{font-size:8px;flex-wrap:wrap;justify-content:flex-start}.news-live-title{font-size:13px;line-height:1.24}.news-live-summary{font-size:9px;-webkit-line-clamp:3}.news-live-source-badge{margin:7px;font-size:7px}.news-live-category-badge{top:7px;right:7px;font-size:6px}.news-live-bottom{font-size:8px}.news-live-domain{display:none}.news-directory-heading h2{font-size:22px}}
+@media(max-width:390px){.news-live-grid{grid-template-columns:1fr}.news-live-card{display:grid;grid-template-columns:minmax(110px,.65fr) minmax(0,1fr);min-height:125px}.news-live-image{height:100%;min-height:125px;aspect-ratio:auto}.news-live-category-badge{display:none}.news-live-copy{padding:12px}.news-live-title{font-size:13px}.news-live-summary{margin-bottom:7px;-webkit-line-clamp:2}.news-live-bottom{padding-top:7px}}
+@media(prefers-reduced-motion:reduce){.news-live-card,.news-live-image img,.news-live-refresh,.news-live-tab{transition:none}}
+
 </style>
 </head>
 <body>
@@ -178,12 +238,46 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
     <div class="news-section-head"><div><div class="news-overline-small">SELEÇÃO EDITORIAL</div><h2 id="news-priority-title">Comece por aqui</h2><p>Três atalhos para a rotina diária: notícias, entretenimento e tecnologia.</p></div></div>
     <div class="news-featured-grid" id="news-featured"></div>
   </section>
+  <section class="news-live" id="news-live" aria-labelledby="news-live-title">
+    <div class="news-live-head">
+      <div class="news-live-heading">
+        <div class="news-live-label"><span class="news-live-pulse"></span> FEED DE NOTÍCIAS</div>
+        <h2 id="news-live-title">Últimas notícias</h2>
+        <p>Manchetes recentes dos veículos selecionados, com links para as matérias originais. O feed atualiza sozinho e substitui as notícias conforme novas publicações chegam.</p>
+      </div>
+      <div class="news-live-actions">
+        <span class="news-live-updated" id="news-live-updated">Conectando aos feeds…</span>
+        <button class="news-live-refresh" type="button" id="news-live-refresh" data-focusable>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.6 9A7 7 0 0 1 17.4 6L20 12M4 12l2.6 6A7 7 0 0 0 18.4 15"/></svg>
+          Atualizar agora
+        </button>
+      </div>
+    </div>
+    <nav class="news-live-tabs" id="news-live-tabs" aria-label="Filtrar notícias por categoria">
+      <button class="news-live-tab active" type="button" data-live-category="todas" data-focusable aria-pressed="true">Todas</button>
+      <button class="news-live-tab" type="button" data-live-category="nacionais" data-focusable aria-pressed="false">Brasil e mundo</button>
+      <button class="news-live-tab" type="button" data-live-category="para" data-focusable aria-pressed="false">Pará e Belém</button>
+      <button class="news-live-tab" type="button" data-live-category="cinema" data-focusable aria-pressed="false">Cinema e séries</button>
+      <button class="news-live-tab" type="button" data-live-category="celebridades" data-focusable aria-pressed="false">Cultura pop</button>
+      <button class="news-live-tab" type="button" data-live-category="ciencia" data-focusable aria-pressed="false">Ciência</button>
+      <button class="news-live-tab" type="button" data-live-category="ia" data-focusable aria-pressed="false">IA e tecnologia</button>
+      <button class="news-live-tab" type="button" data-live-category="jornalismo" data-focusable aria-pressed="false">Jornalismo</button>
+      <button class="news-live-tab" type="button" data-live-category="patrimonio" data-focusable aria-pressed="false">História e patrimônio</button>
+    </nav>
+    <div class="news-live-grid" id="news-live-grid" aria-live="polite" aria-busy="true"></div>
+    <div class="news-live-empty" id="news-live-empty" hidden>As fontes não retornaram manchetes neste momento. Tente atualizar novamente ou use o diretório de portais logo abaixo.</div>
+    <div class="news-load-more-wrap"><button class="news-load-more" type="button" id="news-load-more" data-focusable hidden>Carregar mais manchetes</button></div>
+    <div class="news-live-status" id="news-live-status" role="status">Buscando as publicações mais recentes…</div>
+  </section>
+  <div class="news-section-head news-directory-heading">
+    <div><div class="news-overline-small">DIRETÓRIO DE FONTES</div><h2>Explore os portais</h2><p>Encontre os veículos por assunto e visite suas páginas oficiais.</p></div>
+  </div>
   <div class="news-tools">
     <label class="news-search" for="news-search">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.7"/><path d="m16 16 4.4 4.4"/></svg>
-      <input id="news-search" type="search" placeholder="Buscar portal, tema ou categoria..." autocomplete="off">
+      <input id="news-search" type="search" placeholder="Buscar portal, tema ou categoria..." autocomplete="off" data-focusable>
     </label>
-    <span class="news-results-count" id="news-results-count" aria-live="polite">49 fontes selecionadas</span>
+    <span class="news-results-count" id="news-results-count" aria-live="polite">49 portais no diretório</span>
   </div>
   <nav class="news-category-tabs" id="news-category-tabs" aria-label="Categorias de notícias">
     <button type="button" class="news-category-tab active" data-news-category="todas" aria-pressed="true">Todas as categorias</button>
@@ -422,6 +516,140 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
     tabs.forEach(tab=>tab.addEventListener('click',()=>{category=tab.dataset.newsCategory;apply();}));
     search.addEventListener('input',apply);
     apply();
+  })();
+
+
+  // RSS-powered news cards. Successful refreshes replace the previous snapshot automatically.
+  (function(){
+    const grid=document.getElementById('news-live-grid');
+    if(!grid)return;
+    const endpoint='/api/news?limit=100';
+    const storageKey='centralplus-news-feed-v1';
+    const tabs=[...document.querySelectorAll('[data-live-category]')];
+    const refreshButton=document.getElementById('news-live-refresh');
+    const updatedLabel=document.getElementById('news-live-updated');
+    const status=document.getElementById('news-live-status');
+    const empty=document.getElementById('news-live-empty');
+    const loadMore=document.getElementById('news-load-more');
+    const categoryNames={nacionais:'Brasil e mundo',para:'Pará e Belém',cinema:'Cinema e séries',celebridades:'Cultura pop',ciencia:'Ciência',ia:'IA e tecnologia',jornalismo:'Jornalismo',patrimonio:'História e patrimônio'};
+    let allItems=[],activeCategory='todas',visibleLimit=36,isLoading=false,lastSuccess=0,sourceCount=0,lastUpdated=null;
+    function safeImageUrl(value){try{const url=new URL(value,location.href);return ['http:','https:'].includes(url.protocol)?url.href:''}catch(_){return''}}
+    function humanTime(value){
+      if(!value)return'Data não informada';
+      const date=new Date(value);if(!Number.isFinite(date.getTime()))return'Data não informada';
+      const mins=Math.max(0,Math.floor((Date.now()-date.getTime())/60000));
+      if(mins<1)return'Agora há pouco';
+      if(mins<60)return'há '+mins+' min';
+      const hours=Math.floor(mins/60);if(hours<24)return'há '+hours+' h';
+      const days=Math.floor(hours/24);if(days<7)return'há '+days+' '+(days===1?'dia':'dias');
+      return date.toLocaleDateString('pt-BR',{day:'2-digit',month:'short'});
+    }
+    function addText(parent,tag,className,value){
+      const node=document.createElement(tag);if(className)node.className=className;node.textContent=value||'';parent.appendChild(node);return node;
+    }
+    function makeCard(item){
+      const card=document.createElement('a');card.className='news-live-card';card.href=safeImageUrl(item.url)||'#noticias';card.dataset.category=item.category||'nacionais';card.dataset.focusable='';card.setAttribute('aria-label','Ler notícia: '+item.title);
+      const visual=document.createElement('div');visual.className='news-live-image';visual.dataset.category=item.category||'nacionais';
+      if(item.image){
+        const image=document.createElement('img');image.loading='lazy';image.alt='';image.referrerPolicy='no-referrer';image.src=safeImageUrl(item.image);
+        image.addEventListener('error',()=>{image.remove();visual.classList.remove('has-image')},{once:true});
+        image.addEventListener('load',()=>visual.classList.add('has-image'),{once:true});
+        if(image.src)visual.appendChild(image);
+      }
+      addText(visual,'span','news-live-source-badge',item.source||'Fonte jornalística');
+      addText(visual,'span','news-live-category-badge',categoryNames[item.category]||'Notícias');
+      const copy=document.createElement('div');copy.className='news-live-copy';
+      const meta=document.createElement('div');meta.className='news-live-meta';
+      addText(meta,'span','news-live-source',item.source||'Portal');
+      addText(meta,'time','news-live-date',humanTime(item.publishedAt));
+      if(item.publishedAt)meta.lastElementChild.dateTime=item.publishedAt;
+      const title=addText(copy,'h3','news-live-title',item.title||'Notícia');
+      const summaryText=(item.summary||'').trim()||'Leia a matéria completa diretamente no portal de origem.';
+      addText(copy,'p','news-live-summary',summaryText);
+      const bottom=document.createElement('div');bottom.className='news-live-bottom';
+      addText(bottom,'span','news-live-read','Ler matéria original ↗');
+      let domain='Abrir notícia';try{domain=new URL(item.url).hostname.replace(/^www\./,'')}catch(_){}
+      addText(bottom,'span','news-live-domain',domain);
+      copy.prepend(meta);copy.appendChild(bottom);
+      card.append(visual,copy);
+      return card;
+    }
+    function currentItems(){return allItems.filter(item=>activeCategory==='todas'||item.category===activeCategory)}
+    function render(){
+      const filtered=currentItems();
+      grid.replaceChildren();
+      const visible=filtered.slice(0,visibleLimit);
+      visible.forEach(item=>grid.appendChild(makeCard(item)));
+      grid.setAttribute('aria-busy',isLoading?'true':'false');
+      empty.hidden=filtered.length>0;
+      loadMore.hidden=filtered.length<=visible.length;
+      loadMore.textContent='Carregar mais manchetes ('+Math.max(0,filtered.length-visible.length)+')';
+      tabs.forEach(tab=>{const active=tab.dataset.liveCategory===activeCategory;tab.classList.toggle('active',active);tab.setAttribute('aria-pressed',active?'true':'false')});
+      if(filtered.length){
+        status.textContent=filtered.length+' manchetes disponíveis nesta seleção. Novas publicações entram automaticamente nas próximas atualizações.';
+      }else if(!isLoading){
+        status.textContent='Sem manchetes disponíveis para esta seleção agora; o diretório de portais continua abaixo.';
+      }
+      if(lastUpdated){
+        const time=new Date(lastUpdated);
+        updatedLabel.textContent='Feeds verificados às '+time.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+      }
+    }
+    function applySnapshot(data,fromCache){
+      allItems=Array.isArray(data.items)?data.items.filter(item=>item&&item.title&&item.url&&safeImageUrl(item.url)):[];
+      sourceCount=Number(data.sourceCount)||0;lastUpdated=data.updatedAt||null;
+      if(!fromCache){
+        lastSuccess=Date.now();
+        try{localStorage.setItem(storageKey,JSON.stringify({items:allItems,sourceCount:sourceCount,updatedAt:lastUpdated}))}catch(_){}
+      }
+      visibleLimit=36;render();
+    }
+    async function refresh(manual){
+      if(isLoading)return;
+      isLoading=true;refreshButton.disabled=true;refreshButton.setAttribute('aria-busy','true');
+      if(manual)status.textContent='Consultando as fontes de notícias…';
+      refreshButton.innerHTML='<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.6 9A7 7 0 0 1 17.4 6L20 12M4 12l2.6 6A7 7 0 0 0 18.4 15"/></svg> Atualizando…';
+      render();
+      try{
+        const response=await fetch(endpoint,{method:'GET',headers:{'Accept':'application/json'},cache:'no-store'});
+        if(!response.ok)throw new Error('HTTP '+response.status);
+        const data=await response.json();
+        if(!Array.isArray(data.items))throw new Error('Formato de feed inesperado');
+        if(data.items.length===0&&allItems.length>0)throw new Error('As fontes não retornaram novas manchetes');
+        applySnapshot(data,false);
+        const failed=Number(data.failedSourceCount)||0;
+        status.textContent='Atualizado automaticamente a partir de '+sourceCount+' feeds'+(failed?' · '+failed+' fontes indisponíveis nesta consulta':'')+'. Próxima consulta em cerca de 10 minutos.';
+      }catch(error){
+        console.warn('Central+ newsroom refresh:',error&&error.message?error.message:error);
+        if(!allItems.length){
+          try{const cached=JSON.parse(localStorage.getItem(storageKey)||'null');if(cached&&Array.isArray(cached.items))applySnapshot(cached,true)}catch(_){}
+        }
+        if(allItems.length){
+          status.textContent='Não foi possível consultar todos os feeds agora. Exibindo a última atualização disponível e tentando novamente em 10 minutos.';
+        }else{
+          status.textContent='Não foi possível carregar as manchetes agora. Confira a conexão ou tente Atualizar agora; você ainda pode acessar os portais no diretório abaixo.';
+        }
+        updatedLabel.textContent=lastUpdated?'Último feed salvo às '+new Date(lastUpdated).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}):'Feeds temporariamente indisponíveis';
+      }finally{
+        isLoading=false;refreshButton.disabled=false;refreshButton.removeAttribute('aria-busy');
+        refreshButton.innerHTML='<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.6 9A7 7 0 0 1 17.4 6L20 12M4 12l2.6 6A7 7 0 0 0 18.4 15"/></svg> Atualizar agora';
+        render();
+      }
+    }
+    tabs.forEach(tab=>tab.addEventListener('click',()=>{activeCategory=tab.dataset.liveCategory;visibleLimit=36;render()}));
+    loadMore.addEventListener('click',()=>{visibleLimit+=24;render()});
+    refreshButton.addEventListener('click',()=>refresh(true));
+    try{
+      const cached=JSON.parse(localStorage.getItem(storageKey)||'null');
+      if(cached&&Array.isArray(cached.items)){
+        applySnapshot(cached,true);
+        if(cached.updatedAt)updatedLabel.textContent='Último feed salvo às '+new Date(cached.updatedAt).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+      }
+    }catch(_){}
+    if(!allItems.length)status.textContent='Buscando as publicações mais recentes…';
+    refresh(false);
+    setInterval(()=>{if(!document.hidden)refresh(false)},10*60*1000);
+    document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now()-lastSuccess>5*60*1000)refresh(false)});
   })();
 
     // A navegação do app mantém a mesma guia.
