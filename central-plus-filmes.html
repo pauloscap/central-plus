@@ -75,6 +75,76 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
 @media(max-width:1100px){.film-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.film-feature{min-height:360px}}
 @media(max-width:760px){.films-page{padding-left:20px;padding-right:20px}.films-intro{padding-top:8px}.films-intro h1{font-size:43px}.film-feature{min-height:430px;border-radius:15px}.film-feature-art{background-position:62% center}.film-feature-shade{background:linear-gradient(90deg,#080a11eF 0%,#080a11b8 60%,#080a1160 100%),linear-gradient(0deg,#080a11 0%,transparent 75%)}.film-feature-content{width:100%;padding:27px 22px}.film-feature h2{font-size:47px;margin-top:22px}.film-feature-content p{font-size:12px;max-width:95%}.film-feature-index{right:18px;bottom:18px}.film-toolbar{align-items:start}.film-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 12px}.film-tile .poster{aspect-ratio:2/3}.film-tile .poster-copy{left:10px;right:8px;bottom:10px}.film-tile .poster-title{font-size:16px}.film-tile-meta{font-size:9px}.film-filter{padding:9px 12px}.film-feature-actions{gap:8px}.film-feature-actions .primary-btn,.film-feature-actions .secondary-btn{padding:0 11px;font-size:11px}}
 
+
+/* Destaque cinematográfico: faixa panorâmica com fotografia e carrossel funcional. */
+.films-page .film-feature{
+  width:calc(100% + 2 * var(--gutter));
+  margin-left:calc(-1 * var(--gutter));
+  min-height:clamp(470px,48vw,650px);
+  height:clamp(470px,48vw,650px);
+  border-radius:0;
+  border-left:0;border-right:0;
+  margin-bottom:42px;
+  background:#10131b;
+  box-shadow:0 26px 70px #0005;
+}
+.films-page .film-feature-art{
+  background-size:cover!important;
+  background-position:center 46%;
+  transform:scale(1.025);
+  filter:saturate(1.05) contrast(1.02);
+  will-change:opacity,transform;
+  transition:opacity .55s ease,transform 1.1s ease;
+}
+.films-page .film-feature-art:before,
+.films-page .film-feature-art:after{content:none!important;display:none!important}
+.films-page .film-feature-art.is-changing{opacity:.08;transform:scale(1.07)}
+.films-page .film-feature-shade{
+  background:linear-gradient(90deg,rgba(5,7,12,.96) 0%,rgba(5,7,12,.84) 29%,rgba(5,7,12,.47) 55%,rgba(5,7,12,.08) 100%),linear-gradient(0deg,rgba(5,7,12,.78) 0%,transparent 48%);
+}
+.films-page .film-feature-content{
+  width:min(760px,68%);
+  padding:clamp(44px,6vw,86px) var(--gutter) 118px;
+}
+.films-page .film-feature h2{font-size:clamp(48px,7vw,94px);margin:25px 0 20px}
+.films-page .film-feature-content p{font-size:clamp(14px,1.2vw,17px);max-width:530px;line-height:1.7;margin:19px 0 28px}
+.films-page .film-feature-actions .primary-btn,
+.films-page .film-feature-actions .secondary-btn{min-height:49px;padding:0 22px;font-size:13px}
+.films-page .film-feature-bottom{
+  position:absolute;z-index:4;left:var(--gutter);bottom:28px;
+  display:flex;align-items:center;gap:18px;
+}
+.films-page .film-feature-dots{display:flex;align-items:center;gap:7px}
+.films-page .film-feature-dot{
+  width:22px;height:3px;padding:0;border:0;border-radius:99px;
+  background:#ffffff68;transition:width .25s,background .25s;
+}
+.films-page .film-feature-dot.active{width:40px;background:#fff}
+.films-page .film-feature-controls{display:flex;gap:7px}
+.films-page .film-feature-arrow{
+  display:grid;place-items:center;width:36px;height:36px;border-radius:50%;
+  border:1px solid #ffffff55;background:#090b1280;color:#fff;
+  font-size:26px;line-height:1;backdrop-filter:blur(10px);
+  transition:background .2s,transform .2s;
+}
+.films-page .film-feature-arrow:hover{background:#ffffff25;transform:scale(1.06)}
+.films-page .film-feature-index{right:var(--gutter);bottom:28px}
+@media(max-width:760px){
+  .films-page .film-feature{height:520px;min-height:520px;border-radius:0;margin-bottom:32px}
+  .films-page .film-feature-art{background-position:62% center}
+  .films-page .film-feature-shade{background:linear-gradient(90deg,rgba(5,7,12,.9),rgba(5,7,12,.46)),linear-gradient(0deg,rgba(5,7,12,.85),transparent 75%)}
+  .films-page .film-feature-content{width:100%;padding:38px var(--gutter) 118px}
+  .films-page .film-feature h2{font-size:clamp(45px,12vw,64px);margin:24px 0 20px}
+  .films-page .film-feature-content p{font-size:13px;max-width:100%;margin:17px 0 22px}
+  .films-page .film-feature-actions{gap:8px}
+  .films-page .film-feature-actions .primary-btn,.films-page .film-feature-actions .secondary-btn{min-height:44px;padding:0 15px;font-size:12px}
+  .films-page .film-feature-bottom{left:var(--gutter);bottom:24px;gap:12px}
+  .films-page .film-feature-index{right:var(--gutter);bottom:28px}
+}
+@media(prefers-reduced-motion:reduce){
+  .films-page .film-feature-art,.films-page .film-feature-dot,.films-page .film-feature-arrow{transition:none}
+}
+
 </style>
 </head>
 <body>
@@ -137,10 +207,33 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
   </div></section>
   <section class="content-section films-page" id="filmes">
     <div class="films-intro"><div class="films-overline"><span class="eyebrow-mark"></span> CENTRAL+ CINEMA</div><h1>Histórias que <span>ficam com você.</span></h1><p>Descubra seu próximo filme favorito. Uma seleção para cada momento, humor e vontade de explorar novos mundos.</p></div>
-    <div class="film-feature">
-      <div class="film-feature-art art-dune"></div><div class="film-feature-shade"></div>
-      <div class="film-feature-content"><div class="film-feature-kicker">ESCOLHA CENTRAL+ <span>·</span> FILME EM DESTAQUE</div><h2>DUNA <span>PARTE DOIS</span></h2><div class="film-feature-meta"><span>2024</span><i></i><span>2h 46min</span><i></i><span>Ficção científica</span><b>4K</b></div><p>Em meio a alianças e conflitos em Arrakis, Paul Atreides enfrenta o destino que pode transformar o futuro de toda uma civilização.</p><div class="film-feature-actions"><button class="primary-btn" type="button" id="film-feature-explore">＋ <span>Explorar filme</span></button><button class="secondary-btn" type="button" id="film-feature-save">♡ <span>Adicionar à minha lista</span></button></div></div>
-      <div class="film-feature-index"><span>01</span><span class="film-feature-index-line"></span><span>DESTAQUE</span></div>
+        <div class="film-feature" id="film-feature" role="region" aria-roledescription="carrossel" aria-label="Filmes em destaque">
+      <div class="film-feature-art art-dune" id="film-feature-art" aria-hidden="true"></div>
+      <div class="film-feature-shade"></div>
+      <div class="film-feature-content" aria-live="polite">
+        <div class="film-feature-kicker" id="film-feature-kicker">ESCOLHA CENTRAL+ <span>·</span> FILME EM DESTAQUE</div>
+        <h2 id="film-feature-title">DUNA <span>PARTE DOIS</span></h2>
+        <div class="film-feature-meta">
+          <span id="film-feature-year">2024</span><i></i><span id="film-feature-runtime">2h 46min</span><i></i><span id="film-feature-genre">Ficção científica</span><b id="film-feature-quality">4K</b>
+        </div>
+        <p id="film-feature-description">Em meio a alianças e conflitos em Arrakis, Paul Atreides enfrenta o destino que pode transformar o futuro de toda uma civilização.</p>
+        <div class="film-feature-actions">
+          <button class="primary-btn" type="button" id="film-feature-play">▶ <span>Assistir</span></button>
+          <button class="secondary-btn" type="button" id="film-feature-details">ⓘ <span>Ver detalhes</span></button>
+        </div>
+      </div>
+      <div class="film-feature-bottom">
+        <div class="film-feature-dots" role="group" aria-label="Escolher filme em destaque">
+          <button class="film-feature-dot active" type="button" data-feature-slide="0" aria-label="Duna: Parte Dois" aria-current="true"></button>
+          <button class="film-feature-dot" type="button" data-feature-slide="1" aria-label="Interestelar" aria-current="false"></button>
+          <button class="film-feature-dot" type="button" data-feature-slide="2" aria-label="Andor" aria-current="false"></button>
+        </div>
+        <div class="film-feature-controls">
+          <button class="film-feature-arrow" type="button" id="film-feature-prev" aria-label="Filme anterior">‹</button>
+          <button class="film-feature-arrow" type="button" id="film-feature-next" aria-label="Próximo filme">›</button>
+        </div>
+      </div>
+      <div class="film-feature-index"><span id="film-feature-index-number">01</span><span class="film-feature-index-line"></span><span>EM DESTAQUE</span></div>
     </div>
     <div class="film-toolbar"><div><h2 class="section-title">Explore o catálogo</h2><p class="section-subtitle">Escolha uma categoria e encontre sua próxima história.</p></div><div class="film-count"><span id="film-count">10</span> títulos</div></div>
     <div class="film-filters" role="group" aria-label="Filtrar filmes">
@@ -282,6 +375,96 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
     const save=document.getElementById('film-feature-save');
     if(save)save.addEventListener('click',()=>notify('Título demonstrativo: sua lista ainda não é sincronizada.'));
   }
+
+  // Carrossel cinematográfico: imagem panorâmica, transição suave e avanço automático.
+  const filmFeature = document.getElementById('film-feature');
+  if (filmFeature) {
+    const featureFilms = [
+      {
+        title:'DUNA', subtitle:'PARTE DOIS', year:'2024', runtime:'2h 46min',
+        genre:'Ficção científica', quality:'4K',
+        description:'Em meio a alianças e conflitos em Arrakis, Paul Atreides enfrenta o destino que pode transformar o futuro de toda uma civilização.',
+        art:'dune',
+        image:'https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=2200&q=85'
+      },
+      {
+        title:'INTERESTELAR', subtitle:'ALÉM DAS ESTRELAS', year:'2014', runtime:'2h 49min',
+        genre:'Ficção científica · Drama', quality:'4K',
+        description:'Uma missão para além dos limites conhecidos coloca o amor, o tempo e a sobrevivência da humanidade em rota de colisão.',
+        art:'orbit',
+        image:'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=2200&q=85'
+      },
+      {
+        title:'ANDOR', subtitle:'O PREÇO DA RESISTÊNCIA', year:'2025', runtime:'Série · Temporadas',
+        genre:'Drama · Ficção científica', quality:'4K',
+        description:'Em uma galáxia dominada pelo medo, pequenas escolhas se transformam no começo de uma grande resistência.',
+        art:'night',
+        image:'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=2200&q=85'
+      }
+    ];
+    const featureArt = document.getElementById('film-feature-art');
+    const featureTitle = document.getElementById('film-feature-title');
+    const featureDots = [...filmFeature.querySelectorAll('[data-feature-slide]')];
+    const featureReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let featureIndex = 0;
+    let featureTimer = null;
+    let featureFadeTimer = null;
+    let featurePaused = false;
+
+    function renderFeature(index) {
+      featureIndex = (index + featureFilms.length) % featureFilms.length;
+      const item = featureFilms[featureIndex];
+      featureArt.classList.add('is-changing');
+      if (featureFadeTimer) clearTimeout(featureFadeTimer);
+      featureFadeTimer = setTimeout(() => {
+        featureArt.className = 'film-feature-art art-' + item.art;
+        featureArt.style.backgroundImage =
+          'linear-gradient(90deg,rgba(5,7,12,.90) 0%,rgba(5,7,12,.48) 48%,rgba(5,7,12,.08) 100%),' +
+          'linear-gradient(0deg,rgba(5,7,12,.30),transparent 55%),url("' + item.image + '")';
+        featureTitle.innerHTML = item.title + '<span>' + item.subtitle + '</span>';
+        document.getElementById('film-feature-year').textContent = item.year;
+        document.getElementById('film-feature-runtime').textContent = item.runtime;
+        document.getElementById('film-feature-genre').textContent = item.genre;
+        document.getElementById('film-feature-quality').textContent = item.quality;
+        document.getElementById('film-feature-description').textContent = item.description;
+        document.getElementById('film-feature-index-number').textContent = String(featureIndex + 1).padStart(2, '0');
+        featureDots.forEach((dot, dotIndex) => {
+          const active = dotIndex === featureIndex;
+          dot.classList.toggle('active', active);
+          dot.setAttribute('aria-current', active ? 'true' : 'false');
+        });
+      }, featureReducedMotion.matches ? 0 : 250);
+    }
+    function stopFeatureTimer() {
+      if (featureTimer) { clearInterval(featureTimer); featureTimer = null; }
+    }
+    function startFeatureTimer() {
+      stopFeatureTimer();
+      if (!featurePaused && !featureReducedMotion.matches) {
+        featureTimer = setInterval(() => renderFeature(featureIndex + 1), 8000);
+      }
+    }
+    function chooseFeature(index) { renderFeature(index); startFeatureTimer(); }
+
+    featureDots.forEach(dot => dot.addEventListener('click', () => chooseFeature(Number(dot.dataset.featureSlide))));
+    document.getElementById('film-feature-prev').addEventListener('click', () => chooseFeature(featureIndex - 1));
+    document.getElementById('film-feature-next').addEventListener('click', () => chooseFeature(featureIndex + 1));
+    filmFeature.addEventListener('mouseenter', () => { featurePaused = true; stopFeatureTimer(); });
+    filmFeature.addEventListener('mouseleave', () => { featurePaused = false; startFeatureTimer(); });
+    filmFeature.addEventListener('focusin', () => { featurePaused = true; stopFeatureTimer(); });
+    filmFeature.addEventListener('focusout', event => {
+      if (!filmFeature.contains(event.relatedTarget)) { featurePaused = false; startFeatureTimer(); }
+    });
+    document.getElementById('film-feature-play').addEventListener('click', () =>
+      notify('A reprodução de “' + featureFilms[featureIndex].title + '” será conectada quando o Central+ integrar o serviço de streaming.')
+    );
+    document.getElementById('film-feature-details').addEventListener('click', () =>
+      notify('Detalhes de “' + featureFilms[featureIndex].title + '”: ficha demonstrativa do catálogo Central+.')
+    );
+    renderFeature(0);
+    startFeatureTimer();
+  }
+
 
   setSlide(0);startCarousel();
 })();
