@@ -198,6 +198,54 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
 @media(max-width:390px){.news-live-grid{grid-template-columns:1fr}.news-live-card{display:grid;grid-template-columns:minmax(110px,.65fr) minmax(0,1fr);min-height:125px}.news-live-image{height:100%;min-height:125px;aspect-ratio:auto}.news-live-category-badge{display:none}.news-live-copy{padding:12px}.news-live-title{font-size:13px}.news-live-summary{margin-bottom:7px;-webkit-line-clamp:2}.news-live-bottom{padding-top:7px}}
 @media(prefers-reduced-motion:reduce){.news-live-card,.news-live-image img,.news-live-refresh,.news-live-tab{transition:none}}
 
+
+/* Featured six-latest carousel: dynamic headlines from the news RSS endpoint. */
+.news-carousel{position:relative;isolation:isolate;overflow:hidden;min-height:clamp(360px,39vw,520px);border-radius:17px;border:1px solid #ffffff18;background:#11151e;margin:0 0 35px;box-shadow:0 24px 60px #0004}
+.news-carousel-art{position:absolute;inset:0;z-index:-2;overflow:hidden;background:radial-gradient(ellipse at 70% 25%,#96a9c53a,transparent 40%),linear-gradient(130deg,#273144,#10131b)}
+.news-carousel-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 38%;opacity:0;transform:scale(1.025);transition:opacity .45s,transform 1s;filter:saturate(.9) contrast(1.04)}
+.news-carousel-art.has-image img{opacity:1}
+.news-carousel-art:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,7,12,.96) 0%,rgba(5,7,12,.86) 28%,rgba(5,7,12,.49) 59%,rgba(5,7,12,.18) 100%),linear-gradient(0deg,rgba(5,7,12,.88),transparent 58%),linear-gradient(180deg,rgba(5,7,12,.24),transparent 30%)}
+.news-carousel.is-changing .news-carousel-art img{opacity:.18;transform:scale(1.06)}
+.news-carousel-inner{min-height:inherit;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(23px,4vw,46px);position:relative}
+.news-carousel-topline{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.news-carousel-overline{display:flex;align-items:center;gap:9px;font-size:9px;font-weight:850;letter-spacing:.18em;color:#f1f3f8}
+.news-carousel-live{font-size:8px;letter-spacing:.14em;color:#dbe1ed;border:1px solid #ffffff38;background:#080b12a3;border-radius:999px;padding:7px 9px;white-space:nowrap}
+.news-carousel-count{font-size:10px;color:#cbd2df;font-variant-numeric:tabular-nums}
+.news-carousel-story{display:flex;flex-direction:column;align-items:flex-start;max-width:760px;margin:auto 0;padding:42px 0 36px;color:#fff;text-decoration:none;min-width:0}
+.news-carousel-story:focus-visible{outline:3px solid #fff;outline-offset:5px;border-radius:4px}
+.news-carousel-meta{display:flex;align-items:center;flex-wrap:wrap;gap:9px;margin-bottom:14px}
+.news-carousel-source{font-size:10px;font-weight:800;letter-spacing:.06em;color:#fff;border:1px solid #ffffff3d;border-radius:5px;background:#080b12a6;padding:7px 9px;backdrop-filter:blur(10px)}
+.news-carousel-category{font-size:9px;color:#d7dce7;letter-spacing:.12em;text-transform:uppercase}
+.news-carousel-title{font-size:clamp(27px,4.25vw,55px);line-height:1.02;font-weight:830;letter-spacing:-.055em;margin:0 0 15px;text-wrap:balance;max-width:850px;text-shadow:0 2px 20px #0006}
+.news-carousel-summary{font-size:clamp(12px,1.25vw,15px);line-height:1.7;color:#d1d7e2;margin:0;max-width:640px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;text-shadow:0 1px 12px #0008}
+.news-carousel-cta{display:flex;align-items:center;gap:10px;margin-top:22px;border-radius:8px;background:#f3f4f7;color:#11131a;padding:12px 15px;font-size:10px;font-weight:800}
+.news-carousel-cta svg{width:14px;height:14px}
+.news-carousel-controls{display:flex;align-items:center;justify-content:space-between;gap:18px}
+.news-carousel-dots{display:flex;align-items:center;gap:7px;flex:1}
+.news-carousel-dot{height:4px;width:20px;border:0;padding:0;border-radius:99px;background:#ffffff63;transition:width .2s,background .2s}
+.news-carousel-dot.active{width:37px;background:#fff}
+.news-carousel-arrows{display:flex;gap:8px}
+.news-carousel-arrow{display:grid;place-items:center;width:37px;height:37px;border:1px solid #ffffff5a;border-radius:50%;background:#090b1280;color:#fff;font-size:23px;line-height:1;backdrop-filter:blur(10px);transition:background .2s,transform .2s}
+.news-carousel-arrow:hover{background:#ffffff20;transform:scale(1.05)}
+.news-carousel-arrow:focus-visible,.news-carousel-dot:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.news-carousel.is-empty .news-carousel-story{pointer-events:none;opacity:.8}
+@media(max-width:760px){
+ .news-carousel{min-height:430px;border-radius:13px;margin-bottom:27px}
+ .news-carousel-inner{padding:20px;min-height:430px}
+ .news-carousel-story{padding:38px 0 29px}
+ .news-carousel-title{font-size:clamp(27px,7.8vw,39px);line-height:1.06}
+ .news-carousel-summary{font-size:12px;-webkit-line-clamp:3}
+ .news-carousel-cta{padding:11px 13px;margin-top:17px}
+ .news-carousel-live{font-size:7px;padding:6px 7px}
+ .news-carousel-controls{gap:10px}
+ .news-carousel-dot{width:13px}.news-carousel-dot.active{width:27px}
+ .news-carousel-arrow{width:34px;height:34px}
+ .news-carousel-art img{object-position:62% center}
+ .news-carousel-art:after{background:linear-gradient(90deg,rgba(5,7,12,.88),rgba(5,7,12,.36)),linear-gradient(0deg,rgba(5,7,12,.89),transparent 72%)}
+}
+@media(max-width:380px){.news-carousel-inner{padding:16px}.news-carousel{min-height:410px}.news-carousel-inner{min-height:410px}.news-carousel-overline{font-size:8px;letter-spacing:.13em}.news-carousel-title{font-size:27px}.news-carousel-summary{font-size:11px}.news-carousel-count{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.news-carousel-art img,.news-carousel-dot,.news-carousel-arrow{transition:none}}
+
 </style>
 </head>
 <body>
@@ -234,6 +282,26 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
       <p class="news-aside-copy">Não é necessário ler todos os portais todos os dias. Comece por três fontes prioritárias, compare coberturas e explore as outras categorias conforme seu interesse.</p>
     </aside>
   </div>
+  <section class="news-carousel is-empty" id="news-headline-carousel" aria-label="As seis notícias mais recentes" aria-roledescription="carrossel">
+    <div class="news-carousel-art" id="news-carousel-art" aria-hidden="true"><img id="news-carousel-image" alt="" referrerpolicy="no-referrer"></div>
+    <div class="news-carousel-inner">
+      <div class="news-carousel-topline">
+        <div class="news-carousel-overline"><span class="news-live-pulse"></span> AS MAIS RECENTES</div>
+        <span class="news-carousel-count" id="news-carousel-count">01 / 06</span>
+        <span class="news-carousel-live">ATUALIZAÇÃO AUTOMÁTICA</span>
+      </div>
+      <a class="news-carousel-story" id="news-carousel-story" href="#news-live" aria-label="Notícia em destaque">
+        <div class="news-carousel-meta"><span class="news-carousel-source" id="news-carousel-source">Central+ Newsroom</span><span class="news-carousel-category" id="news-carousel-category">A carregar notícias</span><time class="news-live-date" id="news-carousel-date"></time></div>
+        <h2 class="news-carousel-title" id="news-carousel-title">Carregando as notícias mais recentes…</h2>
+        <p class="news-carousel-summary" id="news-carousel-summary">As seis manchetes mais recentes aparecerão aqui assim que as fontes responderem.</p>
+        <span class="news-carousel-cta">Ler matéria original <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
+      </a>
+      <div class="news-carousel-controls">
+        <div class="news-carousel-dots" id="news-carousel-dots" role="group" aria-label="Selecionar notícia em destaque"></div>
+        <div class="news-carousel-arrows"><button class="news-carousel-arrow" type="button" id="news-carousel-prev" data-focusable aria-label="Notícia anterior">‹</button><button class="news-carousel-arrow" type="button" id="news-carousel-next" data-focusable aria-label="Próxima notícia">›</button></div>
+      </div>
+    </div>
+  </section>
   <section class="news-priority" aria-labelledby="news-priority-title">
     <div class="news-section-head"><div><div class="news-overline-small">SELEÇÃO EDITORIAL</div><h2 id="news-priority-title">Comece por aqui</h2><p>Três atalhos para a rotina diária: notícias, entretenimento e tecnologia.</p></div></div>
     <div class="news-featured-grid" id="news-featured"></div>
@@ -574,8 +642,118 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
       card.append(visual,copy);
       return card;
     }
+    // Six most recent stories: automatically rotates, manually browsable, same-tab article links.
+    const carouselRoot=document.getElementById('news-headline-carousel');
+    const carouselArt=document.getElementById('news-carousel-art');
+    const carouselImage=document.getElementById('news-carousel-image');
+    const carouselStory=document.getElementById('news-carousel-story');
+    const carouselTitle=document.getElementById('news-carousel-title');
+    const carouselSummary=document.getElementById('news-carousel-summary');
+    const carouselSource=document.getElementById('news-carousel-source');
+    const carouselCategory=document.getElementById('news-carousel-category');
+    const carouselDate=document.getElementById('news-carousel-date');
+    const carouselCount=document.getElementById('news-carousel-count');
+    const carouselDots=document.getElementById('news-carousel-dots');
+    const carouselPrev=document.getElementById('news-carousel-prev');
+    const carouselNext=document.getElementById('news-carousel-next');
+    const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
+    let carouselItems=[],carouselIndex=0,carouselTimer=null,carouselPaused=false,carouselChangeTimer=null;
+    function categoryLabel(item){return categoryNames[item.category]||'Notícias'}
+    function latestSix(){
+      const seen=new Set();
+      return allItems.filter(item=>item&&item.title&&safeImageUrl(item.url)).slice().sort((a,b)=>{
+        const da=a.publishedAt?Date.parse(a.publishedAt):0;
+        const db=b.publishedAt?Date.parse(b.publishedAt):0;
+        return db-da;
+      }).filter(item=>{
+        const key=(item.url||item.id||item.title).replace(/[?&](utm_[^=]+|fbclid|gclid)=[^&]*/gi,'');
+        if(seen.has(key))return false;seen.add(key);return true;
+      }).slice(0,6);
+    }
+    function renderCarouselDots(){
+      carouselDots.replaceChildren();
+      carouselItems.forEach((item,index)=>{
+        const dot=document.createElement('button');
+        dot.type='button';dot.className='news-carousel-dot'+(index===carouselIndex?' active':'');
+        dot.dataset.focusable='';dot.setAttribute('aria-label','Mostrar notícia '+(index+1)+': '+item.title);
+        dot.setAttribute('aria-current',index===carouselIndex?'true':'false');
+        dot.addEventListener('click',()=>{setCarouselSlide(index);startCarouselTimer()});
+        carouselDots.appendChild(dot);
+      });
+    }
+    function paintCarousel(index,animate){
+      if(!carouselItems.length)return;
+      carouselIndex=(index+carouselItems.length)%carouselItems.length;
+      const item=carouselItems[carouselIndex];
+      const apply=()=>{
+        carouselRoot.classList.add('is-changing');
+        carouselArt.classList.remove('has-image');
+        const imageUrl=safeImageUrl(item.image);
+        carouselImage.onload=()=>{carouselArt.classList.add('has-image');carouselRoot.classList.remove('is-changing')};
+        carouselImage.onerror=()=>{carouselArt.classList.remove('has-image');carouselRoot.classList.remove('is-changing')};
+        carouselImage.removeAttribute('src');
+        if(imageUrl){carouselImage.src=imageUrl}else carouselRoot.classList.remove('is-changing');
+        carouselArt.dataset.category=item.category||'nacionais';
+        carouselStory.href=safeImageUrl(item.url)||'#news-live';
+        carouselStory.setAttribute('aria-label','Ler notícia: '+item.title);
+        carouselSource.textContent=item.source||'Fonte jornalística';
+        carouselCategory.textContent=categoryLabel(item);
+        carouselTitle.textContent=item.title||'Notícia em destaque';
+        carouselSummary.textContent=(item.summary||'Leia a matéria completa diretamente no portal de origem.').trim();
+        carouselDate.textContent=humanTime(item.publishedAt);
+        if(item.publishedAt)carouselDate.dateTime=item.publishedAt;else carouselDate.removeAttribute('datetime');
+        carouselCount.textContent=String(carouselIndex+1).padStart(2,'0')+' / '+String(carouselItems.length).padStart(2,'0');
+        [...carouselDots.children].forEach((dot,n)=>{const active=n===carouselIndex;dot.classList.toggle('active',active);dot.setAttribute('aria-current',active?'true':'false')});
+        carouselRoot.classList.remove('is-empty');
+      };
+      if(carouselChangeTimer)clearTimeout(carouselChangeTimer);
+      if(animate&&!reducedMotion.matches){carouselRoot.classList.add('is-changing');carouselChangeTimer=setTimeout(apply,180)}else apply();
+    }
+    function setCarouselSlide(index){paintCarousel(index,true)}
+    function stopCarouselTimer(){if(carouselTimer){clearInterval(carouselTimer);carouselTimer=null}}
+    function startCarouselTimer(){
+      stopCarouselTimer();
+      if(carouselItems.length>1&&!carouselPaused&&!reducedMotion.matches){
+        carouselTimer=setInterval(()=>paintCarousel(carouselIndex+1,true),7500);
+      }
+    }
+    function syncCarousel(){
+      const nextItems=latestSix();
+      const oldKey=carouselItems.map(item=>item.id||item.url).join('|');
+      const newKey=nextItems.map(item=>item.id||item.url).join('|');
+      if(oldKey===newKey&&carouselItems.length)return;
+      carouselItems=nextItems;
+      carouselIndex=0;
+      if(!carouselItems.length){
+        carouselRoot.classList.add('is-empty');
+        carouselTitle.textContent='As notícias mais recentes aparecerão aqui';
+        carouselSummary.textContent='Aguardando as fontes de notícias. O feed completo continua disponível abaixo.';
+        carouselSource.textContent='Central+ Newsroom';
+        carouselCategory.textContent='A carregar';
+        carouselCount.textContent='00 / 06';
+        carouselStory.href='#news-live';
+        carouselImage.removeAttribute('src');carouselArt.classList.remove('has-image');
+        carouselDots.replaceChildren();
+        stopCarouselTimer();
+        return;
+      }
+      renderCarouselDots();
+      paintCarousel(0,false);
+      startCarouselTimer();
+    }
+    function syncCarouselMotion(){
+      if(carouselPaused)stopCarouselTimer();else startCarouselTimer();
+    }
+    carouselPrev.addEventListener('click',()=>{setCarouselSlide(carouselIndex-1);startCarouselTimer()});
+    carouselNext.addEventListener('click',()=>{setCarouselSlide(carouselIndex+1);startCarouselTimer()});
+    carouselRoot.addEventListener('mouseenter',()=>{carouselPaused=true;syncCarouselMotion()});
+    carouselRoot.addEventListener('mouseleave',()=>{carouselPaused=false;syncCarouselMotion()});
+    carouselRoot.addEventListener('focusin',()=>{carouselPaused=true;syncCarouselMotion()});
+    carouselRoot.addEventListener('focusout',event=>{if(!carouselRoot.contains(event.relatedTarget)){carouselPaused=false;syncCarouselMotion()}});
+    document.addEventListener('visibilitychange',()=>{if(document.hidden)stopCarouselTimer();else startCarouselTimer()});
     function currentItems(){return allItems.filter(item=>activeCategory==='todas'||item.category===activeCategory)}
     function render(){
+      syncCarousel();
       const filtered=currentItems();
       grid.replaceChildren();
       const visible=filtered.slice(0,visibleLimit);
