@@ -197,7 +197,6 @@
         const detail=$("#cp-home-hero-details",mount);if(detail)detail.href=detailHref(feature);
       }
     }
-    }
   }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",fillPage,{once:true});else fillPage();
 })();
