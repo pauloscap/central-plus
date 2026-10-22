@@ -98,7 +98,7 @@
       }
       try {
         const featured = await fetchItems(type,"popular",false);
-        updateFeature(featured[0] || [],type);
+        if(featured.length)updateFeature(featured[0],type);
       } catch(error) {
         console.warn("Central+ destaque TMDB:",error);
       }
@@ -133,7 +133,7 @@
     const root=$("#root");
     if(root){
       root.style.display="none";
-      document.body.classList.add("cp-home-mode");
+      document.body.classList.add("cp-home-mode");document.title="Central+ | Descubra o que assistir";
       const mount=document.createElement("main");mount.id="cp-api-home";root.insertAdjacentElement("afterend",mount);
       const homeStyles=document.createElement("style");homeStyles.id="cp-home-redesign";
       homeStyles.textContent=`
