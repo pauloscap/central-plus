@@ -178,7 +178,8 @@ module.exports = async function handler(req, res) {
   }
 
   res.setHeader("Content-Type", "application/json; charset=utf-8");
-  res.setHeader("Cache-Control", "public, s-maxage=300, stale-while-revalidate=900");
+  const manualRefresh = Boolean(req.query && req.query.fresh);
+  res.setHeader("Cache-Control", manualRefresh ? "no-store, max-age=0" : "public, s-maxage=300, stale-while-revalidate=900");
   res.setHeader("X-Content-Type-Options", "nosniff");
 
   try {
