@@ -110,6 +110,7 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
 .series-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 15px}
 .series-tile{display:block;min-width:0;color:inherit;text-decoration:none;border-radius:12px;transition:transform .2s,filter .2s;scroll-snap-align:start}
 .series-tile:hover{transform:translateY(-4px);filter:brightness(1.08)}
+.series-tile[hidden]{display:none!important}
 .series-tile:focus-visible{outline:3px solid #fff;outline-offset:4px}
 .series-tile-art{position:relative;isolation:isolate;overflow:hidden;aspect-ratio:16/9;border-radius:12px;border:1px solid #ffffff1c;background-color:#171b25;background-size:cover;background-position:center}
 .series-tile-art:after{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(0deg,rgba(4,5,9,.94) 0%,rgba(4,5,9,.20) 65%,rgba(4,5,9,.08) 100%)}
@@ -206,34 +207,34 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
       <div class="series-feature-meta"><span id="series-feature-year">2022–</span><i></i><span id="series-feature-seasons">2 temporadas</span><i></i><span id="series-feature-genre">Drama · Suspense</span><b id="series-feature-platform">Apple TV+</b></div>
       <p id="series-feature-description">Uma equipe passa por um procedimento que separa suas memórias profissionais das pessoais. O que parece uma solução começa a revelar algo muito maior.</p>
       <div class="series-feature-actions">
-        <button class="primary-btn" type="button" id="series-feature-play">▶ <span>Ver série</span></button>
-        <button class="secondary-btn" type="button" id="series-feature-details">ⓘ <span>Mais informações</span></button>
+        <button class="primary-btn" type="button" id="series-feature-play" data-focusable>▶ <span>Ver série</span></button>
+        <button class="secondary-btn" type="button" id="series-feature-details" data-focusable>ⓘ <span>Mais informações</span></button>
       </div>
     </div>
     <div class="series-feature-bottom">
       <div class="series-feature-dots" role="group" aria-label="Escolher série em destaque">
-        <button class="series-feature-dot active" type="button" data-series-slide="0" aria-label="Ruptura" aria-current="true"></button>
-        <button class="series-feature-dot" type="button" data-series-slide="1" aria-label="A Casa do Dragão" aria-current="false"></button>
-        <button class="series-feature-dot" type="button" data-series-slide="2" aria-label="Fallout" aria-current="false"></button>
+        <button class="series-feature-dot active" type="button" data-series-slide="0" data-focusable aria-label="Ruptura" aria-current="true"></button>
+        <button class="series-feature-dot" type="button" data-series-slide="1" data-focusable aria-label="A Casa do Dragão" aria-current="false"></button>
+        <button class="series-feature-dot" type="button" data-series-slide="2" data-focusable aria-label="Fallout" aria-current="false"></button>
       </div>
       <div class="series-feature-controls">
-        <button class="series-feature-arrow" type="button" id="series-feature-prev" aria-label="Série anterior">‹</button>
-        <button class="series-feature-arrow" type="button" id="series-feature-next" aria-label="Próxima série">›</button>
+        <button class="series-feature-arrow" type="button" id="series-feature-prev" data-focusable aria-label="Série anterior">‹</button>
+        <button class="series-feature-arrow" type="button" id="series-feature-next" data-focusable aria-label="Próxima série">›</button>
       </div>
     </div>
     <div class="series-feature-index"><span id="series-feature-index-number">01</span><span class="series-feature-index-line"></span><span>EM DESTAQUE</span></div>
   </div>
   <div class="series-toolbar"><div><h2>Explore o catálogo</h2><p>Filtre por gênero e descubra sua próxima maratona.</p></div><div class="series-count"><span id="series-count">16</span> séries</div></div>
   <div class="series-filters" role="group" aria-label="Filtrar séries por gênero">
-    <button class="series-filter active" data-series-filter="todos" type="button" aria-pressed="true">Todas</button>
-    <button class="series-filter" data-series-filter="ficcao" type="button" aria-pressed="false">Ficção científica</button>
-    <button class="series-filter" data-series-filter="drama" type="button" aria-pressed="false">Drama</button>
-    <button class="series-filter" data-series-filter="fantasia" type="button" aria-pressed="false">Fantasia</button>
-    <button class="series-filter" data-series-filter="suspense" type="button" aria-pressed="false">Suspense e mistério</button>
-    <button class="series-filter" data-series-filter="comedia" type="button" aria-pressed="false">Comédia</button>
-    <button class="series-filter" data-series-filter="animacao" type="button" aria-pressed="false">Animação</button>
-    <button class="series-filter" data-series-filter="crime" type="button" aria-pressed="false">Crime</button>
-    <button class="series-filter" data-series-filter="aventura" type="button" aria-pressed="false">Aventura</button>
+    <button class="series-filter active" data-series-filter="todos" type="button" data-focusable aria-pressed="true">Todas</button>
+    <button class="series-filter" data-series-filter="ficcao" type="button" data-focusable aria-pressed="false">Ficção científica</button>
+    <button class="series-filter" data-series-filter="drama" type="button" data-focusable aria-pressed="false">Drama</button>
+    <button class="series-filter" data-series-filter="fantasia" type="button" data-focusable aria-pressed="false">Fantasia</button>
+    <button class="series-filter" data-series-filter="suspense" type="button" data-focusable aria-pressed="false">Suspense e mistério</button>
+    <button class="series-filter" data-series-filter="comedia" type="button" data-focusable aria-pressed="false">Comédia</button>
+    <button class="series-filter" data-series-filter="animacao" type="button" data-focusable aria-pressed="false">Animação</button>
+    <button class="series-filter" data-series-filter="crime" type="button" data-focusable aria-pressed="false">Crime</button>
+    <button class="series-filter" data-series-filter="aventura" type="button" data-focusable aria-pressed="false">Aventura</button>
   </div>
   <div class="series-grid" id="series-grid">
     <a class="series-tile" href="central-plus-detalhe-serie.html?serie=ruptura" data-series="ruptura" data-genres="drama suspense ficcao" data-title="Ruptura" data-focusable><div class="series-tile-art" style="background-image:linear-gradient(135deg,#202e39,#0b111b),url('https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1100&q=85')"><div class="series-tile-copy"><div class="series-tile-kicker">Drama · Suspense</div><div class="series-tile-title">Ruptura</div></div></div><div class="series-tile-meta"><span>2022– · 2 temporadas</span><span>Apple TV+</span></div></a>
