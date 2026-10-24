@@ -110,7 +110,15 @@ if(!params.has('tmdbId')){
       const historyKey='centralplus-watch-history-v1';
       const entry={id:key,type:'movie',title:m.title,url:location.pathname+location.search,image:m.backdropImage||m.posterImage||'',provider:service.label||service.button||'',nextEpisode:null,updatedAt:Date.now()};
       const old=JSON.parse(localStorage.getItem(historyKey)||'[]');
-      localStorage.setItem(historyKey,JSON.stringify([entry,...(Array.isArray(old)?old:[]).filter(x=>x&&!(String(x.id)===String(entry.id)&&x.type==='movie'))].slice(0,20)));
+      const session=JSON.parse(sessionStorage.getItem(historyKey)||'[]');
+      const merged=[...(Array.isArray(old)?old:[]),...(Array.isArray(session)?session:[])];
+      const list=[entry,...merged.filter(x=>x&&!(String(x.id)===String(entry.id)&&x.type==='movie'))]
+        .sort((a,b)=>(Number(b.updatedAt)||0)-(Number(a.updatedAt)||0))
+        .filter((x,i,all)=>all.findIndex(y=>String(y.id)===String(x.id)&&y.type===x.type)===i).slice(0,20);
+      const serialized=JSON.stringify(list);
+      localStorage.setItem(historyKey,serialized);
+      sessionStorage.setItem(historyKey,serialized);
+      window.dispatchEvent(new CustomEvent('centralplus:history-updated',{detail:{key:historyKey}}));
     }catch(_){}
   });
 }
