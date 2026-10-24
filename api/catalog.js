@@ -140,6 +140,17 @@ module.exports = async function handler(req, res) {
       const query = String(q.query || "").trim().slice(0,120);
       if (!query) return res.status(400).json({ error: "Informe query para pesquisar." });
       data = await tmdb("/search/" + type, { query, language: lang, region: "BR", include_adult: "false", page: 1 }, auth);
+      const candidates = (data.results || []).filter(x => x.poster_path || x.backdrop_path).slice(0, 12);
+      const items = await Promise.all(candidates.map(async raw => {
+        const item = normalize(raw, type);
+        const availability = await providers(type, item.id, auth);
+        item.provider_names = availability.names;
+        item.provider_options = availability.options;
+        item.provider_link = availability.link;
+        return item;
+      }));
+      const available = items.filter(item => item.provider_names.length > 0);
+      return res.status(200).json({ items: available, page: data.page || 1, total_pages: data.total_pages || 1, source: "TMDB", region: "BR", updatedAt: new Date().toISOString() });
     } else if (section === "streaming" || section === "streaming_new") {
       // Descoberta por disponibilidade no Brasil: títulos apenas em cartaz no cinema ficam de fora.
       const today = new Date().toISOString().slice(0,10);
