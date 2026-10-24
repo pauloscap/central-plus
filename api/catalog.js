@@ -82,7 +82,7 @@ async function providers(type, id, auth) {
 module.exports = async function handler(req, res) {
   res.setHeader("Content-Type", "application/json; charset=utf-8");
   res.setHeader("X-Content-Type-Options", "nosniff");
-  res.setHeader("Cache-Control", "public, s-maxage=300, stale-while-revalidate=600");
+  res.setHeader("Cache-Control", "public, s-maxage=900, stale-while-revalidate=86400");
   if (req.method !== "GET") {
     res.setHeader("Allow", "GET");
     return res.status(405).json({ error: "Método não permitido." });
@@ -140,7 +140,7 @@ module.exports = async function handler(req, res) {
       data = await tmdb(route, params, auth);
     }
     const items = (data.results || []).filter(x => x.poster_path).map(x => normalize(x, type));
-    const enrich = String(q.providers || "true") !== "false";
+    const enrich = String(q.providers || "false") === "true";
     if (enrich) {
       // Streaming discovery returns 20 candidates; enrich every one so home and provider rails can show verified services.
       const enrichLimit = section === "streaming" || section === "streaming_new" ? 20 : 12;
