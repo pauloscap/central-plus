@@ -220,9 +220,12 @@
       if(!track)continue;
       try{
         const titles=await fetchStreamingProvider(service.provider);
-        if(!titles.length){row.remove();continue;}
+        if(!titles.length){
+          track.innerHTML='<p class="cp-streaming-status">Nenhum filme disponível nesta plataforma nos resultados atuais do catálogo brasileiro.</p>';
+          continue;
+        }
         track.innerHTML=titles.slice(0,12).map(item=>horizontalMovieCard(item,service.label)).join("");
-      }catch(_){row.remove();}
+      }catch(_){track.innerHTML='<p class="cp-streaming-status">Não foi possível carregar esta fileira agora.</p>';}
     }
   }
   async function fillPage() {
