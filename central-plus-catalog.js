@@ -17,6 +17,20 @@
   function ensureStyles(){
     if($("#cp-api-styles")) return;
     const style=document.createElement("style");style.id="cp-api-styles";style.textContent=`
+
+      .cp-series-wide{display:block;flex:0 0 clamp(245px,27vw,390px);min-width:0;color:inherit;text-decoration:none;scroll-snap-align:start;transition:transform .22s}
+      .cp-series-wide:hover{transform:translateY(-4px)}
+      .cp-series-wide[hidden]{display:none!important}
+      .cp-series-wide-art{position:relative;aspect-ratio:16/9;border-radius:11px;overflow:hidden;border:1px solid #ffffff16;background:#151923 center/cover no-repeat}
+      .cp-series-wide-copy{position:absolute;left:14px;right:12px;bottom:13px;display:flex;flex-direction:column;gap:5px}
+      .cp-series-wide-copy strong{font-size:clamp(14px,1.5vw,19px);line-height:1.1;letter-spacing:-.035em}
+      .app[data-page="series"] #series-grid{display:flex;gap:14px;overflow-x:auto;overflow-y:hidden;padding:5px var(--gutter) 18px 3px;scroll-snap-type:x mandatory;scrollbar-width:none}
+      .app[data-page="series"] #series-grid::-webkit-scrollbar{display:none}
+      .app[data-page="series"] .series-toolbar{align-items:center}
+      .app[data-page="series"] .series-filters{display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;white-space:nowrap;padding:2px var(--gutter) 12px 0;scrollbar-width:none;scroll-snap-type:x proximity}
+      .app[data-page="series"] .series-filters::-webkit-scrollbar{display:none}
+      .app[data-page="series"] .series-filter{flex:0 0 auto}
+      @media(max-width:600px){.cp-series-wide{flex-basis:78vw}}
       .cp-film-wide{display:block;flex:0 0 clamp(245px,27vw,390px);min-width:0;color:inherit;text-decoration:none;scroll-snap-align:start;transition:transform .22s}
       .cp-film-wide:hover{transform:translateY(-4px)}
       .cp-film-wide-art{position:relative;aspect-ratio:16/9;border-radius:11px;overflow:hidden;border:1px solid #ffffff16;background:#151923 center/cover no-repeat}
@@ -131,11 +145,97 @@
       '<div class="cp-film-wide-copy"><span class="cp-film-wide-kicker">'+esc(genres||"Filme")+'</span><strong>'+title+'</strong></div></div>'+
       '<div class="cp-film-wide-meta"><span>'+esc(year(item)||"Filme")+'</span><span>Ver detalhes ↗</span></div></a>';
   }
-  async function fetchStreamingProvider(provider){
-    const response=await fetch(API+"?type=movie&section=streaming&providers=false&provider="+encodeURIComponent(provider));
+  async function fetchStreamingProvider(provider,type="movie"){
+    const response=await fetch(API+"?type="+encodeURIComponent(type)+"&section=streaming&providers=false&provider="+encodeURIComponent(provider));
     const data=await response.json();
     if(!response.ok)throw new Error(data.error||"Streaming indisponível");
     return data.items||[];
+  }
+  const SERIES_GENRES = [
+    [10759,"aventura","Ação e aventura"],[16,"animacao","Animação"],[35,"comedia","Comédia"],
+    [80,"crime","Crime"],[99,"documentario","Documentário"],[18,"drama","Drama"],
+    [10751,"familia","Família"],[10765,"fantasia","Fantasia e ficção científica"],
+    [9648,"misterio","Mistério"],[10763,"noticias","Notícias"],[10764,"reality","Reality"],
+    [10766,"novela","Novela"],[10767,"talkshow","Talk show"],[10768,"politica","Guerra e política"]
+  ];
+  function seriesGenreSlugs(item){
+    return (item.genre_ids||[]).map(id=>{const g=SERIES_GENRES.find(x=>x[0]===id);return g?g[1]:"";}).filter(Boolean).join(" ");
+  }
+  function horizontalSeriesCard(item,serviceLabel){
+    const href=detailHref(item),image=item.backdrop_url||item.poster_url||"",title=esc(item.title);
+    const genres=(item.genres||[]).slice(0,2).join(" · ");
+    return '<a class="cp-series-wide" href="'+href+'" data-genre="'+seriesGenreSlugs(item)+'" data-title="'+title+'">'+
+      '<div class="cp-series-wide-art" style="background-image:linear-gradient(0deg,rgba(4,5,9,.9),rgba(4,5,9,.02) 78%),url(&quot;'+esc(image)+'&quot;)">'+
+      '<span class="cp-film-wide-badge">'+esc(serviceLabel||providers(item)||"Streaming")+'</span>'+
+      '<div class="cp-series-wide-copy"><span class="cp-film-wide-kicker">'+esc(genres||"Série")+'</span><strong>'+title+'</strong></div></div>'+
+      '<div class="cp-film-wide-meta"><span>'+esc(year(item)||"Série")+'</span><span>Ver detalhes ↗</span></div></a>';
+  }
+  async function renderSeriesStreamingPage(items,launches){
+    const grid=$("#series-grid"),filterRoot=$(".series-filters");
+    if(!grid)return;
+    const title=$("#series .series-intro h1");
+    if(title)title.innerHTML='Séries para <span>assistir agora.</span>';
+    const intro=$("#series .series-intro p");
+    if(intro)intro.textContent="Lançamentos e descobertas disponíveis nos serviços de streaming no Brasil. Escolha um gênero ou explore por plataforma.";
+    const toolbarTitle=$("#series .series-toolbar h2");
+    if(toolbarTitle)toolbarTitle.textContent="Séries disponíveis no streaming";
+    const toolbarSubtitle=$("#series .series-toolbar p");
+    if(toolbarSubtitle)toolbarSubtitle.textContent="Explore por gênero e encontre sua próxima maratona, sem misturar títulos indisponíveis para assistir online.";
+    const featured=[];
+    (launches||[]).concat(items||[]).forEach(item=>{if(item&&item.id&&!featured.some(x=>String(x.id)===String(item.id)))featured.push(item);});
+    const slides=featured.slice(0,6),featureNode=$("#series-feature");
+    if(slides.length&&featureNode){
+      featureNode.hidden=false;featureNode.dataset.apiManaged="true";
+      const dotsRoot=$(".series-feature-dots");
+      if(dotsRoot){dotsRoot.hidden=false;dotsRoot.innerHTML=slides.map((item,i)=>'<button class="series-feature-dot'+(i===0?' active':'')+'" type="button" data-api-series-slide="'+i+'" aria-label="Ver destaque: '+esc(item.title)+'" aria-current="'+(i===0?'true':'false')+'"></button>').join("");}
+      const controls=$(".series-feature-controls");if(controls)controls.hidden=false;
+      let current=0,timer=null,paused=false;
+      const reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const renderSlide=index=>{
+        current=(index+slides.length)%slides.length;const item=slides[current];updateFeature(item,"tv");
+        const kicker=$("#series-feature-kicker");if(kicker)kicker.textContent="LANÇAMENTO NO STREAMING · "+(providers(item)||"DISPONÍVEL NO BRASIL");
+        const seasons=$("#series-feature-seasons");if(seasons)seasons.textContent=item.seasons?(item.seasons+" temporadas"):"Série";
+        const platform=$("#series-feature-platform");if(platform)platform.textContent=providers(item)||"Streaming";
+        const number=$("#series-feature-index-number");if(number)number.textContent=String(current+1).padStart(2,"0");
+        if(dotsRoot)dotsRoot.querySelectorAll("[data-api-series-slide]").forEach((dot,i)=>{const active=i===current;dot.classList.toggle("active",active);dot.setAttribute("aria-current",active?"true":"false");});
+      };
+      const stop=()=>{if(timer){clearInterval(timer);timer=null;}};
+      const start=()=>{stop();if(!paused&&!reduced&&slides.length>1)timer=setInterval(()=>renderSlide(current+1),5000);};
+      const choose=index=>{renderSlide(index);start();};
+      if(dotsRoot)dotsRoot.querySelectorAll("[data-api-series-slide]").forEach(dot=>dot.addEventListener("click",()=>choose(Number(dot.dataset.apiSeriesSlide))));
+      const prev=$("#series-feature-prev"),next=$("#series-feature-next");if(prev)prev.onclick=()=>choose(current-1);if(next)next.onclick=()=>choose(current+1);
+      featureNode.onmouseenter=()=>{paused=true;stop();};featureNode.onmouseleave=()=>{paused=false;start();};
+      featureNode.onfocusin=()=>{paused=true;stop();};featureNode.onfocusout=event=>{if(!featureNode.contains(event.relatedTarget)){paused=false;start();}};
+      renderSlide(0);start();
+    }else if(featureNode){featureNode.hidden=true;}
+    grid.innerHTML=(items||[]).map(item=>horizontalSeriesCard(item)).join("");
+    const genreList=SERIES_GENRES.filter(g=>(items||[]).some(item=>(item.genre_ids||[]).includes(g[0])));
+    if(filterRoot){
+      filterRoot.innerHTML='<button class="series-filter active" data-series-filter="todos" type="button" aria-pressed="true">Todas</button>'+
+        genreList.map(g=>'<button class="series-filter" data-series-filter="'+g[1]+'" type="button" aria-pressed="false">'+g[2]+'</button>').join("");
+      filterRoot.querySelectorAll("[data-series-filter]").forEach(button=>button.addEventListener("click",()=>{
+        const selected=button.dataset.seriesFilter||"todos";
+        grid.querySelectorAll(".cp-series-wide").forEach(tile=>{tile.hidden=selected!=="todos"&&tile.dataset.genre.split(" ").indexOf(selected)<0;});
+        filterRoot.querySelectorAll(".series-filter").forEach(b=>{const active=b===button;b.classList.toggle("active",active);b.setAttribute("aria-pressed",active?"true":"false");});
+        const count=$("#series-count");if(count)count.textContent=String([...grid.querySelectorAll(".cp-series-wide")].filter(tile=>!tile.hidden).length);
+      }));
+    }
+    const count=$("#series-count");if(count)count.textContent=String((items||[]).length);
+    const empty=$("#series-empty");if(empty)empty.hidden=(items||[]).length>0;
+    let rails=$("#cp-series-streaming-rails");
+    if(!rails){rails=document.createElement("div");rails.id="cp-series-streaming-rails";grid.insertAdjacentElement("afterend",rails);}
+    rails.innerHTML='<div class="cp-streaming-rails-heading"><div class="eyebrow">EXPLORE POR PLATAFORMA</div><h2>O que assistir em cada streaming</h2><p>Séries disponíveis para assistir por assinatura ou gratuitamente no Brasil.</p></div>'+
+      STREAMING_SERVICES.map(service=>'<section class="cp-streaming-row" data-series-service="'+esc(service.label)+'"><div class="cp-streaming-row-head"><h3>'+esc(service.label)+'</h3><span>Disponíveis no Brasil</span></div><div class="cp-streaming-row-track" aria-label="Séries na plataforma '+esc(service.label)+'"><p class="cp-streaming-status">Carregando séries…</p></div></section>').join("");
+    const disclaimer=$("#series .series-disclaimer");
+    if(disclaimer)disclaimer.textContent="Catálogo e disponibilidade para o Brasil consultados via TMDB/JustWatch. A oferta pode mudar; confirme no serviço antes de assistir.";
+    for(const service of STREAMING_SERVICES){
+      const row=rails.querySelector('[data-series-service="'+service.label+'"]'),track=row&&row.querySelector(".cp-streaming-row-track");
+      if(!track)continue;
+      try{
+        const titles=await fetchStreamingProvider(service.provider,"tv");
+        track.innerHTML=titles.length?titles.slice(0,12).map(item=>horizontalSeriesCard(item,service.label)).join(""):'<p class="cp-streaming-status">Nenhuma série disponível nesta plataforma nos resultados atuais do catálogo brasileiro.</p>';
+      }catch(_){track.innerHTML='<p class="cp-streaming-status">Não foi possível carregar esta fileira agora.</p>';}
+    }
   }
   async function renderFilmStreamingPage(items, launches){
     const grid=$("#film-grid"),filterRoot=$(".film-filters");
@@ -244,25 +344,21 @@
       if(isFilmPage){
         try {
           const results=await Promise.all([fetchItems("movie","streaming"),fetchItems("movie","streaming_new")]);
-          renderFilmStreamingPage(results[0],results[1]);
+          await renderFilmStreamingPage(results[0],results[1]);
         } catch(error) {
           if(grid){const note=document.createElement("p");note.className="cp-api-status";note.textContent="Não foi possível carregar as opções de streaming: "+error.message;grid.prepend(note)}
         }
         return;
       }
-      try {
-        const items = await fetchItems(type,"trending");
-        renderCatalogGrid(items,type);
-      } catch(error) {
-        if(grid){const note=document.createElement("p");note.className="cp-api-status";note.textContent="Não foi possível carregar o catálogo: "+error.message;grid.prepend(note)}
+      if(isSeriesPage){
+        try {
+          const results=await Promise.all([fetchItems("tv","streaming"),fetchItems("tv","streaming_new")]);
+          await renderSeriesStreamingPage(results[0],results[1]);
+        } catch(error) {
+          if(grid){const note=document.createElement("p");note.className="cp-api-status";note.textContent="Não foi possível carregar as séries disponíveis no streaming: "+error.message;grid.prepend(note)}
+        }
+        return;
       }
-      try {
-        const featured = await fetchItems(type,"popular",false);
-        if(featured.length)updateFeature(featured[0],type);
-      } catch(error) {
-        console.warn("Central+ destaque TMDB:",error);
-      }
-      const dots=$(isSeriesPage?".series-feature-dots":".film-feature-dots");if(dots)dots.innerHTML="";
       return;
     }
     if(path.includes("central-plus-detalhe-filme")||path.includes("central-plus-detalhe-serie")){
