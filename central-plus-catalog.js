@@ -46,6 +46,12 @@
       .app[data-page="series"] .series-filters{display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;white-space:nowrap;padding:2px var(--gutter) 12px 0;scrollbar-width:none;scroll-snap-type:x proximity}
       .app[data-page="series"] .series-filters::-webkit-scrollbar{display:none}
       .app[data-page="series"] .series-filter{flex:0 0 auto}
+      .app[data-page="filmes"] #film-grid{display:flex;gap:14px;overflow-x:auto;overflow-y:hidden;padding:5px var(--gutter) 18px 3px;scroll-snap-type:x mandatory;scrollbar-width:none}
+      .app[data-page="filmes"] #film-grid::-webkit-scrollbar{display:none}
+      .app[data-page="filmes"] .cp-film-wide{flex:0 0 clamp(245px,27vw,390px)}
+      #cp-api-home-series .cp-api-poster{width:100%;aspect-ratio:16/9;border-radius:12px;overflow:hidden}
+      #cp-api-home-series .cp-api-poster img{width:100%;height:100%;object-fit:cover}
+      @media(max-width:600px){.app[data-page="filmes"] .cp-film-wide{flex-basis:78vw}}
       @media(max-width:600px){.cp-series-wide{flex-basis:78vw}}
       .cp-film-wide{display:block;flex:0 0 clamp(245px,27vw,390px);min-width:0;color:inherit;text-decoration:none;scroll-snap-align:start;transition:transform .22s}
       .cp-film-wide:hover{transform:translateY(-4px)}
