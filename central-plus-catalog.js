@@ -12,7 +12,8 @@
     const provider = providers(item);
     if (kind === "series") return '<a class="series-tile" href="'+href+'" data-series="tmdb-'+item.id+'" data-genres="'+genreSlug(item)+'" data-title="'+title+'" data-focusable><div class="series-tile-art" style="background-image:linear-gradient(0deg,rgba(4,5,9,.88),rgba(4,5,9,.05)),url(&quot;'+esc(img)+'&quot;)"><div class="series-tile-copy"><div class="series-tile-kicker">'+esc((item.genres||[]).slice(0,2).join(" · ") || "Série")+'</div><div class="series-tile-title">'+title+'</div></div></div><div class="series-tile-meta"><span>'+esc(meta || "Série")+'</span><span>'+esc(provider || "Ver opções")+'</span></div></a>';
     if (kind === "films") return '<a class="film-tile" href="'+href+'" data-focusable data-genre="'+genreSlug(item)+'" data-title="'+title+'"><div class="poster" style="aspect-ratio:2/3"><img loading="lazy" src="'+esc(img)+'" alt="Pôster de '+title+'" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display=\'none\'"><span class="poster-badge">'+esc(provider || "Catálogo TMDB")+'</span><div class="poster-copy"><div class="poster-kicker">'+esc((item.genres||[]).slice(0,2).join(" · "))+'</div><div class="poster-title">'+title+'</div></div></div><div class="film-tile-meta"><span>'+esc(year(item))+'</span><span>★ '+esc(item.rating)+'</span></div></a>';
-    return '<a class="cp-api-card" href="'+href+'"><div class="cp-api-poster"><img loading="lazy" src="'+esc(item.backdrop_url || img)+'" alt="Imagem de '+title+'" onerror="this.style.opacity=0"></div><div class="cp-api-title">'+title+'</div><div class="cp-api-meta">'+esc([year(item), (item.genres||[]).slice(0,1).join("")].filter(Boolean).join(" · "))+'</div><div class="cp-api-provider">'+esc(provider || "Ver onde assistir")+'</div></a>';
+    const primaryImage=item.backdrop_url||img,secondaryImage=item.poster_url&&item.poster_url!==primaryImage?item.poster_url:"";
+    return '<a class="cp-api-card" href="'+href+'"><div class="cp-api-poster cp-home-card-art" data-title="'+title+'"><img loading="lazy" src="'+esc(primaryImage)+'"'+(secondaryImage?' data-fallback="'+esc(secondaryImage)+'"':'')+' alt="Imagem de '+title+'" onerror="if(this.dataset.fallback){const next=this.dataset.fallback;this.dataset.fallback=\'\';this.src=next;}else{this.remove();this.parentElement.classList.add(\'cp-art-fallback\')}"><span class="cp-art-fallback-title">'+title+'</span></div><div class="cp-api-title">'+title+'</div><div class="cp-api-meta">'+esc([year(item), (item.genres||[]).slice(0,1).join("")].filter(Boolean).join(" · "))+'</div><div class="cp-api-provider">'+esc(provider || "Ver onde assistir")+'</div></a>';
   }
   function ensureStyles(){
     if($("#cp-api-styles")) return;
@@ -605,6 +606,11 @@
         .cp-home-app-fallback{font-size:11px;font-weight:850;line-height:1.05;overflow-wrap:anywhere}
         .cp-home-app-card:hover .cp-home-app-art{border-color:#ffffff55}
         .cp-home-news .cp-api-poster,.cp-home-continue .cp-api-poster{width:100%;aspect-ratio:16/9;border-radius:12px}
+        .cp-home-card-art{position:relative;background:linear-gradient(135deg,#202635,#10131c);isolation:isolate}
+        .cp-home-card-art img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;display:block;transition:opacity .2s}
+        .cp-home-card-art .cp-art-fallback-title{display:none}
+        .cp-home-card-art.cp-art-fallback{display:grid;place-items:end start;padding:14px;background:radial-gradient(ellipse at 75% 20%,#444d65 0,transparent 48%),linear-gradient(135deg,#202635,#10131c)}
+        .cp-home-card-art.cp-art-fallback .cp-art-fallback-title{display:block;position:relative;z-index:2;font-size:clamp(15px,2vw,22px);font-weight:850;line-height:1.1;max-width:90%;text-shadow:0 2px 12px #000}
         .cp-home-news .cp-api-title,.cp-home-continue .cp-api-title{font-size:14px}
         .cp-home-news-card{display:block;flex:0 0 clamp(280px,31vw,410px);min-width:0;scroll-snap-align:start;color:inherit;text-decoration:none}
         .cp-home-news-art{position:relative;aspect-ratio:16/9;border:1px solid #ffffff16;border-radius:12px;overflow:hidden;background-color:#151923;background-size:cover;background-position:center;transition:transform .25s,border-color .25s}
@@ -711,6 +717,23 @@
         if(event.key===RECENT_APPS_KEY)renderRecentApps();
       });
       window.addEventListener("pageshow",()=>{renderContinueWatching();renderRecentApps();});
+      const setHomeHeroImage=(element,item)=>{
+        if(!element||!item)return;
+        const candidates=[item.backdrop_url,item.poster_url].filter((url,index,all)=>url&&(url.startsWith("https://")||url.startsWith("http://"))&&all.indexOf(url)===index);
+        const base="linear-gradient(90deg,rgba(5,7,12,.34),rgba(5,7,12,.08)),linear-gradient(0deg,rgba(5,7,12,.58),transparent 68%)";
+        const tryImage=index=>{
+          if(index>=candidates.length){
+            element.style.backgroundImage=base+",radial-gradient(ellipse at 70% 25%,#343d54 0,transparent 48%),linear-gradient(135deg,#202635,#08090d)";
+            element.classList.add("cp-art-fallback");
+            return;
+          }
+          const probe=new Image();
+          probe.onload=()=>{element.style.backgroundImage=base+',url("'+candidates[index]+'")';element.classList.remove("cp-art-fallback");};
+          probe.onerror=()=>tryImage(index+1);
+          probe.src=candidates[index];
+        };
+        tryImage(0);
+      };
       const loadRail=async(id,type,section,limit=18)=>{
         const rail=$("#"+id,mount);
         try{
@@ -853,7 +876,7 @@
         const showFeature=(index)=>{
           activeSlide=(index+featuredItems.length)%featuredItems.length;
           const feature=featuredItems[activeSlide];
-          const hero=$("#cp-home-hero-art",mount);if(hero)hero.style.backgroundImage='linear-gradient(90deg,rgba(5,7,12,.28),rgba(5,7,12,.06)),url("'+(feature.backdrop_url||feature.poster_url||"")+'")';
+          const hero=$("#cp-home-hero-art",mount);if(hero)setHomeHeroImage(hero,feature);
           const title=$("#cp-home-hero-title",mount);if(title)title.textContent=feature.title;
           const dateLabel=feature.date?new Date(feature.date+"T12:00:00").toLocaleDateString("pt-BR",{day:"2-digit",month:"short",year:"numeric"}):year(feature);
           const platforms=(feature.provider_names||[]).slice(0,3).join(" · ");
@@ -895,7 +918,7 @@
             if(featuredItems.length&&typeof refreshHomeFeatured==="function")refreshHomeFeatured(refreshed);
             else{
               const feature=refreshed[0],hero=$("#cp-home-hero-art",mount),title=$("#cp-home-hero-title",mount);
-              if(hero)hero.style.backgroundImage='linear-gradient(90deg,rgba(5,7,12,.28),rgba(5,7,12,.06)),url("'+(feature.backdrop_url||feature.poster_url||"")+'")';
+              if(hero)setHomeHeroImage(hero,feature);
               if(title)title.textContent=feature.title;
               const meta=$("#cp-home-hero-meta",mount);if(meta)meta.textContent=[feature.type==="tv"?"Série":"Filme",year(feature),(feature.provider_names||[]).slice(0,3).join(" · ")].filter(Boolean).join(" · ");
               const overview=$("#cp-home-hero-overview",mount);if(overview)overview.textContent=feature.overview||"Descubra este lançamento disponível em streaming.";
