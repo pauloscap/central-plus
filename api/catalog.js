@@ -82,7 +82,7 @@ async function providers(type, id, auth) {
 module.exports = async function handler(req, res) {
   res.setHeader("Content-Type", "application/json; charset=utf-8");
   res.setHeader("X-Content-Type-Options", "nosniff");
-  res.setHeader("Cache-Control", "public, s-maxage=900, stale-while-revalidate=86400");
+  res.setHeader("Cache-Control", "public, max-age=300, s-maxage=900, stale-while-revalidate=86400");
   if (req.method !== "GET") {
     res.setHeader("Allow", "GET");
     return res.status(405).json({ error: "Método não permitido." });
