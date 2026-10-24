@@ -73,10 +73,10 @@
  function initAuth(){
   import("https://esm.sh/@supabase/supabase-js@2").then(function(mod){
    client=mod.createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+   client.auth.onAuthStateChange(function(_event,session){user=session&&session.user||null;if(user)syncLocal()});
    return client.auth.getSession();
   }).then(function(res){user=res.data&&res.data.session&&res.data.session.user||null;if(user)syncLocal()})
   .catch(function(e){console.warn("Central+ histórico/auth:",e.message)});
-  if(client&&client.auth)client.auth.onAuthStateChange(function(_event,session){user=session&&session.user||null;if(user)syncLocal()});
  }
  function start(){render();initAuth();window.addEventListener("pageshow",render);window.addEventListener("storage",function(e){if(e.key===MEDIA||e.key===APPS)render()})}
  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start,{once:true});else start();
