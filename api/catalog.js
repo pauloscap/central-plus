@@ -47,18 +47,35 @@ function normalize(item, type) {
     seasons: item.number_of_seasons || null,
     episodes: item.number_of_episodes || null,
     tmdb_url: "https://www.themoviedb.org/" + (isTv ? "tv/" : "movie/") + item.id,
-    provider_names: []
+    provider_names: [],\n    provider_options: [],\n    provider_link: ""
   };
 }
 async function providers(type, id, auth) {
   try {
     const data = await tmdb("/" + type + "/" + id + "/watch/providers", {}, auth);
     const br = data.results && data.results.BR;
-    if (!br) return [];
-    const list = [].concat(br.flatrate || [], br.rent || [], br.buy || []);
-    const names = [...new Set(list.map(p => p.provider_name).filter(Boolean))];
-    return names.slice(0, 5);
-  } catch (_) { return []; }
+    if (!br) return { names: [], options: [], link: "" };
+    const categories = [
+      ["flatrate", "Assinatura"], ["free", "Grátis"], ["ads", "Grátis com anúncios"],
+      ["rent", "Aluguel"], ["buy", "Compra"]
+    ];
+    const options = [];
+    for (const [key, label] of categories) {
+      for (const p of (br[key] || [])) {
+        if (!p.provider_name) continue;
+        options.push({
+          id: p.provider_id || null,
+          name: p.provider_name,
+          logo_url: image(p.logo_path, "w92"),
+          category: label,
+          category_key: key
+        });
+      }
+    }
+    const unique = options.filter((p, i, arr) => arr.findIndex(x => x.id === p.id && x.category_key === p.category_key) === i);
+    const names = [...new Set(unique.map(p => p.name))];
+    return { names: names.slice(0, 8), options: unique.slice(0, 16), link: br.link || "" };
+  } catch (_) { return { names: [], options: [], link: "" }; }
 }
 module.exports = async function handler(req, res) {
   res.setHeader("Content-Type", "application/json; charset=utf-8");
@@ -81,7 +98,7 @@ module.exports = async function handler(req, res) {
       if (!Number.isInteger(id) || id <= 0) return res.status(400).json({ error: "ID inválido." });
       const item = await tmdb("/" + type + "/" + id, { language: lang }, auth);
       const normalized = normalize(item, type);
-      normalized.provider_names = await providers(type, id, auth);
+      const availability = await providers(type, id, auth);\n      normalized.provider_names = availability.names;\n      normalized.provider_options = availability.options;\n      normalized.provider_link = availability.link;
       normalized.runtime = item.runtime || (item.episode_run_time && item.episode_run_time[0]) || null;
       return res.status(200).json({ item: normalized, source: "TMDB", region: "BR", updatedAt: new Date().toISOString() });
     }
@@ -102,7 +119,7 @@ module.exports = async function handler(req, res) {
     const items = (data.results || []).filter(x => x.poster_path).map(x => normalize(x, type));
     const enrich = String(q.providers || "true") !== "false";
     if (enrich) {
-      await Promise.all(items.slice(0, 12).map(async item => { item.provider_names = await providers(type, item.id, auth); }));
+      await Promise.all(items.slice(0, 12).map(async item => {\n        const availability = await providers(type, item.id, auth);\n        item.provider_names = availability.names;\n        item.provider_options = availability.options;\n        item.provider_link = availability.link;\n      }));
     }
     return res.status(200).json({
       items, page: data.page || 1, total_pages: data.total_pages || 1,
