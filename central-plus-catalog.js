@@ -17,6 +17,23 @@
   function ensureStyles(){
     if($("#cp-api-styles")) return;
     const style=document.createElement("style");style.id="cp-api-styles";style.textContent=`
+      .cp-film-wide{display:block;flex:0 0 clamp(245px,27vw,390px);min-width:0;color:inherit;text-decoration:none;scroll-snap-align:start;transition:transform .22s}
+      .cp-film-wide:hover{transform:translateY(-4px)}
+      .cp-film-wide-art{position:relative;aspect-ratio:16/9;border-radius:11px;overflow:hidden;border:1px solid #ffffff16;background:#151923 center/cover no-repeat}
+      .cp-film-wide-copy{position:absolute;left:14px;right:12px;bottom:13px;display:flex;flex-direction:column;gap:5px}
+      .cp-film-wide-copy strong{font-size:clamp(14px,1.5vw,19px);line-height:1.1;letter-spacing:-.035em}
+      .cp-film-wide-kicker{font-size:9px;color:#d0d4df;letter-spacing:.04em}
+      .cp-film-wide-badge{position:absolute;left:10px;top:10px;z-index:2;border:1px solid #ffffff38;border-radius:4px;padding:5px 7px;background:#080a10c9;font-size:9px;font-weight:750}
+      .cp-film-wide-meta{display:flex;justify-content:space-between;gap:8px;padding:8px 2px 0;font-size:10px;color:#aeb4c2}
+      .cp-streaming-rails-heading{padding:34px 0 10px}.cp-streaming-rails-heading h2{font-size:clamp(23px,3vw,34px);letter-spacing:-.05em;margin:8px 0}.cp-streaming-rails-heading p{font-size:12px;color:#aeb4c2}
+      .cp-streaming-row{margin:28px 0 34px}.cp-streaming-row-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-right:var(--gutter);margin-bottom:12px}.cp-streaming-row-head h3{margin:0;font-size:clamp(17px,2vw,22px);letter-spacing:-.035em}.cp-streaming-row-head span{font-size:10px;color:#939aaa}
+      .cp-streaming-row-track{display:flex;gap:14px;overflow-x:auto;overflow-y:hidden;padding:3px var(--gutter) 18px 3px;scroll-snap-type:x mandatory;scrollbar-width:none}.cp-streaming-row-track::-webkit-scrollbar{display:none}
+      .cp-streaming-status{font-size:12px;color:#aeb4c2;padding:12px 0}
+      .app[data-page="filmes"] #film-grid{display:flex;gap:14px;overflow-x:auto;overflow-y:hidden;padding:5px var(--gutter) 18px 3px;scroll-snap-type:x mandatory;scrollbar-width:none}
+      .app[data-page="filmes"] #film-grid::-webkit-scrollbar{display:none}
+      .app[data-page="filmes"] #film-grid .cp-film-wide[hidden]{display:none}
+      .app[data-page="filmes"] .film-toolbar{align-items:center}
+      @media(max-width:600px){.cp-film-wide{flex-basis:78vw}.cp-streaming-row-head span{display:none}.cp-streaming-row{margin:22px 0}.cp-streaming-rails-heading{padding-top:25px}}
       .cp-api-live{padding:32px clamp(18px,4vw,64px);background:#08090d;color:#f6f7fb;font-family:Inter,system-ui,sans-serif}
       .cp-api-live h2{font-size:clamp(20px,2.2vw,28px);letter-spacing:-.04em;margin:0 0 6px;font-weight:750}
       .cp-api-live .cp-api-sub{font-size:12px;color:#9da3b1;margin-bottom:18px}
@@ -82,6 +99,88 @@
     const play=$(isTv?"#series-feature-play":"#film-feature-play"),more=$(isTv?"#series-feature-details":"#film-feature-details");
     const href=detailHref(item);[play,more].filter(Boolean).forEach(btn=>{btn.onclick=()=>{window.location.href=href}});
   }
+  const MOVIE_GENRES = [
+    [28,"acao","Ação"],[12,"aventura","Aventura"],[16,"animacao","Animação"],
+    [35,"comedia","Comédia"],[80,"crime","Crime"],[99,"documentario","Documentário"],
+    [18,"drama","Drama"],[10751,"familia","Família"],[14,"fantasia","Fantasia"],
+    [27,"terror","Terror"],[9648,"misterio","Mistério"],[10749,"romance","Romance"],
+    [878,"ficcao","Ficção científica"],[53,"suspense","Suspense"],[10752,"guerra","Guerra"]
+  ];
+  const STREAMING_SERVICES = [
+    {label:"Netflix",provider:"8"},{label:"Prime Video",provider:"9"},
+    {label:"Disney+",provider:"337"},{label:"Apple TV+",provider:"350"},
+    {label:"Max / HBO Max",provider:"1899|384"},{label:"Paramount+",provider:"531"},
+    {label:"Crunchyroll",provider:"283"}
+  ];
+  function movieGenreSlugs(item){
+    return (item.genre_ids||[]).map(id=>{const g=MOVIE_GENRES.find(x=>x[0]===id);return g?g[1]:"";}).filter(Boolean).join(" ");
+  }
+  function horizontalMovieCard(item, serviceLabel){
+    const href=detailHref(item), image=poster(item), title=esc(item.title);
+    const genres=(item.genres||[]).slice(0,2).join(" · ");
+    return '<a class="cp-film-wide" href="'+href+'" data-genre="'+movieGenreSlugs(item)+'" data-title="'+title+'">'+
+      '<div class="cp-film-wide-art" style="background-image:linear-gradient(0deg,rgba(4,5,9,.9),rgba(4,5,9,.02) 78%),url(&quot;'+esc(image)+'&quot;)">'+
+      '<span class="cp-film-wide-badge">'+esc(serviceLabel||providers(item)||"Streaming")+'</span>'+
+      '<div class="cp-film-wide-copy"><span class="cp-film-wide-kicker">'+esc(genres||"Filme")+'</span><strong>'+title+'</strong></div></div>'+
+      '<div class="cp-film-wide-meta"><span>'+esc(year(item)||"Filme")+'</span><span>Ver detalhes ↗</span></div></a>';
+  }
+  async function fetchStreamingProvider(provider){
+    const response=await fetch(API+"&type=movie&section=streaming&providers=false&provider="+encodeURIComponent(provider));
+    const data=await response.json();
+    if(!response.ok)throw new Error(data.error||"Streaming indisponível");
+    return data.items||[];
+  }
+  function renderFilmStreamingPage(items, launches){
+    const grid=$("#film-grid"),filterRoot=$(".film-filters");
+    if(!grid)return;
+    const title=$("#filmes .films-intro h1");
+    if(title)title.innerHTML='Filmes para <span>assistir agora.</span>';
+    const intro=$("#filmes .films-intro p");
+    if(intro)intro.textContent="Lançamentos e descobertas disponíveis nos serviços de streaming no Brasil. Escolha um gênero ou explore por plataforma.";
+    const featured=(launches||[]).find(item=>(item.provider_names||[]).length)||((launches||[])[0]);
+    const featureNode=$("#film-feature");
+    if(featured){
+      updateFeature(featured,"movie");
+      const kicker=$("#film-feature-kicker");
+      if(kicker)kicker.textContent="LANÇAMENTO NO STREAMING · "+(providers(featured)||"DISPONÍVEL NO BRASIL");
+      const runtime=$("#film-feature-runtime");if(runtime)runtime.textContent="Filme";
+      const index=$("#film-feature-index-number");if(index)index.textContent="01";
+      const dots=$(".film-feature-dots");if(dots)dots.hidden=true;
+      const controls=$(".film-feature-controls");if(controls)controls.hidden=true;
+      if(featureNode)featureNode.dataset.apiManaged="true";
+    } else if(featureNode){featureNode.hidden=true;}
+    grid.innerHTML=(items||[]).map(item=>horizontalMovieCard(item)).join("");
+    const genreList=MOVIE_GENRES.filter(g=>(items||[]).some(item=>(item.genre_ids||[]).includes(g[0])));
+    if(filterRoot){
+      filterRoot.innerHTML='<button class="film-filter active" data-filter="todos" type="button">Todos</button>'+
+        genreList.map(g=>'<button class="film-filter" data-filter="'+g[1]+'" type="button">'+g[2]+'</button>').join("");
+      filterRoot.setAttribute("aria-label","Filtrar filmes por gênero");
+      filterRoot.querySelectorAll("[data-filter]").forEach(button=>button.addEventListener("click",()=>{
+        const selected=button.dataset.filter||"todos";
+        grid.querySelectorAll(".cp-film-wide").forEach(tile=>{tile.hidden=selected!=="todos"&&tile.dataset.genre.split(" ").indexOf(selected)<0;});
+        filterRoot.querySelectorAll(".film-filter").forEach(b=>{const active=b===button;b.classList.toggle("active",active);b.setAttribute("aria-pressed",active?"true":"false");});
+        const count=$("#film-count");if(count)count.textContent=String([...grid.querySelectorAll(".cp-film-wide")].filter(tile=>!tile.hidden).length);
+      }));
+    }
+    const count=$("#film-count");if(count)count.textContent=String((items||[]).length);
+    const empty=$("#film-empty");if(empty)empty.hidden=(items||[]).length>0;
+    let rails=$("#cp-film-streaming-rails");
+    if(!rails){rails=document.createElement("div");rails.id="cp-film-streaming-rails";const parent=grid.parentElement;if(parent)parent.insertAdjacentElement("afterend",rails);}
+    rails.innerHTML='<div class="cp-streaming-rails-heading"><div class="eyebrow">EXPLORE POR PLATAFORMA</div><h2>O que assistir em cada streaming</h2><p>Filmes disponíveis para assistir por assinatura ou gratuitamente no Brasil.</p></div>'+
+      STREAMING_SERVICES.map(service=>'<section class="cp-streaming-row" data-service="'+esc(service.label)+'"><div class="cp-streaming-row-head"><h3>'+esc(service.label)+'</h3><span>Disponíveis no Brasil</span></div><div class="cp-streaming-row-track"><p class="cp-streaming-status">Carregando filmes…</p></div></section>').join("");
+    const disclaimer=$("#filmes .film-disclaimer");
+    if(disclaimer)disclaimer.textContent="Catálogo e disponibilidade para o Brasil consultados via TMDB/JustWatch. A oferta pode mudar; confirme no serviço antes de assistir.";
+    STREAMING_SERVICES.forEach(async service=>{
+      const row=rails.querySelector('[data-service="'+service.label+'"]');
+      const track=row&&row.querySelector(".cp-streaming-row-track");
+      if(!track)return;
+      try{
+        const titles=await fetchStreamingProvider(service.provider);
+        if(!titles.length){row.remove();return;}
+        track.innerHTML=titles.map(item=>horizontalMovieCard(item,service.label)).join("");
+      }catch(_){track.innerHTML='<p class="cp-streaming-status">Não foi possível carregar esta fileira agora.</p>';}
+    });
+  }
   async function fillPage() {
     ensureStyles();
     const path=location.pathname;
@@ -90,6 +189,15 @@
     if(isFilmPage||isSeriesPage){
       const type=isSeriesPage?"tv":"movie";
       const grid=$(isSeriesPage?"#series-grid":"#film-grid");
+      if(isFilmPage){
+        try {
+          const results=await Promise.all([fetchItems("movie","streaming"),fetchItems("movie","streaming_new")]);
+          renderFilmStreamingPage(results[0],results[1]);
+        } catch(error) {
+          if(grid){const note=document.createElement("p");note.className="cp-api-status";note.textContent="Não foi possível carregar os opções de streaming: "+error.message;grid.prepend(note)}
+        }
+        return;
+      }
       try {
         const items = await fetchItems(type,"trending");
         renderCatalogGrid(items,type);
