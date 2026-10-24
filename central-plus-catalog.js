@@ -79,7 +79,7 @@
     `;document.head.appendChild(style);
   }
   async function fetchItems(type, section, providersEnabled=true) {
-    const response=await fetch(API+"?type="+type+"&section="+section+"&providers="+providersEnabled);
+    const response=await fetch(API+"?type="+type+"&section="+section+"&providers="+providersEnabled,{cache:"no-store"});
     const data=await response.json();
     if(!response.ok) throw new Error(data.error || "Catálogo indisponível");
     return data.items || [];
@@ -169,7 +169,7 @@
       '<div class="cp-film-wide-meta"><span>'+esc(year(item)||"Filme")+'</span><span>Ver detalhes ↗</span></div></a>';
   }
   async function fetchStreamingProvider(provider,type="movie"){
-    const response=await fetch(API+"?type="+encodeURIComponent(type)+"&section=streaming&providers=true&provider="+encodeURIComponent(provider));
+    const response=await fetch(API+"?type="+encodeURIComponent(type)+"&section=streaming&providers=true&provider="+encodeURIComponent(provider),{cache:"no-store"});
     const data=await response.json();
     if(!response.ok)throw new Error(data.error||"Streaming indisponível");
     return data.items||[];
