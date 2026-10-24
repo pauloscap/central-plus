@@ -165,7 +165,7 @@
     const count=$("#film-count");if(count)count.textContent=String((items||[]).length);
     const empty=$("#film-empty");if(empty)empty.hidden=(items||[]).length>0;
     let rails=$("#cp-film-streaming-rails");
-    if(!rails){rails=document.createElement("div");rails.id="cp-film-streaming-rails";const parent=grid.parentElement;if(parent)parent.insertAdjacentElement("afterend",rails);}
+    if(!rails){rails=document.createElement("div");rails.id="cp-film-streaming-rails";grid.insertAdjacentElement("afterend",rails);}
     rails.innerHTML='<div class="cp-streaming-rails-heading"><div class="eyebrow">EXPLORE POR PLATAFORMA</div><h2>O que assistir em cada streaming</h2><p>Filmes disponíveis para assistir por assinatura ou gratuitamente no Brasil.</p></div>'+
       STREAMING_SERVICES.map(service=>'<section class="cp-streaming-row" data-service="'+esc(service.label)+'"><div class="cp-streaming-row-head"><h3>'+esc(service.label)+'</h3><span>Disponíveis no Brasil</span></div><div class="cp-streaming-row-track"><p class="cp-streaming-status">Carregando filmes…</p></div></section>').join("");
     const disclaimer=$("#filmes .film-disclaimer");
