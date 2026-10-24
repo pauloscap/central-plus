@@ -9,7 +9,7 @@
   const genreSlug = item => (item.genre_ids || []).map(id => ({878:"ficcao",10765:"ficcao",18:"drama",14:"fantasia",53:"suspense",9648:"suspense",35:"comedia",16:"animacao",80:"crime",12:"aventura",10759:"aventura",28:"acao"}[id] || "")).filter(Boolean).join(" ");
   function card(item, kind) {
     const href = detailHref(item), img = poster(item), title = esc(item.title), meta = [year(item), (item.genres || []).slice(0,2).join(" · ")].filter(Boolean).join(" · ");
-    const provider = providers(item);
+    const provider = providers(item) || (kind === "home" ? "Disponível no streaming" : "");
     if (kind === "series") return '<a class="series-tile" href="'+href+'" data-series="tmdb-'+item.id+'" data-genres="'+genreSlug(item)+'" data-title="'+title+'" data-focusable><div class="series-tile-art" style="background-image:linear-gradient(0deg,rgba(4,5,9,.88),rgba(4,5,9,.05)),url(&quot;'+esc(img)+'&quot;)"><div class="series-tile-copy"><div class="series-tile-kicker">'+esc((item.genres||[]).slice(0,2).join(" · ") || "Série")+'</div><div class="series-tile-title">'+title+'</div></div></div><div class="series-tile-meta"><span>'+esc(meta || "Série")+'</span><span>'+esc(provider || "Ver opções")+'</span></div></a>';
     if (kind === "films") return '<a class="film-tile" href="'+href+'" data-focusable data-genre="'+genreSlug(item)+'" data-title="'+title+'"><div class="poster" style="aspect-ratio:2/3"><img loading="lazy" src="'+esc(img)+'" alt="Pôster de '+title+'" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display=\'none\'"><span class="poster-badge">'+esc(provider || "Catálogo TMDB")+'</span><div class="poster-copy"><div class="poster-kicker">'+esc((item.genres||[]).slice(0,2).join(" · "))+'</div><div class="poster-title">'+title+'</div></div></div><div class="film-tile-meta"><span>'+esc(year(item))+'</span><span>★ '+esc(item.rating)+'</span></div></a>';
     const primaryImage=item.backdrop_url||img,secondaryImage=item.poster_url&&item.poster_url!==primaryImage?item.poster_url:"";
@@ -255,13 +255,30 @@
       STREAMING_SERVICES.map(service=>'<section class="cp-streaming-row" data-series-service="'+esc(service.label)+'"><div class="cp-streaming-row-head"><h3>'+esc(service.label)+'</h3><span>Disponíveis no Brasil</span></div><div class="cp-streaming-row-track" aria-label="Séries na plataforma '+esc(service.label)+'"><p class="cp-streaming-status">Carregando séries…</p></div></section>').join("");
     const disclaimer=$("#series .series-disclaimer");
     if(disclaimer)disclaimer.textContent="Catálogo e disponibilidade para o Brasil consultados via TMDB/JustWatch. A oferta pode mudar; confirme no serviço antes de assistir.";
-    for(const service of STREAMING_SERVICES){
+    // Carregamento sob demanda: as plataformas abaixo da dobra só consultam a API quando estão próximas da tela.
+    const loadSeriesService=async service=>{
       const row=rails.querySelector('[data-series-service="'+service.label+'"]'),track=row&&row.querySelector(".cp-streaming-row-track");
-      if(!track)continue;
+      if(!track||row.dataset.loaded==="true")return;
+      row.dataset.loaded="true";
+      track.innerHTML='<p class="cp-streaming-status">Carregando '+esc(service.label)+'…</p>';
       try{
         const titles=await fetchStreamingProvider(service.provider,"tv");
         track.innerHTML=titles.length?titles.slice(0,12).map(item=>horizontalSeriesCard(item,service.label)).join(""):'<p class="cp-streaming-status">Nenhuma série disponível nesta plataforma nos resultados atuais do catálogo brasileiro.</p>';
-      }catch(_){track.innerHTML='<p class="cp-streaming-status">Não foi possível carregar esta fileira agora.</p>';}
+      }catch(_){track.innerHTML='<p class="cp-streaming-status">Não foi possível carregar esta fileira agora.</p>';row.dataset.loaded="false";}
+    };
+    if("IntersectionObserver" in window){
+      const observer=new IntersectionObserver(entries=>{
+        entries.filter(entry=>entry.isIntersecting).forEach(entry=>{
+          observer.unobserve(entry.target);
+          const service=STREAMING_SERVICES.find(item=>item.label===entry.target.dataset.seriesService);
+          if(service)loadSeriesService(service);
+        });
+      },{rootMargin:"700px 0px"});
+      STREAMING_SERVICES.forEach(service=>{const row=rails.querySelector('[data-series-service="'+service.label+'"]');if(row)observer.observe(row);});
+    }else{
+      for(let start=0;start<STREAMING_SERVICES.length;start+=3){
+        await Promise.all(STREAMING_SERVICES.slice(start,start+3).map(loadSeriesService));
+      }
     }
   }
   async function renderFilmStreamingPage(items, launches){
@@ -359,22 +376,31 @@
     const disclaimer=$("#filmes .film-disclaimer");
     if(disclaimer)disclaimer.textContent="Catálogo e disponibilidade para o Brasil consultados via TMDB/JustWatch. A oferta pode mudar; confirme no serviço antes de assistir.";
 
-    // Carrega três fileiras em paralelo por lote: a página aparece antes e as plataformas não bloqueiam umas às outras.
-    for(let start=0;start<STREAMING_SERVICES.length;start+=3){
-      const batch=STREAMING_SERVICES.slice(start,start+3);
-      await Promise.all(batch.map(async service=>{
-        const row=rails.querySelector('[data-service="'+service.label+'"]');
-        const track=row&&row.querySelector(".cp-streaming-row-track");
-        if(!track)return;
-        try{
-          const titles=await fetchStreamingProvider(service.provider);
-          if(!titles.length){
-            track.innerHTML='<p class="cp-streaming-status">Nenhum filme disponível nesta plataforma nos resultados atuais do catálogo brasileiro.</p>';
-            return;
-          }
-          track.innerHTML=titles.slice(0,12).map(item=>horizontalMovieCard(item,service.label)).join("");
-        }catch(_){track.innerHTML='<p class="cp-streaming-status">Não foi possível carregar esta fileira agora.</p>';}
-      }));
+    // As fileiras por streaming são carregadas perto da área visível para não atrasar o destaque e os primeiros cards.
+    const loadFilmService=async service=>{
+      const row=rails.querySelector('[data-service="'+service.label+'"]');
+      const track=row&&row.querySelector(".cp-streaming-row-track");
+      if(!track||row.dataset.loaded==="true")return;
+      row.dataset.loaded="true";
+      track.innerHTML='<p class="cp-streaming-status">Carregando '+esc(service.label)+'…</p>';
+      try{
+        const titles=await fetchStreamingProvider(service.provider);
+        track.innerHTML=titles.length?titles.slice(0,12).map(item=>horizontalMovieCard(item,service.label)).join(""):'<p class="cp-streaming-status">Nenhum filme disponível nesta plataforma nos resultados atuais do catálogo brasileiro.</p>';
+      }catch(_){track.innerHTML='<p class="cp-streaming-status">Não foi possível carregar esta fileira agora.</p>';row.dataset.loaded="false";}
+    };
+    if("IntersectionObserver" in window){
+      const observer=new IntersectionObserver(entries=>{
+        entries.filter(entry=>entry.isIntersecting).forEach(entry=>{
+          observer.unobserve(entry.target);
+          const service=STREAMING_SERVICES.find(item=>item.label===entry.target.dataset.service);
+          if(service)loadFilmService(service);
+        });
+      },{rootMargin:"700px 0px"});
+      STREAMING_SERVICES.forEach(service=>{const row=rails.querySelector('[data-service="'+service.label+'"]');if(row)observer.observe(row);});
+    }else{
+      for(let start=0;start<STREAMING_SERVICES.length;start+=3){
+        await Promise.all(STREAMING_SERVICES.slice(start,start+3).map(loadFilmService));
+      }
     }
   }
   async function fillPage() {
