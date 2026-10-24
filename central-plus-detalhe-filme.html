@@ -104,6 +104,16 @@ Object.entries(movies).filter(([relKey])=>relKey!==key).slice(0,6).forEach(([rel
 function loadArtwork(url, target, isPoster){const img=new Image();img.onload=()=>{target.style.backgroundImage='linear-gradient(0deg,#08090d10,#08090d10),url(\"'+url+'\")';if(isPoster)target.classList.add('has-image')};img.onerror=()=>{target.style.backgroundImage=m.art;if(isPoster)target.classList.remove('has-image')};img.src=url;}
 loadArtwork(m.backdropImage||m.posterImage,hero,false);loadArtwork(m.posterImage,posterEl,true);
 const streamBtn=document.getElementById('streamBtn');streamBtn.href=service.direct||getServiceSearch(service.type,m.search);streamBtn.innerHTML='▶ Assistir no '+service.button;streamBtn.title='Buscar '+m.title+' no '+service.button;
+if(!params.has('tmdbId')){
+  streamBtn.addEventListener('click',()=>{
+    try{
+      const historyKey='centralplus-watch-history-v1';
+      const entry={id:key,type:'movie',title:m.title,url:location.pathname+location.search,image:m.backdropImage||m.posterImage||'',provider:service.label||service.button||'',nextEpisode:null,updatedAt:Date.now()};
+      const old=JSON.parse(localStorage.getItem(historyKey)||'[]');
+      localStorage.setItem(historyKey,JSON.stringify([entry,...(Array.isArray(old)?old:[]).filter(x=>x&&!(String(x.id)===String(entry.id)&&x.type==='movie'))].slice(0,20)));
+    }catch(_){}
+  });
+}
 const optionsBtn=document.getElementById('watchOptionsBtn');optionsBtn.href=service.justwatch;optionsBtn.title='Conferir serviços de assinatura, aluguel e compra para '+m.title;
 document.getElementById('trailerBtn').href='https://www.youtube.com/results?search_query='+encodeURIComponent(m.search+' trailer oficial');
 const favKey='centralplus-favoritos';function getFavs(){try{return JSON.parse(localStorage.getItem(favKey)||'[]')}catch(e){return []}}function isFav(){return getFavs().includes(key)}const fav=document.getElementById('favoriteBtn');function updateFav(){fav.textContent=isFav()?'✓ Na minha lista':'♡ Adicionar aos favoritos'}updateFav();fav.addEventListener('click',()=>{let arr=getFavs();if(arr.includes(key)){arr=arr.filter(x=>x!==key);showToast('Filme removido dos favoritos')}else{arr.push(key);showToast('Filme adicionado aos favoritos')}try{localStorage.setItem(favKey,JSON.stringify(arr))}catch(e){showToast('O navegador não permitiu salvar favoritos')}updateFav()});function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
