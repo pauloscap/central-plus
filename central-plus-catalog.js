@@ -405,6 +405,17 @@
           const res=await fetch(API+"?type="+type+"&section=details&id="+encodeURIComponent(id)),data=await res.json();
           if(!res.ok)throw new Error(data.error||"Ficha indisponível");
           const item=data.item;
+          const watchHistoryKey="centralplus-watch-history-v1";
+          const saveWatchHistory=(nextEpisode)=>{
+            try{
+              const savedProgress=JSON.parse(localStorage.getItem("centralplus-series-progress-v1")||"{}");
+              const progress=Number.isInteger(savedProgress[String(item.id||item.title).toLowerCase()])?savedProgress[String(item.id||item.title).toLowerCase()]:0;
+              const entry={id:String(item.id),type,title:item.title,url:location.pathname+location.search,image:item.backdrop_url||item.poster_url||"",provider:(item.provider_names||[]).slice(0,2).join(" · "),nextEpisode:type==="tv"?(Number(nextEpisode)||progress+1):null,updatedAt:Date.now()};
+              const old=JSON.parse(localStorage.getItem(watchHistoryKey)||"[]");
+              const list=[entry,...(Array.isArray(old)?old:[]).filter(x=>x&&!(String(x.id)===entry.id&&x.type===entry.type))].slice(0,20);
+              localStorage.setItem(watchHistoryKey,JSON.stringify(list));
+            }catch(_){}
+          };
           const set=(selector,value)=>{const el=$(selector);if(el&&value!==undefined&&value!==null)el.textContent=value};
           set("#title",item.title);set("#posterTitle",item.title);set("#year",item.year);set("#yearFact",item.year);
           set("#genre",(item.genres||[]).join(" · "));set("#genreFact",(item.genres||[]).join(" · "));
@@ -539,6 +550,23 @@
             }else{
               stream.href=providerSearch?providerSearch+encodeURIComponent(item.title):"#";
               stream.textContent="▶ Assistir";
+            }
+          }
+          if(stream&&!stream.dataset.historyBound){
+            stream.dataset.historyBound="true";
+            stream.addEventListener("click",()=>saveWatchHistory());
+          }
+          if(type==="tv"){
+            const watchedForHistory=$("#episodeWatchedBtn");
+            if(watchedForHistory&&!watchedForHistory.dataset.historyBound){
+              watchedForHistory.dataset.historyBound="true";
+              watchedForHistory.addEventListener("click",()=>{
+                try{
+                  const saved=JSON.parse(localStorage.getItem("centralplus-series-progress-v1")||"{}");
+                  const watched=Number(saved[String(item.id||item.title).toLowerCase()]||0);
+                  saveWatchHistory(watched+1);
+                }catch(_){saveWatchHistory();}
+              });
             }
           }
           const options=$("#watchOptionsBtn");if(options){options.href="#cp-provider-cartela";options.textContent="Ver opções no Brasil";options.addEventListener("click",event=>{event.preventDefault();const panel=$("#cp-provider-cartela");if(panel)panel.scrollIntoView({behavior:"smooth",block:"start"});});}
