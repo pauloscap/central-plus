@@ -34,6 +34,20 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
 .art-sports{background:radial-gradient(ellipse at 50% 60%,#a7c98e,#446d47 20%,transparent 53%),linear-gradient(145deg,#1b342b,#080d0b)}.art-sports:before{content:"";position:absolute;inset:18% 12%;border:1px solid #e3f4d477;border-radius:45%}
 .art-live{background:radial-gradient(ellipse at 50% 40%,#d9a27e,#7d5147 22%,transparent 54%),linear-gradient(145deg,#29212b,#090a10)}.art-live:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 35px,#07080d66 36px 42px)}
 .footer{padding:28px var(--gutter) 42px;border-top:1px solid #ffffff0c;color:#747985;font-size:11px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.footer strong{color:#d5d7df;font-size:13px;letter-spacing:-.4px}.toast{position:fixed;z-index:50;left:50%;bottom:28px;transform:translate(-50%,20px);opacity:0;pointer-events:none;padding:13px 18px;border:1px solid #ffffff25;border-radius:10px;background:#171a23ed;box-shadow:0 16px 50px #0008;color:#f4f5f8;font-size:13px;transition:opacity .2s,transform .2s;max-width:calc(100vw - 32px);text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}.search-panel{position:fixed;inset:0;z-index:40;background:#06070bd9;backdrop-filter:blur(18px);display:none;align-items:flex-start;justify-content:center;padding:15vh 24px 30px}.search-panel.open{display:flex}.search-box{width:min(720px,100%);border-bottom:1px solid #ffffff6e;padding-bottom:17px;display:flex;gap:16px;align-items:center}.search-box input{flex:1;background:transparent;border:0;outline:0;color:#fff;font-size:clamp(24px,4vw,42px);letter-spacing:-.04em;min-width:0}.search-box input::placeholder{color:#737987}.search-close{border:1px solid #ffffff30;border-radius:8px;padding:10px 14px;background:#ffffff10;font-size:12px}
+.search-panel.open{display:flex;flex-direction:column;align-items:center;overflow-y:auto}
+.search-box{flex:0 0 auto}
+.search-results{width:min(720px,100%);max-height:min(58vh,620px);overflow-y:auto;padding-top:12px}
+.search-results:empty{display:none}
+.search-results-status{padding:18px 2px;color:#9ca4b5;font-size:13px;line-height:1.5}
+.search-result{display:flex;align-items:center;gap:14px;padding:10px 12px;margin:3px 0;border:1px solid transparent;border-radius:12px;color:#f6f7fb;text-decoration:none;transition:background .16s,border-color .16s}
+.search-result:hover,.search-result:focus-visible{outline:none;background:#ffffff10;border-color:#ffffff25}
+.search-result-poster{width:48px;height:68px;flex:0 0 48px;border-radius:6px;object-fit:cover;background:#171b24}
+.search-result-copy{min-width:0;flex:1;display:flex;flex-direction:column}
+.search-result-title{font-size:14px;font-weight:750;line-height:1.3;overflow-wrap:anywhere}
+.search-result-meta{margin-top:5px;color:#a8afbd;font-size:11px}
+.search-result-type{flex:0 0 auto;padding:5px 8px;border:1px solid #ffffff20;border-radius:999px;color:#d3d8e2;font-size:10px}
+@media(max-width:600px){.search-panel.open{padding:10vh 16px 24px}.search-box{gap:10px}.search-box svg{width:22px}.search-box input{font-size:22px}.search-close{padding:8px;font-size:10px}.search-result{gap:10px;padding:9px 6px}.search-result-poster{width:42px;height:60px;flex-basis:42px}.search-result-title{font-size:13px}.search-result-type{font-size:9px;padding:4px 6px}}
+
 @media(max-width:1050px){.topbar{gap:14px}.nav{gap:2px}.nav a{font-size:12px;padding:9px 9px}.hero-content{width:58vw}.hero-art:before{right:-8%}.hero-description{font-size:14px;max-width:420px}}
 @media(max-width:760px){:root{--gutter:20px}.topbar{min-height:108px;padding-top:12px;padding-bottom:8px;gap:10px;align-content:center;flex-wrap:wrap}.brand{font-size:20px}.brand-mark{width:28px;height:28px}.nav{order:3;flex:0 0 100%;width:100%;padding:2px 0 5px;gap:4px}.nav a{font-size:12px;padding:8px 11px}.top-actions{gap:8px}.hero{height:670px;min-height:620px;max-height:78vh}.hero-art:before{width:105vw;height:105vw;right:-35%;top:0;opacity:.65}.hero-grain{background:linear-gradient(90deg,#080a10 0%,rgba(8,10,16,.77) 55%,rgba(8,10,16,.25) 100%),linear-gradient(0deg,#07080c 0%,transparent 40%,#07080c55 100%)}.hero-content{top:175px;width:calc(100% - 2 * var(--gutter));max-width:500px}.hero h1{font-size:clamp(48px,13vw,72px)}.hero-description{max-width:390px;font-size:14px}.hero-bottom{bottom:26px}.hero-hint{display:none}.section-head{align-items:center}.section-title{font-size:20px}.section-subtitle{font-size:11px}.content-section{margin-bottom:30px}.rail{gap:11px}.card{flex-basis:190px}.continue-rail .card{flex-basis:230px}.news-rail .card{flex-basis:230px}.apps-rail .card{flex-basis:150px}.live-rail .card{flex-basis:220px}.poster-title{font-size:16px}.poster-fav{opacity:1}.footer{padding-bottom:30px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
@@ -142,7 +156,7 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
 </main>
 <footer class="footer"><div><strong>central<span style="color:#b8c1d5">+</span></strong><div style="margin-top:7px">Uma experiência para descobrir o que assistir.</div></div><div>Protótipo visual v1 · Carrossel demonstrativo · Não publicado</div></footer>
 </div>
-<div class="search-panel" id="search-panel" role="dialog" aria-modal="true" aria-label="Buscar conteúdo"><div class="search-box"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10.8" cy="10.8" r="6.7"/><path d="m16 16 4.4 4.4"/></svg><input id="search-input" type="search" placeholder="Filmes, séries, apps..." aria-label="Buscar filmes, séries e aplicativos"><button class="search-close" id="search-close" data-focusable>Fechar · Esc</button></div></div>
+<div class="search-panel" id="search-panel" role="dialog" aria-modal="true" aria-label="Buscar conteúdo"><div class="search-box"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.7"/><path d="m16 16 4.4 4.4"/></svg><input id="search-input" type="search" placeholder="Buscar filmes e séries..." aria-label="Buscar filmes e séries" autocomplete="off" aria-controls="search-results"><button class="search-close" id="search-close" data-focusable>Fechar · Esc</button></div><div class="search-results" id="search-results" role="listbox" aria-label="Resultados da busca" aria-live="polite"></div></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 (function(){
@@ -165,9 +179,54 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
   document.getElementById('hero-play').addEventListener('click',()=>notify('Prévia visual: aqui será conectado o detalhe ou serviço do título.'));
   document.getElementById('hero-info').addEventListener('click',()=>notify('A ficha completa do título será implementada na próxima etapa.'));
   document.getElementById('profile-button').addEventListener('click',()=>notify('Perfis entram em uma etapa futura.'));
-  const searchPanel=document.getElementById('search-panel'),searchInput=document.getElementById('search-input');function openSearch(){searchPanel.classList.add('open');searchInput.value='';setTimeout(()=>searchInput.focus(),40)}function closeSearch(){searchPanel.classList.remove('open');document.getElementById('search-open').focus()}
-  document.getElementById('search-open').addEventListener('click',openSearch);document.getElementById('search-close').addEventListener('click',closeSearch);searchPanel.addEventListener('click',e=>{if(e.target===searchPanel)closeSearch()});
-  searchInput.addEventListener('input',()=>{const q=searchInput.value.trim().toLocaleLowerCase('pt-BR');document.querySelectorAll('.card[data-title]').forEach(c=>{c.dataset.searchMatch=!q||c.dataset.title.toLocaleLowerCase('pt-BR').includes(q)?'1':'0'})});
+  const searchPanel=document.getElementById('search-panel'),searchInput=document.getElementById('search-input'),searchResults=document.getElementById('search-results');
+  let searchTimer=null,searchController=null,searchRequest=0;
+  const searchEsc=value=>String(value||'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  function closeSearch(){searchPanel.classList.remove('open');if(searchTimer)clearTimeout(searchTimer);if(searchController)searchController.abort();document.getElementById('search-open').focus()}
+  function openSearch(){searchPanel.classList.add('open');searchInput.value='';searchResults.innerHTML='<div class="search-results-status">Digite o nome de um filme ou série para pesquisar.</div>';setTimeout(()=>searchInput.focus(),40)}
+  function renderSearchResults(items,q){
+    if(!items.length){searchResults.innerHTML='<div class="search-results-status">Nenhum filme ou série encontrado para “'+searchEsc(q)+'”. Tente outro título.</div>';return}
+    searchResults.innerHTML=items.map(item=>{
+      const isSeries=item.type==='tv',href=(isSeries?'/central-plus-detalhe-serie.html':'/central-plus-detalhe-filme.html')+'?tmdbId='+encodeURIComponent(item.id)+'&tipo='+(isSeries?'tv':'movie');
+      const image=item.poster_url||item.backdrop_url||'',title=searchEsc(item.title),year=item.year&&item.year!=='—'?item.year:'';
+      return '<a class="search-result" role="option" data-focusable href="'+href+'" aria-label="Abrir detalhes de '+title+'"><img class="search-result-poster" src="'+searchEsc(image)+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'"><span class="search-result-copy"><span class="search-result-title">'+title+'</span><span class="search-result-meta">'+searchEsc([year,(item.genres||[]).slice(0,2).join(' · ')].filter(Boolean).join(' · ')||'Catálogo Central+')+'</span></span><span class="search-result-type">'+(isSeries?'Série':'Filme')+'</span></a>';
+    }).join('');
+  }
+  async function runSearch(rawQuery){
+    const q=rawQuery.trim();
+    if(searchController)searchController.abort();
+    if(q.length<2){searchResults.innerHTML='<div class="search-results-status">Digite pelo menos 2 caracteres para buscar.</div>';return}
+    const request=++searchRequest;searchController=new AbortController();
+    searchResults.innerHTML='<div class="search-results-status">Buscando filmes e séries…</div>';
+    const endpoint='/api/catalog?section=search&query='+encodeURIComponent(q)+'&providers=false&language=pt-BR';
+    try{
+      const responses=await Promise.allSettled([
+        fetch(endpoint+'&type=movie',{signal:searchController.signal}).then(r=>{if(!r.ok)throw new Error('Filmes indisponíveis');return r.json()}),
+        fetch(endpoint+'&type=tv',{signal:searchController.signal}).then(r=>{if(!r.ok)throw new Error('Séries indisponíveis');return r.json()})
+      ]);
+      if(request!==searchRequest||!searchPanel.classList.contains('open'))return;
+      const items=responses.flatMap(result=>result.status==='fulfilled'?(result.value.items||[]):[]);
+      const normalized=q.toLocaleLowerCase('pt-BR');
+      items.sort((a,b)=>{
+        const score=item=>{const title=(item.title||'').toLocaleLowerCase('pt-BR');return title===normalized?0:title.startsWith(normalized)?1:title.includes(normalized)?2:3};
+        return score(a)-score(b)||(a.type===b.type?0:a.type==='tv'?-1:1);
+      });
+      const unique=items.filter((item,index,all)=>all.findIndex(other=>String(other.id)===String(item.id)&&other.type===item.type)===index).slice(0,12);
+      if(responses.every(result=>result.status==='rejected')){searchResults.innerHTML='<div class="search-results-status">A busca está temporariamente indisponível. Tente novamente em instantes.</div>';return}
+      renderSearchResults(unique,q);
+    }catch(error){if(error.name==='AbortError')return;if(request===searchRequest)searchResults.innerHTML='<div class="search-results-status">Não foi possível concluir a busca agora. Tente novamente.</div>'}
+  }
+  document.getElementById('search-open').addEventListener('click',openSearch);
+  document.getElementById('search-close').addEventListener('click',closeSearch);
+  searchPanel.addEventListener('click',e=>{if(e.target===searchPanel)closeSearch()});
+  searchInput.addEventListener('input',()=>{
+    if(searchTimer)clearTimeout(searchTimer);
+    if(searchController)searchController.abort();
+    const q=searchInput.value;
+    if(q.trim().length<2){searchResults.innerHTML='<div class="search-results-status">Digite pelo menos 2 caracteres para buscar.</div>';return}
+    searchResults.innerHTML='<div class="search-results-status">Buscando filmes e séries…</div>';
+    searchTimer=setTimeout(()=>runSearch(q),280);
+  });
   document.querySelectorAll('.card').forEach(card=>{card.addEventListener('click',e=>{if(card.classList.contains('app-card')){notify('Abrindo o serviço oficial: '+card.dataset.title);return;}e.preventDefault();notify('Selecionado: '+(card.dataset.title||'conteúdo')+'. A ficha e reprodução serão conectadas na próxima etapa.');});});
   // Add focusable favorite controls to eligible cards; favorites remain local to this prototype session.
   const favs=new Map();document.querySelectorAll('.card:not(.app-card)').forEach((card,index)=>{const poster=card.querySelector('.poster');if(!poster)return;const b=document.createElement('button');b.className='poster-fav';b.type='button';b.dataset.focusable='';b.setAttribute('aria-label','Adicionar à minha lista');b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 4.8A1.8 1.8 0 0 1 7.8 3h8.4A1.8 1.8 0 0 1 18 4.8V21l-6-3.8L6 21z"/></svg>';b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();const key=card.dataset.title||('item-'+index);if(favs.has(key)){favs.delete(key);b.classList.remove('is-fav');b.setAttribute('aria-label','Adicionar à minha lista');notify('Removido da Minha lista.')}else{favs.set(key,card.cloneNode(true));b.classList.add('is-fav');b.setAttribute('aria-label','Remover da minha lista');notify('Adicionado à Minha lista.')}renderFavorites()});poster.appendChild(b)});
