@@ -212,13 +212,8 @@
   function horizontalMovieCard(item, serviceLabel){
     const href=detailHref(item), image=item.backdrop_url||item.poster_url||"", title=esc(item.title);
     const genres=(item.genres||[]).slice(0,2).join(" · ");
-    const logo=serviceLogo(item,serviceLabel);
-    const itemOptions=Array.isArray(item.provider_options)?item.provider_options:[];
-    const itemLogos=itemOptions.filter((p,i,arr)=>p.logo_url&&arr.findIndex(x=>String(x.id)===String(p.id))===i).slice(0,3);
-    const logoStack=itemLogos.length?'<span class="cp-film-provider-stack" aria-label="Disponível em '+esc(itemLogos.map(p=>p.name).join(", "))+'">'+itemLogos.map(p=>'<span class="cp-film-provider-mark" title="'+esc(p.name)+'"><img src="'+esc(p.logo_url)+'" alt="'+esc(p.name)+'" loading="lazy"></span>').join("")+'</span>':'<span class="cp-film-wide-badge">'+esc(providers(item)||"Streaming")+'</span>';
-    const badge=serviceLabel?'<span class="cp-film-provider-mark" title="'+esc(serviceLabel)+'">'+(logo?'<img src="'+esc(logo)+'" alt="'+esc(serviceLabel)+'" loading="lazy">':'<span>'+esc(serviceLabel)+'</span>')+'</span>':logoStack;
     return '<a class="cp-film-wide" href="'+href+'" data-genre="'+movieGenreSlugs(item)+'" data-title="'+title+'">'+
-      '<div class="cp-film-wide-art"><img class="cp-film-wide-image" src="'+esc(image)+'"'+(item.poster_url&&item.poster_url!==image?' data-fallback="'+esc(item.poster_url)+'"':'')+' alt="" loading="lazy" decoding="async">'+badge+
+      '<div class="cp-film-wide-art"><img class="cp-film-wide-image" src="'+esc(image)+'"'+(item.poster_url&&item.poster_url!==image?' data-fallback="'+esc(item.poster_url)+'"':'')+' alt="" loading="lazy" decoding="async">'+
       '<div class="cp-film-wide-copy"><span class="cp-film-wide-kicker">'+esc(genres||"Filme")+'</span><strong>'+title+'</strong></div></div>'+
       '<div class="cp-film-wide-meta"><span>'+esc(year(item)||"Filme")+'</span><span>Ver detalhes ↗</span></div></a>';
   }
@@ -464,7 +459,7 @@
       const grid=$(isSeriesPage?"#series-grid":"#film-grid");
       if(isFilmPage){
         try {
-          const results=await Promise.all([fetchItems("movie","streaming",true),fetchItems("movie","streaming_new",true)]);
+          const results=await Promise.all([fetchItems("movie","streaming",false),fetchItems("movie","streaming_new",false)]);
           await renderFilmStreamingPage(results[0],results[1]);
         } catch(error) {
           if(grid){const note=document.createElement("p");note.className="cp-api-status";note.textContent="Não foi possível carregar as opções de streaming: "+error.message;grid.prepend(note)}
@@ -473,7 +468,7 @@
       }
       if(isSeriesPage){
         try {
-          const results=await Promise.all([fetchItems("tv","streaming"),fetchItems("tv","streaming_new",false)]);
+          const results=await Promise.all([fetchItems("tv","streaming",false),fetchItems("tv","streaming_new",false)]);
           await renderSeriesStreamingPage(results[0],results[1]);
         } catch(error) {
           if(grid){const note=document.createElement("p");note.className="cp-api-status";note.textContent="Não foi possível carregar as séries disponíveis no streaming: "+error.message;grid.prepend(note)}
@@ -834,7 +829,7 @@
       const loadStreamingMovieRail=async()=>{
         const rail=$("#cp-api-home-movies",mount);
         try{
-          const items=await fetchItems("movie","streaming_new",true);
+          const items=await fetchItems("movie","streaming_new",false);
           // API results are already restricted to streaming availability in Brazil.
           const available=items
             .filter(item=>item&&item.id&&(item.backdrop_url||item.poster_url))
@@ -851,7 +846,7 @@
       const [streamingMovies,series,streamingSeries]=await Promise.all([
         loadStreamingMovieRail(),
         loadRail("cp-api-home-series","tv","streaming",18),
-        fetchItems("tv","streaming_new",true)
+        fetchItems("tv","streaming_new",false)
       ]);
       const streamingLaunches=[...streamingMovies,...streamingSeries]
         .filter(item=>item&&item.id)
@@ -861,7 +856,7 @@
       // Reuse the live RSS newsroom feed from the dedicated News page.
       const newsRail=$("#cp-api-home-news",mount);
       try{
-        const response=await fetch("/api/news?limit=100",{headers:{"Accept":"application/json"},cache:"no-store"});
+        const response=await fetch("/api/news?limit=100",{headers:{"Accept":"application/json"},cache:"default"});
         if(!response.ok)throw new Error("HTTP "+response.status);
         const newsData=await response.json();
         const newsItems=(Array.isArray(newsData.items)?newsData.items:[])
