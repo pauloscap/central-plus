@@ -698,6 +698,22 @@
         .cp-home-brand{font-size:25px;font-weight:850;letter-spacing:-1.2px;white-space:nowrap;text-decoration:none;color:#f7f8fb}.cp-home-brand span{display:inline-grid;place-items:center;width:30px;height:30px;margin-right:8px;border-radius:9px;background:#f4f5f8;color:#090a10;font-size:20px}
         .cp-home-links{display:flex;align-items:center;justify-content:center;gap:clamp(12px,1.8vw,26px);flex:1}.cp-home-links a{font-size:12px;color:#b7bdcb;text-decoration:none;white-space:nowrap;transition:color .2s}.cp-home-links a:hover,.cp-home-links a[aria-current="page"]{color:#fff}
         .cp-home-status{color:#7f8799;font-size:9px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
+        .cp-home-search{position:relative;flex:0 1 260px;min-width:190px;z-index:40}
+        .cp-home-search-field{display:flex;align-items:center;gap:8px;padding:0 10px;height:38px;border:1px solid #ffffff28;border-radius:8px;background:#11141c;color:#f5f6fa}
+        .cp-home-search-field>span{font-size:22px;line-height:1;color:#aeb5c4}
+        .cp-home-search-field input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:#fff;font:inherit;font-size:12px}
+        .cp-home-search-field input::placeholder{color:#8e96a8}
+        .cp-home-search-field button{border:0;background:transparent;color:#dce0e8;font-size:20px;cursor:pointer}
+        .cp-home-search-results{position:absolute;top:calc(100% + 8px);right:0;width:min(440px,calc(100vw - 32px));max-height:min(70vh,560px);overflow:auto;padding:8px;border:1px solid #ffffff1e;border-radius:12px;background:#10131b;box-shadow:0 20px 60px #000a}
+        .cp-home-search-results[hidden]{display:none}
+        .cp-home-search-result{display:flex;align-items:center;gap:11px;padding:8px;border-radius:8px;color:inherit;text-decoration:none}
+        .cp-home-search-result:hover,.cp-home-search-result:focus{background:#ffffff12;outline:0}
+        .cp-home-search-result img{width:54px;height:72px;flex:0 0 54px;object-fit:cover;border-radius:6px;background:#252a35}
+        .cp-home-search-result-copy{min-width:0;flex:1}
+        .cp-home-search-result-title{font-size:12px;font-weight:750;line-height:1.35}
+        .cp-home-search-result-meta{font-size:10px;color:#aab1c0;margin-top:5px}
+        .cp-home-search-message{padding:14px 12px;color:#aab1c0;font-size:12px;line-height:1.5}
+        @media(max-width:900px){.cp-home-search{order:2;flex:1 1 100%;min-width:0}.cp-home-status{display:none}.cp-home-search-results{width:100%}}
         .cp-home-news .cp-api-card,.cp-home-continue .cp-api-card{flex-basis:clamp(250px,30vw,390px);scroll-snap-align:start}
         .cp-home-live .cp-home-live-card{display:block;flex:0 0 clamp(240px,27vw,350px);min-width:0;scroll-snap-align:start;color:inherit;text-decoration:none;border:1px solid #ffffff16;border-radius:12px;overflow:hidden;background:#11141c;transition:transform .2s,border-color .2s}.cp-home-live .cp-home-live-card:hover{transform:translateY(-3px);border-color:#ffffff45}.cp-home-live-art{position:relative;aspect-ratio:16/9;background:#171b25 center/cover no-repeat}.cp-home-live-art:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(4,5,9,.78),transparent 72%)}.cp-home-live-status{position:absolute;z-index:1;top:10px;left:10px;padding:5px 7px;border:1px solid #ffffff35;border-radius:4px;background:#08090dcc;font-size:9px;letter-spacing:.06em;text-transform:uppercase}.cp-home-live-status.is-live{border-color:#ff59686b;color:#fff1f2}.cp-home-live-status.is-live:before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:#ff5968;margin-right:6px}.cp-home-live-copy{padding:11px 12px 13px}.cp-home-live-title{font-size:13px;font-weight:800}.cp-home-live-meta{font-size:10px;color:#aab1c0;margin-top:5px}.cp-home-live-updated{font-size:9px;color:#cbd3e1;margin-top:7px}
         .cp-home-app-card{flex-basis:clamp(125px,13vw,165px);scroll-snap-align:start}
@@ -759,7 +775,7 @@
       `;
       document.head.appendChild(homeStyles);
       mount.innerHTML=`
-        <nav class="cp-home-nav"><a class="cp-home-brand" href="/"><span>+</span>Central+</a><div class="cp-home-links"><a href="/" aria-current="page">Home</a><a href="/central-plus-filmes.html">Filmes</a><a href="/central-plus-series.html">Séries</a><a href="/central-plus-apps.html">Apps</a><a href="/central-plus-noticias.html">Notícias</a><a href="/central-plus-ao-vivo.html">Ao vivo</a><a href="/central-plus-favoritos.html">Favoritos</a></div><div class="cp-home-status">Seu próximo universo começa aqui</div></nav>
+        <nav class="cp-home-nav"><a class="cp-home-brand" href="/"><span>+</span>Central+</a><div class="cp-home-links"><a href="/" aria-current="page">Home</a><a href="/central-plus-filmes.html">Filmes</a><a href="/central-plus-series.html">Séries</a><a href="/central-plus-apps.html">Apps</a><a href="/central-plus-noticias.html">Notícias</a><a href="/central-plus-ao-vivo.html">Ao vivo</a><a href="/central-plus-favoritos.html">Favoritos</a></div><form class="cp-home-search" id="cp-home-search-form" role="search"><label class="cp-home-search-field"><span aria-hidden="true">⌕</span><input id="cp-home-search-input" type="search" placeholder="Buscar filmes e séries" autocomplete="off" aria-label="Buscar filmes e séries disponíveis nos streamings" aria-controls="cp-home-search-results"><button type="button" id="cp-home-search-clear" aria-label="Limpar busca" hidden>×</button></label><div class="cp-home-search-results" id="cp-home-search-results" role="listbox" hidden></div></form><div class="cp-home-status">Seu próximo universo começa aqui</div></nav>
         <section class="cp-home-hero"><div class="cp-home-hero-art" id="cp-home-hero-art"></div><div class="cp-home-slide-controls"><button class="cp-home-slide-btn" id="cp-home-prev" aria-label="Destaque anterior">‹</button><span class="cp-home-slide-count" id="cp-home-slide-count">01 / 06</span><button class="cp-home-slide-btn" id="cp-home-next" aria-label="Próximo destaque">›</button></div><div class="cp-home-hero-copy"><div class="cp-home-eyebrow">Em destaque · catálogo atualizado</div><h1 id="cp-home-hero-title">Descubra sua próxima história</h1><div class="cp-home-hero-meta" id="cp-home-hero-meta"><span class="cp-home-chip">Central+ seleção</span></div><p id="cp-home-hero-overview">Filmes e séries para sua próxima maratona.</p><div class="cp-home-actions"><a class="cp-home-btn" id="cp-home-hero-details" href="/central-plus-filmes.html">＋ Explorar título</a><a class="cp-home-btn secondary" href="/central-plus-filmes.html">Explorar catálogo <span>↗</span></a></div></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Notícias atualizadas</h2><p>Novos títulos e lançamentos do universo do entretenimento</p></div><div class="cp-home-news-actions"><button class="cp-home-news-control" id="cp-home-news-prev" type="button" aria-label="Notícias anteriores">‹</button><button class="cp-home-news-control" id="cp-home-news-next" type="button" aria-label="Próximas notícias">›</button><a class="cp-home-seeall" href="/central-plus-noticias.html">Ver notícias ↗</a></div></div><div class="cp-home-rail cp-home-news" id="cp-api-home-news"><span class="cp-api-status">Carregando atualizações…</span></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Continue assistindo</h2><p>Retome sua próxima maratona</p></div><a class="cp-home-inline-action" href="/central-plus-favoritos.html">Sua lista ↗</a></div><div class="cp-home-rail cp-home-continue" id="cp-api-home-continue"><div class="cp-home-empty"><div><strong>Sua jornada começa aqui</strong>Abra um filme ou série para começar a montar seu histórico.</div></div></div></section>
@@ -770,6 +786,49 @@
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Ao vivo</h2><p>Canais oficiais — os sinais e prévias atualizados aparecem primeiro</p></div><a class="cp-home-seeall" href="/central-plus-ao-vivo.html">Ver todos os canais ↗</a></div><div class="cp-home-rail cp-home-live" id="cp-api-home-live"><span class="cp-api-status">Atualizando canais…</span></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Favoritos</h2><p>Uma área para seus títulos salvos</p></div><a class="cp-home-seeall" href="/central-plus-favoritos.html">Ver favoritos ↗</a></div><div class="cp-home-rail" id="cp-api-home-favorites"><div class="cp-home-empty"><div><strong>Seus favoritos em um só lugar</strong>Explore filmes e séries e abra sua lista de favoritos.</div></div></div></section>
         <footer class="cp-home-footer"><span>Central+ · Descubra o que assistir</span><span>Metadados e imagens fornecidos pelo TMDB. A Central+ não é endossada pelo TMDB.</span></footer>`;
+      // Global home search: search both catalog types, filter to Brazilian streaming availability, and open the existing detail page.
+      const homeSearchForm=$("#cp-home-search-form",mount),homeSearchInput=$("#cp-home-search-input",mount),homeSearchResults=$("#cp-home-search-results",mount),homeSearchClear=$("#cp-home-search-clear",mount);
+      let homeSearchTimer=null,homeSearchSequence=0;
+      const closeHomeSearch=()=>{if(homeSearchResults)homeSearchResults.hidden=true;};
+      const renderHomeSearchMessage=message=>{if(homeSearchResults){homeSearchResults.innerHTML='<div class="cp-home-search-message">'+esc(message)+'</div>';homeSearchResults.hidden=false;}};
+      const runHomeSearch=async()=>{
+        const query=(homeSearchInput?.value||"").trim(),sequence=++homeSearchSequence;
+        if(homeSearchClear)homeSearchClear.hidden=!query;
+        if(query.length<2){closeHomeSearch();return;}
+        renderHomeSearchMessage("Buscando filmes e séries disponíveis nos streamings…");
+        try{
+          const fetchType=async type=>{
+            const response=await fetch("/api/catalog?type="+type+"&section=search&query="+encodeURIComponent(query),{headers:{"Accept":"application/json"},cache:"no-store"});
+            const data=await response.json();
+            if(!response.ok)throw new Error(data.error||"Busca indisponível");
+            return (data.items||[]).map(item=>({...item,type}));
+          };
+          const [movies,shows]=await Promise.all([fetchType("movie"),fetchType("tv")]);
+          if(sequence!==homeSearchSequence)return;
+          const results=[...movies,...shows]
+            .filter(item=>item&&item.id&&item.provider_names&&item.provider_names.length)
+            .sort((a,b)=>(Number(b.rating)||0)-(Number(a.rating)||0))
+            .slice(0,10);
+          if(!results.length){renderHomeSearchMessage("Nenhum filme ou série com disponibilidade de streaming encontrada para essa busca.");return;}
+          homeSearchResults.innerHTML=results.map(item=>{
+            const title=esc(item.title),href=detailHref(item),image=esc(item.poster_url||item.backdrop_url||"");
+            const kind=item.type==="tv"?"Série":"Filme",platforms=esc((item.provider_names||[]).slice(0,3).join(" · "));
+            return '<a class="cp-home-search-result" role="option" href="'+href+'"><img src="'+image+'" alt="" loading="lazy" onerror="this.style.display=\'none\'"><span class="cp-home-search-result-copy"><span class="cp-home-search-result-title">'+title+'</span><span class="cp-home-search-result-meta">'+kind+(item.year&&item.year!=="—"?" · "+esc(item.year):"")+'</span><span class="cp-home-search-result-meta">'+platforms+'</span></span></a>';
+          }).join("");
+          homeSearchResults.hidden=false;
+        }catch(error){
+          if(sequence===homeSearchSequence)renderHomeSearchMessage("Não foi possível concluir a busca agora. Tente novamente.");
+          console.warn("Central+ home search:",error);
+        }
+      };
+      if(homeSearchForm&&homeSearchInput){
+        homeSearchForm.addEventListener("submit",event=>{event.preventDefault();if(homeSearchTimer)window.clearTimeout(homeSearchTimer);runHomeSearch();});
+        homeSearchInput.addEventListener("input",()=>{if(homeSearchTimer)window.clearTimeout(homeSearchTimer);homeSearchTimer=window.setTimeout(runHomeSearch,280);});
+        homeSearchInput.addEventListener("focus",()=>{if(homeSearchInput.value.trim().length>=2)runHomeSearch();});
+        homeSearchInput.addEventListener("keydown",event=>{if(event.key==="Escape"){closeHomeSearch();homeSearchInput.blur();}});
+        if(homeSearchClear)homeSearchClear.addEventListener("click",()=>{homeSearchInput.value="";homeSearchInput.focus();closeHomeSearch();homeSearchClear.hidden=true;});
+        document.addEventListener("click",event=>{if(!homeSearchForm.contains(event.target))closeHomeSearch();});
+      }
       // Keep only the canonical Apps recentes section on the generated homepage.
       mount.querySelectorAll(".cp-home-section").forEach(section=>{
         const heading=section.querySelector("h2");
