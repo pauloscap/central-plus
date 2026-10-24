@@ -122,6 +122,67 @@
           if(hero&&item.backdrop_url)hero.style.backgroundImage='linear-gradient(90deg,rgba(5,6,10,.28),rgba(5,6,10,.08)),url("'+item.backdrop_url+'")';
           if(posterEl&&item.poster_url)posterEl.style.backgroundImage='url("'+item.poster_url+'")';
           set("#platformTag",(item.provider_names||[]).join(" · ")||"Consulte a disponibilidade no Brasil");
+          const renderProviderCartela=()=>{
+            let panel=$("#cp-provider-cartela");
+            if(!panel){
+              panel=document.createElement("section");panel.id="cp-provider-cartela";panel.className="cp-provider-cartela";
+              const actions=$(".actions");
+              if(actions)actions.insertAdjacentElement("afterend",panel);
+              else return;
+            }
+            const options=Array.isArray(item.provider_options)?item.provider_options:[];
+            const officialSearch=name=>{
+              const n=String(name||"").toLowerCase();
+              if(n.includes("netflix"))return "https://www.netflix.com/search?q=";
+              if(n.includes("prime")||n.includes("amazon"))return "https://www.primevideo.com/search/ref=atv_nb_sr?phrase=";
+              if(n.includes("disney"))return "https://www.disneyplus.com/search?q=";
+              if(n.includes("apple"))return "https://tv.apple.com/br/search?term=";
+              if(n.includes("max")||n.includes("hbo"))return "https://play.max.com/search?q=";
+              if(n.includes("paramount"))return "https://www.paramountplus.com/search/?query=";
+              if(n.includes("crunchyroll"))return "https://www.crunchyroll.com/search?q=";
+              if(n.includes("globoplay"))return "https://globoplay.globo.com/busca/?q=";
+              if(n.includes("mubi"))return "https://mubi.com/pt/br/search?query=";
+              return "";
+            };
+            const categoryOrder=["Assinatura","Grátis","Grátis com anúncios","Aluguel","Compra"];
+            const cards=options.map(p=>{
+              const href=officialSearch(p.name),target=href?href+encodeURIComponent(item.title):item.provider_link;
+              const logo=p.logo_url?'<img src="'+esc(p.logo_url)+'" alt="" loading="lazy">':'<span class="cp-provider-monogram">'+esc(p.name.slice(0,1))+'</span>';
+              return {p,href:target,logo};
+            }).filter(x=>x.href);
+            const groups=categoryOrder.map(category=>{
+              const group=cards.filter(x=>x.p.category===category);
+              if(!group.length)return "";
+              return '<div class="cp-provider-group"><div class="cp-provider-group-title">'+esc(category)+
+                '</div><div class="cp-provider-grid">'+group.map(x=>'<a class="cp-provider-card" href="'+esc(x.href)+
+                '" target="_blank" rel="noopener noreferrer" aria-label="Abrir '+esc(x.p.name)+' para buscar '+esc(item.title)+'">'+
+                '<span class="cp-provider-logo">'+x.logo+'</span><span class="cp-provider-name">'+esc(x.p.name)+
+                '</span><span class="cp-provider-category">'+esc(x.p.category)+'</span><span class="cp-provider-arrow">↗</span></a>').join("")+
+                '</div></div>';
+            }).join("");
+            const fullLink=item.provider_link?'<a class="cp-provider-all" href="'+esc(item.provider_link)+'" target="_blank" rel="noopener noreferrer">Ver todas as opções no JustWatch ↗</a>':"";
+            panel.innerHTML='<div class="cp-provider-heading"><div><div class="cp-provider-eyebrow">ONDE ASSISTIR NO BRASIL</div><h2>Escolha seu streaming</h2><p>Opções informadas para este título. A disponibilidade pode mudar.</p></div></div>'+
+              (groups||'<p class="cp-provider-empty">Não encontramos opções de streaming para este título no Brasil neste momento.</p>')+
+              '<p class="cp-provider-attribution">Disponibilidade fornecida pelo JustWatch via TMDB. Os cards abrem a busca da plataforma quando há um endereço oficial conhecido; caso contrário, use o link de disponibilidade.</p>'+fullLink;
+          };
+          if(!document.getElementById("cp-provider-cartela-styles")){
+            const css=document.createElement("style");css.id="cp-provider-cartela-styles";css.textContent=`
+              .cp-provider-cartela{margin:24px 0 8px;padding:22px;border:1px solid #ffffff16;border-radius:18px;background:linear-gradient(145deg,#151923,#0c0e14);color:#f6f7fb}
+              .cp-provider-heading h2{margin:5px 0;font-size:clamp(20px,3vw,28px);letter-spacing:-.04em}
+              .cp-provider-heading p,.cp-provider-attribution{font-size:12px;line-height:1.5;color:#a8afbd;margin:6px 0 18px}
+              .cp-provider-eyebrow{font-size:10px;letter-spacing:.16em;color:#aab6d0;font-weight:800}
+              .cp-provider-group{margin-top:18px}.cp-provider-group-title{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#a8afbd;margin-bottom:9px}
+              .cp-provider-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px}
+              .cp-provider-card{position:relative;display:flex;align-items:center;gap:10px;min-width:0;padding:12px;border:1px solid #ffffff16;border-radius:12px;background:#ffffff06;color:inherit;text-decoration:none;transition:background .2s,border-color .2s}
+              .cp-provider-card:hover{background:#ffffff10;border-color:#ffffff40}.cp-provider-logo{width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border-radius:10px;overflow:hidden;background:#fff}
+              .cp-provider-logo img{width:100%;height:100%;object-fit:cover}.cp-provider-monogram{font-size:19px;font-weight:800;color:#151923}
+              .cp-provider-name{font-size:12px;font-weight:750;line-height:1.25;overflow-wrap:anywhere}.cp-provider-category{position:absolute;left:64px;bottom:10px;font-size:9px;color:#a8afbd}
+              .cp-provider-arrow{margin-left:auto;align-self:flex-start;color:#a8afbd}.cp-provider-empty{color:#c4c9d3;font-size:13px}
+              .cp-provider-attribution{margin:18px 0 0;font-size:10px}.cp-provider-all{display:inline-block;margin-top:8px;color:#f3f4f8;font-size:12px;font-weight:750;text-decoration:underline;text-underline-offset:3px}
+              @media(max-width:480px){.cp-provider-cartela{padding:15px}.cp-provider-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.cp-provider-card{padding:9px;gap:8px}.cp-provider-logo{width:34px;height:34px;flex-basis:34px}.cp-provider-category{left:51px;font-size:8px}}
+            `;document.head.appendChild(css);
+          }
+          renderProviderCartela();
           const stream=$("#streamBtn");
           if(stream){
             const provider=(item.provider_names||[]).find(Boolean)||"";
