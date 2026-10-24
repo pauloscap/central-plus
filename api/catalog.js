@@ -112,7 +112,7 @@ module.exports = async function handler(req, res) {
       const today = new Date().toISOString().slice(0, 10);
       const providerIds = String(q.provider || "").split("|")
         .map(value => value.trim())
-        .filter(value => /^\\d+$/.test(value))
+        .filter(value => /^\d+$/.test(value))
         .filter((value, index, all) => all.indexOf(value) === index)
         .join("|");
       const params = {
