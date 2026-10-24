@@ -672,10 +672,9 @@
           return [];
         }
       };
-      const [movies,series,streamingMovies,streamingSeries]=await Promise.all([
+      const [streamingMovies,series,streamingSeries]=await Promise.all([
         loadStreamingMovieRail(),
         loadRail("cp-api-home-series","tv","trending",18),
-        fetchItems("movie","streaming_new"),
         fetchItems("tv","streaming_new")
       ]);
       const streamingLaunches=[...streamingMovies,...streamingSeries]
