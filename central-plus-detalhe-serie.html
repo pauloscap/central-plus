@@ -67,8 +67,8 @@
       <div class="meta"><span id="year">2022–</span><span>•</span><span id="seasons">2 temporadas</span><span>•</span><span id="genre">Drama · Suspense</span><span class="tag" id="rating">16</span><span class="tag">Série</span><span class="tag" id="platformTag">Apple TV+</span></div>
       <p class="synopsis" id="synopsis">Uma equipe de funcionários passa por um procedimento que separa suas memórias profissionais das pessoais. A rotina misteriosa começa a revelar um experimento perturbador.</p>
       <div class="actions">
-        <a class="btn primary" id="streamBtn" href="https://tv.apple.com/br">▶ Assistir na plataforma</a>
-        <a class="btn watch-options" id="watchOptionsBtn" href="https://www.justwatch.com/br">▦ Todas as opções</a>
+        <a class="btn primary" id="streamBtn" href="https://tv.apple.com/br">▶ Assistir episódio 01</a>
+        <button class="btn watch-options" id="episodeWatchedBtn" type="button">✓ Marcar episódio 01 como assistido</button>
         <a class="btn" id="trailerBtn" href="https://www.youtube.com/">▷ Ver trailer</a>
         <button class="btn" id="favoriteBtn" type="button">♡ Adicionar aos favoritos</button>
       </div>
@@ -133,12 +133,33 @@ const platformTypes={
 function byId(id){return document.getElementById(id)}
 function set(id,value){const el=byId(id);if(el)el.textContent=value}
 function serviceSearch(show){return (platformTypes[show.type]||platformTypes.apple).url+encodeURIComponent(show.search)}
-function justWatchSearch(show){return 'https://www.justwatch.com/br/busca?q='+encodeURIComponent(show.search)}
 set('title',m.title);set('posterTitle',m.poster);set('year',m.year);set('yearFact',m.year);set('seasons',m.seasons);set('seasonsFact',m.seasons);set('genre',m.genre);set('genreFact',m.genreFact);set('rating',m.rating);set('ratingFact',m.rating+' anos (referência)');set('creator',m.creator);set('cast',m.cast);set('synopsis',m.synopsis);set('longSynopsis',m.synopsis);set('platformTag',m.platform);document.title='Central+ | '+m.title;
 byId('heroBg').style.backgroundImage='linear-gradient(90deg,rgba(5,6,10,.25),rgba(5,6,10,.05)),url("'+m.backdropImage+'")';
 byId('poster').style.backgroundImage='linear-gradient(0deg,#08090d26,#08090d26),url("'+m.posterImage+'")';
-byId('streamBtn').href=serviceSearch(m);byId('streamBtn').textContent='▶ Assistir na '+m.platform;
-byId('watchOptionsBtn').href=justWatchSearch(m);
+byId('streamBtn').href=serviceSearch(m);
+byId('streamBtn').target='_self';
+const episodeStorageKey='centralplus-series-progress-v1';
+const episodeButton=byId('episodeWatchedBtn');
+function readProgress(){try{const value=JSON.parse(localStorage.getItem(episodeStorageKey)||'{}');return Number.isInteger(value[key])&&value[key]>=0?value[key]:0}catch(_){return 0}}
+function episodeLabel(number){return String(number).padStart(2,'0')}
+function renderEpisodeProgress(){
+  const watched=readProgress(),next=watched+1,label=episodeLabel(next);
+  byId('streamBtn').textContent='▶ Assistir episódio '+label;
+  episodeButton.textContent='✓ Marcar episódio '+label+' como assistido';
+  episodeButton.setAttribute('aria-label','Marcar episódio '+label+' de '+m.title+' como assistido');
+  episodeButton.dataset.episode=String(next);
+}
+episodeButton.addEventListener('click',()=>{
+  const watched=readProgress(),episode=watched+1;
+  try{
+    const all=JSON.parse(localStorage.getItem(episodeStorageKey)||'{}');
+    all[key]=episode;
+    localStorage.setItem(episodeStorageKey,JSON.stringify(all));
+    renderEpisodeProgress();
+    showToast('Progresso salvo · próximo: episódio '+episodeLabel(episode+1));
+  }catch(_){showToast('Não foi possível salvar o progresso neste navegador')}
+});
+renderEpisodeProgress();
 byId('trailerBtn').href='https://www.youtube.com/results?search_query='+encodeURIComponent(m.search+' trailer oficial');
 const favoriteKey='centralplus-series-favoritos';
 function favorites(){try{return JSON.parse(localStorage.getItem(favoriteKey)||'[]')}catch(e){return[]}}
