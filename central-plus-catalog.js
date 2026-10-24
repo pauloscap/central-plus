@@ -387,7 +387,7 @@
       const grid=$(isSeriesPage?"#series-grid":"#film-grid");
       if(isFilmPage){
         try {
-          const results=await Promise.all([fetchItems("movie","streaming"),fetchItems("movie","streaming_new")]);
+          const results=await Promise.all([fetchItems("movie","streaming",false),fetchItems("movie","streaming_new",false)]);
           await renderFilmStreamingPage(results[0],results[1]);
         } catch(error) {
           if(grid){const note=document.createElement("p");note.className="cp-api-status";note.textContent="Não foi possível carregar as opções de streaming: "+error.message;grid.prepend(note)}
@@ -396,7 +396,7 @@
       }
       if(isSeriesPage){
         try {
-          const results=await Promise.all([fetchItems("tv","streaming"),fetchItems("tv","streaming_new")]);
+          const results=await Promise.all([fetchItems("tv","streaming"),fetchItems("tv","streaming_new",false)]);
           await renderSeriesStreamingPage(results[0],results[1]);
         } catch(error) {
           if(grid){const note=document.createElement("p");note.className="cp-api-status";note.textContent="Não foi possível carregar as séries disponíveis no streaming: "+error.message;grid.prepend(note)}
@@ -752,7 +752,7 @@
       const loadStreamingMovieRail=async()=>{
         const rail=$("#cp-api-home-movies",mount);
         try{
-          const items=await fetchItems("movie","streaming_new",true);
+          const items=await fetchItems("movie","streaming_new",false);
           // API results are already restricted to streaming availability in Brazil.
           const available=items
             .filter(item=>item&&item.id&&(item.backdrop_url||item.poster_url))
@@ -769,7 +769,7 @@
       const [streamingMovies,series,streamingSeries]=await Promise.all([
         loadStreamingMovieRail(),
         loadRail("cp-api-home-series","tv","streaming",18),
-        fetchItems("tv","streaming_new")
+        fetchItems("tv","streaming_new",false)
       ]);
       const streamingLaunches=[...streamingMovies,...streamingSeries]
         .filter(item=>item&&item.id)
@@ -908,7 +908,7 @@
           const [freshMovies,freshSeries,freshLaunchSeries]=await Promise.all([
             loadStreamingMovieRail(),
             loadRail("cp-api-home-series","tv","streaming",18),
-            fetchItems("tv","streaming_new")
+            fetchItems("tv","streaming_new",false)
           ]);
           const refreshed=[...freshMovies,...freshLaunchSeries]
             .filter(item=>item&&item.id)
