@@ -755,6 +755,11 @@
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Ao vivo</h2><p>Canais oficiais — os sinais e prévias atualizados aparecem primeiro</p></div><a class="cp-home-seeall" href="/central-plus-ao-vivo.html">Ver todos os canais ↗</a></div><div class="cp-home-rail cp-home-live" id="cp-api-home-live"><span class="cp-api-status">Atualizando canais…</span></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Favoritos</h2><p>Uma área para seus títulos salvos</p></div><a class="cp-home-seeall" href="/central-plus-favoritos.html">Ver favoritos ↗</a></div><div class="cp-home-rail" id="cp-api-home-favorites"><div class="cp-home-empty"><div><strong>Seus favoritos em um só lugar</strong>Explore filmes e séries e abra sua lista de favoritos.</div></div></div></section>
         <footer class="cp-home-footer"><span>Central+ · Descubra o que assistir</span><span>Metadados e imagens fornecidos pelo TMDB. A Central+ não é endossada pelo TMDB.</span></footer>`;
+      // Keep only the canonical Apps recentes section on the generated homepage.
+      mount.querySelectorAll(".cp-home-section").forEach(section=>{
+        const heading=section.querySelector("h2");
+        if(heading&&/^(seus aplicativos|seus apps)$/i.test((heading.textContent||"").trim()))section.remove();
+      });
       const RECENT_APPS_KEY="centralplus-recent-apps-v1";
       const appBrandColor=name=>({
         "netflix":"#e50914","prime video":"#0879bd","disney+":"#132f82","hbo max":"#5424a8",
