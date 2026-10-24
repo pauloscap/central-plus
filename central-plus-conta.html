@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="robots" content="noindex,nofollow">
+<title>Central+ | Perfil e conta</title>
+<style>
+:root{color-scheme:dark;--bg:#08090e;--panel:#12151e;--line:#ffffff18;--text:#f5f6fa;--muted:#a7afbf;--accent:#e9ebf2}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 70% 0%,#252c4133,transparent 40%),var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:inherit;text-decoration:none}button,input,textarea{font:inherit}.page{max-width:1120px;margin:auto;padding:24px clamp(18px,4vw,56px) 64px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 0 40px}.brand{font-size:24px;font-weight:850;letter-spacing:-1px}.brand span{display:inline-grid;place-items:center;width:30px;height:30px;margin-right:8px;border-radius:9px;background:#f4f5f8;color:#090a10}.back{font-size:12px;color:#c6cbd6}.eyebrow{font-size:10px;letter-spacing:.18em;color:#aab6d0;font-weight:800}.layout{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1fr);gap:24px;align-items:start}.intro{padding:18px 6px}.intro h1{font-size:clamp(32px,5vw,56px);line-height:1;letter-spacing:-.06em;margin:12px 0 16px}.intro p{max-width:420px;color:#b7bdcb;line-height:1.65;font-size:14px}.perks{display:grid;gap:12px;margin-top:28px}.perk{display:flex;gap:12px;align-items:center;color:#d4d8e2;font-size:12px}.perk span{width:34px;height:34px;border-radius:10px;background:#ffffff0c;border:1px solid var(--line);display:grid;place-items:center;font-size:16px}.panel{padding:clamp(20px,3vw,32px);border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,#171b25,#0d0f15);box-shadow:0 22px 80px #0004}.panel h2{font-size:27px;letter-spacing:-.05em;margin:7px 0 8px}.desc{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 22px}.field{display:grid;gap:7px;margin:14px 0}.field label{font-size:11px;color:#c7ccd7;font-weight:700}.field input,.field textarea{width:100%;min-height:44px;border:1px solid #ffffff20;border-radius:9px;padding:11px 12px;background:#090b11;color:#fff;outline:none}.field textarea{min-height:94px;resize:vertical}.field input:focus,.field textarea:focus{border-color:#d9deea;box-shadow:0 0 0 3px #ffffff10}.primary,.secondary{width:100%;min-height:46px;border-radius:9px;border:1px solid transparent;font-weight:750;font-size:12px;cursor:pointer}.primary{background:#f1f2f7;color:#10121a}.primary:disabled{opacity:.55;cursor:wait}.secondary{background:#ffffff0a;border-color:#ffffff20;color:#f5f6fa;margin-top:10px}.switch{display:block;width:100%;padding:14px 4px 0;text-align:center;color:#d2d6e0;font-size:11px;background:transparent;border:0;cursor:pointer}.status{padding:11px 12px;border:1px solid var(--line);border-radius:9px;background:#ffffff07;color:#d4d8e2;font-size:12px;line-height:1.5;margin:16px 0 0}.status[data-kind="error"]{border-color:#b74d5b88;color:#ffdce1}.status[data-kind="success"]{border-color:#7ba88c66;color:#d9f5e4}.status[hidden],[hidden]{display:none!important}.profile-head{display:flex;align-items:center;gap:14px;margin-bottom:22px}.avatar{width:62px;height:62px;flex:0 0 62px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(135deg,#39445c,#171c29);border:1px solid #ffffff20;overflow:hidden;font-size:20px;font-weight:800}.avatar img{width:100%;height:100%;object-fit:cover}.email{font-size:12px;color:var(--muted);margin-top:5px;overflow-wrap:anywhere}.hint{font-size:10px;color:#929bad;line-height:1.5}.actions{display:flex;gap:10px;margin-top:18px}.actions button{flex:1}.footer{margin-top:34px;text-align:center;color:#71798b;font-size:10px}@media(max-width:760px){.layout{grid-template-columns:1fr}.intro{padding:8px 0}.intro h1{font-size:38px}.perks{grid-template-columns:1fr 1fr}.top{padding-bottom:24px}}@media(max-width:420px){.perks{grid-template-columns:1fr}.panel{padding:18px}}
+</style>
+</head>
+<body>
+<main class="page">
+<header class="top"><a class="brand" href="/"><span>+</span>Central+</a><a class="back" href="/">← Voltar para a Home</a></header>
+<div class="layout">
+<section class="intro">
+<div class="eyebrow">SUA EXPERIÊNCIA, DO SEU JEITO</div>
+<h1>Uma Central+ só sua.</h1>
+<p>Crie seu perfil para organizar o que quer assistir, retomar suas séries e personalizar sua experiência no Central+.</p>
+<div class="perks">
+<div class="perk"><span>◷</span><div>Continue de onde parou</div></div>
+<div class="perk"><span>♡</span><div>Guarde seus favoritos</div></div>
+<div class="perk"><span>◎</span><div>Personalize seu perfil</div></div>
+<div class="perk"><span>▤</span><div>Tenha seus dados sincronizados</div></div>
+</div>
+</section>
+<section>
+<div class="panel" id="authPanel">
+<div class="eyebrow" id="authEyebrow">COMECE SUA JORNADA</div>
+<h2 id="authHeading">Crie seu perfil Central+</h2>
+<p class="desc" id="authDescription">Salve filmes, acompanhe séries e personalize sua experiência.</p>
+<form id="authForm">
+<div class="field" id="authNameWrap"><label for="authName">Como quer ser chamado?</label><input id="authName" name="name" autocomplete="name" maxlength="80" placeholder="Seu nome" required></div>
+<div class="field" id="authUsernameWrap"><label for="authUsername">Nome de usuário (opcional)</label><input id="authUsername" name="username" autocomplete="username" maxlength="24" placeholder="ex.: paulogarcia"><div class="hint">3–24 caracteres; letras, números, ponto, hífen ou sublinhado.</div></div>
+<div class="field"><label for="authEmail">E-mail</label><input id="authEmail" name="email" type="email" autocomplete="email" required maxlength="254" placeholder="voce@exemplo.com"></div>
+<div class="field"><label for="authPassword">Senha</label><input id="authPassword" name="password" type="password" autocomplete="new-password" required minlength="8" placeholder="Mínimo de 8 caracteres"></div>
+<button class="primary" id="authSubmit" type="submit">Criar minha conta</button>
+<button class="switch" id="authModeToggle" type="button">Já tenho uma conta · Entrar</button>
+</form>
+<div class="status" id="accountStatus" role="status" aria-live="polite" hidden></div>
+</div>
+<div class="panel" id="profilePanel" hidden>
+<div class="profile-head"><div class="avatar"><img id="profileAvatarPreview" alt="Prévia do avatar" hidden><span id="profileAvatarInitials">CP</span></div><div><div class="eyebrow">PERFIL CENTRAL+</div><h2>Seu espaço</h2><div class="email" id="profileEmail"></div></div></div>
+<p class="desc">Essas informações ficam vinculadas à sua conta. Você pode atualizar seu nome, avatar e bio quando quiser.</p>
+<form id="profileForm">
+<div class="field"><label for="profileName">Nome de exibição</label><input id="profileName" maxlength="80" autocomplete="name" placeholder="Como quer ser chamado"></div>
+<div class="field"><label for="profileUsername">Nome de usuário</label><input id="profileUsername" maxlength="24" autocomplete="username" placeholder="Seu @nome"><div class="hint">Opcional. Deve ser único e ter de 3 a 24 caracteres.</div></div>
+<div class="field"><label for="profileAvatarUrl">URL da imagem do avatar (opcional)</label><input id="profileAvatarUrl" type="url" maxlength="500" placeholder="https://…"><div class="hint">Use um endereço público de imagem. Se deixar em branco, exibimos suas iniciais.</div></div>
+<div class="field"><label for="profileBio">Bio (opcional)</label><textarea id="profileBio" maxlength="240" placeholder="Um pouco sobre você e o que gosta de assistir"></textarea></div>
+<button class="primary" id="profileSave" type="submit">Salvar meu perfil</button>
+</form>
+<div class="actions"><button class="secondary" id="signOutBtn" type="button">Sair da conta</button><a class="secondary" href="/" style="display:grid;place-items:center">Ir para a Home</a></div>
+<div class="status" id="accountStatusProfile" role="status" aria-live="polite" hidden></div>
+</div>
+</section>
+</div>
+<div class="footer">Central+ · Conta protegida pelo Supabase Auth.</div>
+</main>
+<script src="/central-plus-auth.js" defer></script>
+</body>
+</html>
