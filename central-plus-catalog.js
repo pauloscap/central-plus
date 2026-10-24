@@ -7,13 +7,13 @@
   const providers = item => (item.provider_names || []).slice(0,2).join(" · ");
   const detailHref = item => (item.type === "tv" ? "/central-plus-detalhe-serie.html" : "/central-plus-detalhe-filme.html") + "?tmdbId=" + encodeURIComponent(item.id) + "&tipo=" + item.type;
   const genreSlug = item => (item.genre_ids || []).map(id => ({878:"ficcao",10765:"ficcao",18:"drama",14:"fantasia",53:"suspense",9648:"suspense",35:"comedia",16:"animacao",80:"crime",12:"aventura",10759:"aventura",28:"acao"}[id] || "")).filter(Boolean).join(" ");
-  function card(item, kind) {
+  function card(item, kind, index=0) {
     const href = detailHref(item), img = poster(item), title = esc(item.title), meta = [year(item), (item.genres || []).slice(0,2).join(" · ")].filter(Boolean).join(" · ");
     const provider = providers(item) || (kind === "home" ? "Disponível no streaming" : "");
     if (kind === "series") return '<a class="series-tile" href="'+href+'" data-series="tmdb-'+item.id+'" data-genres="'+genreSlug(item)+'" data-title="'+title+'" data-focusable><div class="series-tile-art" style="background-image:linear-gradient(0deg,rgba(4,5,9,.88),rgba(4,5,9,.05)),url(&quot;'+esc(img)+'&quot;)"><div class="series-tile-copy"><div class="series-tile-kicker">'+esc((item.genres||[]).slice(0,2).join(" · ") || "Série")+'</div><div class="series-tile-title">'+title+'</div></div></div><div class="series-tile-meta"><span>'+esc(meta || "Série")+'</span><span>'+esc(provider || "Ver opções")+'</span></div></a>';
     if (kind === "films") return '<a class="film-tile" href="'+href+'" data-focusable data-genre="'+genreSlug(item)+'" data-title="'+title+'"><div class="poster" style="aspect-ratio:2/3"><img loading="lazy" src="'+esc(img)+'" alt="Pôster de '+title+'" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display=\'none\'"><span class="poster-badge">'+esc(provider || "Catálogo TMDB")+'</span><div class="poster-copy"><div class="poster-kicker">'+esc((item.genres||[]).slice(0,2).join(" · "))+'</div><div class="poster-title">'+title+'</div></div></div><div class="film-tile-meta"><span>'+esc(year(item))+'</span><span>★ '+esc(item.rating)+'</span></div></a>';
     const primaryImage=item.backdrop_url||img,secondaryImage=item.poster_url&&item.poster_url!==primaryImage?item.poster_url:"";
-    return '<a class="cp-api-card" href="'+href+'"><div class="cp-api-poster cp-home-card-art" data-title="'+title+'"><img loading="lazy" src="'+esc(primaryImage)+'"'+(secondaryImage?' data-fallback="'+esc(secondaryImage)+'"':'')+' alt="Imagem de '+title+'" onerror="if(this.dataset.fallback){const next=this.dataset.fallback;this.dataset.fallback=\'\';this.src=next;}else{this.remove();this.parentElement.classList.add(\'cp-art-fallback\')}"><span class="cp-art-fallback-title">'+title+'</span></div><div class="cp-api-title">'+title+'</div><div class="cp-api-meta">'+esc([year(item), (item.genres||[]).slice(0,1).join("")].filter(Boolean).join(" · "))+'</div><div class="cp-api-provider">'+esc(provider || "Ver onde assistir")+'</div></a>';
+    return '<a class="cp-api-card" href="'+href+'"><div class="cp-api-poster cp-home-card-art" data-title="'+title+'"><img loading="'+(kind==="home"&&index<2?"eager":"lazy")+'" '+(kind==="home"&&index===0?'fetchpriority="high" ':'')+'decoding="async" src="'+esc(primaryImage)+'"'+(secondaryImage?' data-fallback="'+esc(secondaryImage)+'"':'')+' alt="Imagem de '+title+'" onerror="if(this.dataset.fallback){const next=this.dataset.fallback;this.dataset.fallback=\'\';this.src=next;}else{this.remove();this.parentElement.classList.add(\'cp-art-fallback\')}"><span class="cp-art-fallback-title">'+title+'</span></div><div class="cp-api-title">'+title+'</div><div class="cp-api-meta">'+esc([year(item), (item.genres||[]).slice(0,1).join("")].filter(Boolean).join(" · "))+'</div><div class="cp-api-provider">'+esc(provider || "Ver onde assistir")+'</div></a>';
   }
   function ensureStyles(){
     if($("#cp-api-styles")) return;
@@ -767,7 +767,7 @@
         const rail=$("#"+id,mount);
         try{
           const items=await fetchItems(type,section,false);
-          rail.innerHTML=items.slice(0,limit).map(x=>card(x,"home")).join("")||'<div class="cp-home-error">Nenhum título encontrado nesta seleção.</div>';
+          rail.innerHTML=items.slice(0,limit).map((x,index)=>card(x,"home",index)).join("")||'<div class="cp-home-error">Nenhum título encontrado nesta seleção.</div>';
           return items;
         }catch(error){
           rail.innerHTML='<div class="cp-home-error">Não foi possível carregar esta seleção. <a href="/api/catalog?type='+type+'&section='+section+'" style="text-decoration:underline">Ver resposta da API</a></div>';
@@ -783,7 +783,7 @@
           const available=items
             .filter(item=>item&&item.id&&(item.backdrop_url||item.poster_url))
             .sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
-          rail.innerHTML=available.slice(0,18).map(item=>card(item,"home")).join("")||
+          rail.innerHTML=available.slice(0,18).map((item,index)=>card(item,"home",index)).join("")||
             '<div class="cp-home-error">Não encontramos lançamentos recentes com disponibilidade de streaming confirmada no Brasil.</div>';
           return available;
         }catch(error){
