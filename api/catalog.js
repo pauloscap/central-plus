@@ -111,7 +111,11 @@ module.exports = async function handler(req, res) {
       // Restrict results to titles available online in Brazil; cinema-only titles are excluded.
       const today = new Date().toISOString().slice(0, 10);
       const since = new Date(Date.now() - 180 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
-      const providerIds = String(q.provider || "").split("|")
+      // Restrict the catalog to services already integrated into Central+.
+      // Without an explicit provider, a monetization-type-only discover query can
+      // return titles that are not actually available on the user's streaming apps.
+      const centralPlusProviderIds = "8|337|119|9|384|1899|307|350|2|11|531|283|300";
+      const providerIds = String(q.provider || centralPlusProviderIds).split("|")
         .map(value => value.trim())
         .filter(value => /^\d+$/.test(value))
         .filter((value, index, all) => all.indexOf(value) === index)
