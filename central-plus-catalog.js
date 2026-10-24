@@ -843,6 +843,9 @@
           return [];
         }
       };
+      // Start secondary feeds alongside the catalog requests so the homepage doesn't wait for them sequentially.
+      const homeNewsRequest=fetch("/api/news?limit=100",{headers:{"Accept":"application/json"},cache:"default"});
+      let homeLiveRequest=fetch("/api/live-previews",{headers:{"Accept":"application/json"},cache:"default"});
       const [streamingMovies,series,streamingSeries]=await Promise.all([
         loadStreamingMovieRail(),
         loadRail("cp-api-home-series","tv","streaming",18),
@@ -856,7 +859,7 @@
       // Reuse the live RSS newsroom feed from the dedicated News page.
       const newsRail=$("#cp-api-home-news",mount);
       try{
-        const response=await fetch("/api/news?limit=100",{headers:{"Accept":"application/json"},cache:"default"});
+        const response=await homeNewsRequest;
         if(!response.ok)throw new Error("HTTP "+response.status);
         const newsData=await response.json();
         const newsItems=(Array.isArray(newsData.items)?newsData.items:[])
@@ -931,7 +934,8 @@
       const renderHomeLive=async()=>{
         if(!liveRail)return;
         try{
-          const response=await fetch("/api/live-previews",{headers:{"Accept":"application/json"},cache:"no-store"});
+          const response=await (homeLiveRequest || fetch("/api/live-previews",{headers:{"Accept":"application/json"},cache:"default"}));
+          homeLiveRequest=null;
           if(!response.ok)throw new Error("HTTP "+response.status);
           const data=await response.json();
           const previews=Array.isArray(data.items)?data.items:[];
