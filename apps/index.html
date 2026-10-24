@@ -23,5 +23,40 @@ Error generating stack: `+o.message+`
 </script>
   <script>(function(){function m(a){var h=a.getAttribute("href");if(!h)return;try{var u=new URL(h,document.baseURI);if((u.protocol==="http:"||u.protocol==="https:")&&u.host!==location.host){a.target="_blank";a.rel="noopener noreferrer";}}catch(e){}}function s(){document.querySelectorAll("a[href]").forEach(m);}if(document.readyState!=="loading"){s();}else{document.addEventListener("DOMContentLoaded",s);}document.addEventListener("click",function(e){var a=e.target&&e.target.closest&&e.target.closest("a[href]");if(a){m(a);}},true);})();</script>
   <script type="application/json" data-clippy-inline-media-manifest="1">{"version":1,"slots":[]}</script>
+
+<script>
+(function(){
+  const logos=[
+    {key:"netflix",label:"Netflix",src:"https://cdn.simpleicons.org/netflix/FFFFFF",bg:"#E50914"},
+    {key:"prime",label:"Prime Video",src:"https://cdn.simpleicons.org/primevideo/FFFFFF",bg:"#0A1520"},
+    {key:"disney",label:"Disney+",src:"https://cdn.simpleicons.org/disneyplus/FFFFFF",bg:"#132F82"},
+    {key:"hbomax",label:"Max",src:"https://cdn.simpleicons.org/max/FFFFFF",bg:"#5424A8"},
+    {key:"appletv",label:"Apple TV",src:"https://cdn.simpleicons.org/appletv/FFFFFF",bg:"#252A32"},
+    {key:"globoplay",label:"Globoplay",src:"https://cdn.simpleicons.org/globoplay/FFFFFF",bg:"#ED2735"},
+    {key:"paramount",label:"Paramount+",src:"https://cdn.simpleicons.org/paramountplus/FFFFFF",bg:"#1262A5"},
+    {key:"mubi",label:"MUBI",src:"https://cdn.simpleicons.org/mubi/FFFFFF",bg:"#0A0A0A"},
+    {key:"plutotv",label:"Pluto TV",src:"https://cdn.simpleicons.org/plutotv/FFFFFF",bg:"#6D39DB"},
+    {key:"youtube",label:"YouTube",src:"https://cdn.simpleicons.org/youtube/FFFFFF",bg:"#E62117"},
+    {key:"spotify",label:"Spotify",src:"https://cdn.simpleicons.org/spotify/FFFFFF",bg:"#1DB954"}
+  ];
+  const apply=()=>{
+    const root=document.querySelector("#root");if(!root)return;
+    const buttons=[...root.querySelectorAll("button")].filter(button=>String(button.className).includes("aspect-[16/9]"));
+    buttons.forEach((button,index)=>{
+      const text=(button.innerText||button.textContent||"").toLowerCase();
+      const logo=logos.find(item=>text.includes(item.key)||((item.key==="hbomax")&&/hbo|max/.test(text))||((item.key==="appletv")&&/apple\\s*tv/.test(text))||((item.key==="plutotv")&&/pluto\\s*tv/.test(text)))||logos[index];
+      if(!logo||button.querySelector(".central-plus-brand-image"))return;
+      const wrap=document.createElement("span");wrap.className="central-plus-brand-image";wrap.setAttribute("aria-hidden","true");
+      wrap.style.cssText="position:absolute;z-index:4;left:50%;top:50%;transform:translate(-50%,-50%);width:68px;height:68px;border-radius:15px;background:"+logo.bg+";display:grid;place-items:center;box-shadow:0 10px 28px #0008;border:1px solid #ffffff30;pointer-events:none;";
+      const img=document.createElement("img");img.src=logo.src;img.alt="";img.loading="lazy";img.style.cssText="width:48px;height:48px;object-fit:contain;";
+      const fallback=document.createElement("span");fallback.textContent=logo.label;fallback.style.cssText="display:none;color:#fff;font-size:11px;font-weight:800;text-align:center;padding:4px;";
+      img.onerror=()=>{img.style.display="none";fallback.style.display="block";};wrap.append(img,fallback);button.appendChild(wrap);
+    });
+  };
+  const start=()=>{apply();const root=document.querySelector("#root");if(root)new MutationObserver(apply).observe(root,{childList:true,subtree:true});};
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start,{once:true});else start();
+  const css=document.createElement("style");css.textContent=".central-plus-brand-image{pointer-events:none!important}.central-plus-brand-image img{max-width:100%;max-height:100%}";document.head.appendChild(css);
+})();
+</script>
 </body>
 </html>
