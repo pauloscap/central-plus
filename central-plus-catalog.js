@@ -56,6 +56,8 @@
       .cp-film-wide{display:block;flex:0 0 clamp(245px,27vw,390px);min-width:0;color:inherit;text-decoration:none;scroll-snap-align:start;transition:transform .22s}
       .cp-film-wide:hover{transform:translateY(-4px)}
       .cp-film-wide-art{position:relative;aspect-ratio:16/9;border-radius:11px;overflow:hidden;border:1px solid #ffffff16;background:#151923 center/cover no-repeat}
+      .cp-film-wide-art>.cp-film-wide-image{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;transition:transform .35s ease}
+      .cp-film-wide:hover .cp-film-wide-image{transform:scale(1.035)}
       .cp-film-wide-copy{position:absolute;left:14px;right:12px;bottom:13px;display:flex;flex-direction:column;gap:5px}
       .cp-film-wide-copy strong{font-size:clamp(14px,1.5vw,19px);line-height:1.1;letter-spacing:-.035em}
       .cp-film-wide-kicker{font-size:9px;color:#d0d4df;letter-spacing:.04em}
@@ -332,6 +334,7 @@
       if(!item||!item.id||featureItems.some(x=>String(x.id)===String(item.id)))return;
       featureItems.push(item);
     });
+    const launchIds=new Set((launches||[]).map(item=>String(item&&item.id)).filter(Boolean));
     const slides=featureItems.slice(0,6);
     const featureNode=$("#film-feature");
     if(slides.length&&featureNode){
@@ -350,7 +353,7 @@
         const item=slides[current];
         updateFeature(item,"movie");
         const kicker=$("#film-feature-kicker");
-        if(kicker)kicker.textContent="LANÇAMENTO NO STREAMING · "+(providers(item)||"DISPONÍVEL NO BRASIL");
+        if(kicker)kicker.textContent=(launchIds.has(String(item.id))?"LANÇAMENTO RECENTE NO STREAMING":"EM DESTAQUE NO STREAMING")+" · "+(providers(item)||"DISPONÍVEL NO BRASIL");
         const runtime=$("#film-feature-runtime");if(runtime)runtime.textContent="Filme";
         const quality=$("#film-feature-quality");if(quality)quality.textContent=providers(item)||"Streaming";
         const number=$("#film-feature-index-number");if(number)number.textContent=String(current+1).padStart(2,"0");
