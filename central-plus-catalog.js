@@ -554,7 +554,10 @@
           }
           if(stream&&!stream.dataset.historyBound){
             stream.dataset.historyBound="true";
-            stream.addEventListener("click",()=>saveWatchHistory());
+            stream.addEventListener("click",()=>{
+              const href=stream.getAttribute("href")||"";
+              if(href&&href!=="#"&&/^https?:/i.test(href))saveWatchHistory();
+            });
           }
           if(type==="tv"){
             const watchedForHistory=$("#episodeWatchedBtn");
@@ -611,6 +614,12 @@
         .cp-home-news-link{font-size:10px;color:#e1e4ec;margin-top:7px}
         .cp-home-news-actions{display:flex;align-items:center;gap:8px}.cp-home-news-control{display:grid;place-items:center;width:30px;height:30px;border:1px solid #ffffff25;border-radius:50%;background:#ffffff08;color:#f5f6fb;font-size:21px;line-height:1;cursor:pointer}.cp-home-news-control:hover{background:#ffffff18;border-color:#ffffff55}.cp-home-news-control:focus-visible{outline:2px solid #fff;outline-offset:3px}.cp-home-news{scroll-behavior:smooth;scrollbar-width:none}.cp-home-news::-webkit-scrollbar{display:none}
         .cp-home-progress{height:3px;border-radius:4px;background:#ffffff20;margin-top:10px;overflow:hidden}.cp-home-progress span{display:block;height:100%;width:35%;background:#f4f5f8}
+        .cp-home-history-card{flex:0 0 clamp(250px,29vw,390px);scroll-snap-align:start}
+        .cp-home-history-art{position:relative;display:flex;align-items:flex-end;justify-content:space-between;padding:12px;background-color:#171a22;background-size:cover;background-position:center;aspect-ratio:16/9}
+        .cp-home-history-type{align-self:flex-start;padding:5px 7px;border:1px solid #ffffff35;border-radius:4px;background:#08090dcc;font-size:9px;letter-spacing:.08em;text-transform:uppercase}
+        .cp-home-history-resume{font-size:10px;font-weight:800;color:#fff;text-shadow:0 1px 8px #000}
+        .cp-home-history-card:hover .cp-home-history-art{border-color:#ffffff50}
+        
         .cp-home-empty{display:flex;align-items:center;gap:14px;min-width:260px;padding:18px 20px;border:1px dashed #ffffff24;border-radius:12px;color:#9da5b5;font-size:12px;line-height:1.6}.cp-home-empty strong{display:block;color:#e3e6ee;font-size:13px;margin-bottom:3px}
         .cp-home-inline-action{font-size:11px;color:#c8cdda;text-decoration:none;white-space:nowrap}.cp-home-inline-action:hover{color:#fff}
         .cp-home-hero{position:relative;min-height:clamp(540px,76vh,760px);display:flex;align-items:flex-end;overflow:hidden;background:#11141d}
@@ -672,6 +681,33 @@
       };
       mount.addEventListener("click",event=>{const link=event.target.closest(".cp-home-app-card");if(link){recordRecentApp(link);if(link.parentElement)link.parentElement.prepend(link);}},true);
       renderRecentApps();
+      renderContinueWatching();
+      const WATCH_HISTORY_KEY="centralplus-watch-history-v1";
+      const renderContinueWatching=()=>{
+        const rail=$("#cp-api-home-continue",mount);if(!rail)return;
+        let history=[];
+        try{
+          const raw=JSON.parse(localStorage.getItem(WATCH_HISTORY_KEY)||"[]");
+          history=Array.isArray(raw)?raw.filter(x=>x&&x.id&&x.title&&x.url&&x.url.startsWith("/")): [];
+        }catch(_){}
+        history.sort((a,b)=>(Number(b.updatedAt)||0)-(Number(a.updatedAt)||0));
+        if(!history.length){
+          rail.innerHTML='<div class="cp-home-empty"><div><strong>Sua jornada começa aqui</strong>Abra um filme ou série e escolha assistir. Seus títulos aparecerão aqui para você retomar depois.</div></div>';
+          return;
+        }
+        rail.innerHTML=history.slice(0,12).map(item=>{
+          const title=esc(item.title),href=esc(item.url),image=esc(item.image||""),type=item.type==="tv"?"Série":"Filme";
+          const resume=item.type==="tv"?(item.nextEpisode?"Próximo episódio "+String(item.nextEpisode).padStart(2,"0"):"Continuar série"):"Continuar filme";
+          const provider=esc(item.provider||"Streaming");
+          const art=image?' style="background-image:linear-gradient(0deg,rgba(4,5,9,.94),rgba(4,5,9,.04) 78%),url(&quot;'+image+'&quot;)"':'';
+          return '<a class="cp-api-card cp-home-history-card" href="'+href+'"><div class="cp-api-poster cp-home-history-art"'+art+'><span class="cp-home-history-type">'+type+'</span><span class="cp-home-history-resume">'+esc(resume)+' ↗</span></div><div class="cp-api-title">'+title+'</div><div class="cp-api-meta">'+provider+' · '+esc(resume)+'</div></a>';
+        }).join("");
+      };
+      window.addEventListener("storage",event=>{
+        if(event.key===WATCH_HISTORY_KEY)renderContinueWatching();
+        if(event.key===RECENT_APPS_KEY)renderRecentApps();
+      });
+      window.addEventListener("pageshow",()=>{renderContinueWatching();renderRecentApps();});
       const loadRail=async(id,type,section,limit=18)=>{
         const rail=$("#"+id,mount);
         try{
