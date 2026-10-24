@@ -125,19 +125,37 @@
           const stream=$("#streamBtn");
           if(stream){
             const provider=(item.provider_names||[]).find(Boolean)||"";
-            const providerUrl=provider.toLowerCase().includes("netflix")?"https://www.netflix.com/search?q=":
-              provider.toLowerCase().includes("prime")?"https://www.primevideo.com/search/ref=atv_nb_sr?phrase=":
-              provider.toLowerCase().includes("disney")?"https://www.disneyplus.com/search?q=":
-              provider.toLowerCase().includes("apple")?"https://tv.apple.com/br/search?term=":
-              provider.toLowerCase().includes("max")||provider.toLowerCase().includes("hbo")?"https://play.max.com/search?q=":
-              provider.toLowerCase().includes("paramount")?"https://www.paramountplus.com/search/?query=":"";
+            const providerLower=provider.toLowerCase();
+            const providerSearch=providerLower.includes("netflix")?"https://www.netflix.com/search?q=":
+              providerLower.includes("prime")?"https://www.primevideo.com/search/ref=atv_nb_sr?phrase=":
+              providerLower.includes("disney")?"https://www.disneyplus.com/search?q=":
+              providerLower.includes("apple")?"https://tv.apple.com/br/search?term=":
+              providerLower.includes("max")||providerLower.includes("hbo")?"https://play.max.com/search?q=":
+              providerLower.includes("paramount")?"https://www.paramountplus.com/search/?query=":
+              providerLower.includes("crunchyroll")?"https://www.crunchyroll.com/search?q=":"";
+            // Add only verified official episode URLs to this registry. Never infer platform IDs.
+            // Shape: TMDB series ID -> { seriesUrl: "...", episodes: { "1": "...", "2": "..." } }
+            const directLinks={};
             const progressKey="centralplus-series-progress-v1";
-            const seriesKey=String(new URLSearchParams(location.search).get("serie")||item.id||item.title).toLowerCase();
+            const seriesKey=String(item.id||item.title).toLowerCase();
             const readEpisode=()=>{try{const saved=JSON.parse(localStorage.getItem(progressKey)||"{}");return Number.isInteger(saved[seriesKey])&&saved[seriesKey]>=0?saved[seriesKey]+1:1}catch(_){return 1}};
-            const renderEpisode=()=>{stream.textContent="▶ Assista o episódio "+String(readEpisode()).padStart(2,"0");};
+            const resolveWatchUrl=()=>{
+              const episode=readEpisode(),curated=directLinks[String(item.id)];
+              if(curated&&curated.episodes&&curated.episodes[String(episode)])return {url:curated.episodes[String(episode)],exact:true};
+              if(curated&&curated.seriesUrl)return {url:curated.seriesUrl,exact:false};
+              if(providerSearch)return {url:providerSearch+encodeURIComponent(item.title),exact:false};
+              return {url:"",exact:false};
+            };
+            const renderEpisode=()=>{
+              const episode=readEpisode(),target=resolveWatchUrl();
+              stream.textContent=type==="tv"?"▶ Assista o episódio "+String(episode).padStart(2,"0"):"▶ Assistir";
+              stream.href=target.url||"#";
+              stream.dataset.exactEpisode=target.exact?"true":"false";
+              stream.title=target.exact?"Abrir episódio exato na plataforma":"Link direto do episódio não verificado; abrir busca/ficha da série";
+              stream.setAttribute("aria-label",stream.title);
+            };
             if(type==="tv"){
-              stream.href=providerUrl?providerUrl+encodeURIComponent(item.title):"#";
-              stream.textContent="▶ Assista o episódio "+String(readEpisode()).padStart(2,"0");
+              renderEpisode();
               const watched=$("#episodeWatchedBtn");
               if(watched){
                 const updateWatched=()=>{watched.textContent="✓ Marcar episódio "+String(readEpisode()).padStart(2,"0")+" como assistido";};
@@ -154,8 +172,18 @@
                   });
                 }
               }
+              if(!stream.dataset.noticeBound){
+                stream.dataset.noticeBound="true";
+                stream.addEventListener("click",event=>{
+                  if(!stream.getAttribute("href")||stream.getAttribute("href")==="#"){event.preventDefault();return;}
+                  if(stream.dataset.exactEpisode!=="true"){
+                    const notice=$("#streamNotice");
+                    if(notice){notice.textContent="Ainda não há um link oficial verificado para este episódio específico. Abriremos a busca/ficha da série na plataforma.";notice.hidden=false;}
+                  }
+                });
+              }
             }else{
-              stream.href=providerUrl?providerUrl+encodeURIComponent(item.title):"#";
+              stream.href=providerSearch?providerSearch+encodeURIComponent(item.title):"#";
               stream.textContent="▶ Assistir";
             }
           }
