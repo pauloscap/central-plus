@@ -419,6 +419,7 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
     let featurePaused = false;
 
     function renderFeature(index) {
+      if (filmFeature.dataset.apiManaged === "true") return;
       featureIndex = (index + featureFilms.length) % featureFilms.length;
       const item = featureFilms[featureIndex];
       featureArt.classList.add('is-changing');
