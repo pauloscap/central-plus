@@ -678,6 +678,7 @@
         .cp-home-news .cp-api-card,.cp-home-continue .cp-api-card{flex-basis:clamp(250px,30vw,390px);scroll-snap-align:start}
         .cp-home-live .cp-home-live-card{display:block;flex:0 0 clamp(240px,27vw,350px);min-width:0;scroll-snap-align:start;color:inherit;text-decoration:none;border:1px solid #ffffff16;border-radius:12px;overflow:hidden;background:#11141c;transition:transform .2s,border-color .2s}.cp-home-live .cp-home-live-card:hover{transform:translateY(-3px);border-color:#ffffff45}.cp-home-live-art{position:relative;aspect-ratio:16/9;background:#171b25 center/cover no-repeat}.cp-home-live-art:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(4,5,9,.78),transparent 72%)}.cp-home-live-status{position:absolute;z-index:1;top:10px;left:10px;padding:5px 7px;border:1px solid #ffffff35;border-radius:4px;background:#08090dcc;font-size:9px;letter-spacing:.06em;text-transform:uppercase}.cp-home-live-status.is-live{border-color:#ff59686b;color:#fff1f2}.cp-home-live-status.is-live:before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:#ff5968;margin-right:6px}.cp-home-live-copy{padding:11px 12px 13px}.cp-home-live-title{font-size:13px;font-weight:800}.cp-home-live-meta{font-size:10px;color:#aab1c0;margin-top:5px}.cp-home-live-updated{font-size:9px;color:#cbd3e1;margin-top:7px}
         .cp-home-app-card{flex-basis:clamp(125px,13vw,165px);scroll-snap-align:start}
+        .cp-home-novelties .cp-api-card{flex-basis:clamp(260px,29vw,390px);scroll-snap-align:start}.cp-home-novelty-art{position:relative;aspect-ratio:16/9;border:1px solid #ffffff16;border-radius:12px;overflow:hidden;background:#171b25 center/cover no-repeat}.cp-home-novelty-art:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(4,5,9,.8),transparent 78%)}.cp-home-novelty-type{position:absolute;z-index:1;top:10px;left:10px;padding:5px 7px;border:1px solid #ffffff38;border-radius:4px;background:#08090dcc;font-size:9px;letter-spacing:.1em;text-transform:uppercase}.cp-home-novelty-title{font-size:13px;font-weight:800;margin-top:9px;line-height:1.25}.cp-home-novelty-meta{font-size:10px;color:#aab1c0;margin-top:5px}.cp-home-novelty-providers{font-size:10px;color:#e0e4ee;margin-top:5px}
         .cp-home-app-art{height:88px;position:relative;display:grid;place-items:center;overflow:hidden;border:1px solid #ffffff20;border-radius:13px;background:#1a1d26}
         .cp-home-app-glow{position:absolute;width:100px;height:100px;right:-28px;top:-38px;border-radius:50%;background:#ffffff20}
         .cp-home-app-logo{position:relative;z-index:1;width:52px;height:52px;border-radius:13px;background:#10111635;display:grid;place-items:center;color:#fff;font-size:16px;font-weight:850;text-align:center;overflow:hidden;box-shadow:0 8px 24px #0005}
@@ -739,6 +740,7 @@
         <section class="cp-home-hero"><div class="cp-home-hero-art" id="cp-home-hero-art"></div><div class="cp-home-slide-controls"><button class="cp-home-slide-btn" id="cp-home-prev" aria-label="Destaque anterior">‹</button><span class="cp-home-slide-count" id="cp-home-slide-count">01 / 06</span><button class="cp-home-slide-btn" id="cp-home-next" aria-label="Próximo destaque">›</button></div><div class="cp-home-hero-copy"><div class="cp-home-eyebrow">Em destaque · catálogo atualizado</div><h1 id="cp-home-hero-title">Descubra sua próxima história</h1><div class="cp-home-hero-meta" id="cp-home-hero-meta"><span class="cp-home-chip">Central+ seleção</span></div><p id="cp-home-hero-overview">Filmes e séries para sua próxima maratona.</p><div class="cp-home-actions"><a class="cp-home-btn" id="cp-home-hero-details" href="/central-plus-filmes.html">＋ Explorar título</a><a class="cp-home-btn secondary" href="/central-plus-filmes.html">Explorar catálogo <span>↗</span></a></div></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Notícias atualizadas</h2><p>Novos títulos e lançamentos do universo do entretenimento</p></div><div class="cp-home-news-actions"><button class="cp-home-news-control" id="cp-home-news-prev" type="button" aria-label="Notícias anteriores">‹</button><button class="cp-home-news-control" id="cp-home-news-next" type="button" aria-label="Próximas notícias">›</button><a class="cp-home-seeall" href="/central-plus-noticias.html">Ver notícias ↗</a></div></div><div class="cp-home-rail cp-home-news" id="cp-api-home-news"><span class="cp-api-status">Carregando atualizações…</span></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Continue assistindo</h2><p>Retome sua próxima maratona</p></div><a class="cp-home-inline-action" href="/central-plus-favoritos.html">Sua lista ↗</a></div><div class="cp-home-rail cp-home-continue" id="cp-api-home-continue"><div class="cp-home-empty"><div><strong>Sua jornada começa aqui</strong>Abra um filme ou série para começar a montar seu histórico.</div></div></div></section>
+        <section class="cp-home-section cp-home-novelties-section"><div class="cp-home-section-head"><div><h2>Novidades</h2><p>Um mix de filmes e séries que chegaram aos streamings no Brasil</p></div><a class="cp-home-seeall" href="/central-plus-filmes.html">Explorar lançamentos ↗</a></div><div class="cp-home-rail cp-home-novelties" id="cp-api-home-novelties"><span class="cp-api-status">Carregando novidades…</span></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Apps recentes</h2><p>Seus serviços de streaming em um só lugar</p></div><a class="cp-home-seeall" href="/central-plus-apps.html">Ver apps ↗</a></div><div class="cp-home-rail" id="cp-api-home-apps"><a class="cp-api-card" href="/central-plus-apps.html"><div class="cp-api-poster" style="display:grid;place-items:center;font-size:34px;color:#e8eaf1">▶</div><div class="cp-api-title">Explorar aplicativos</div><div class="cp-api-meta">Seus serviços de streaming</div></a><a class="cp-api-card" href="/central-plus-apps.html"><div class="cp-api-poster" style="display:grid;place-items:center;font-size:30px;color:#e8eaf1">＋</div><div class="cp-api-title">Adicionar serviços</div><div class="cp-api-meta">Personalize sua Central+</div></a></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Séries</h2><p>Séries populares para sua próxima maratona</p></div><a class="cp-home-seeall" href="/central-plus-series.html">Ver todas ↗</a></div><div class="cp-home-rail" id="cp-api-home-series"><span class="cp-api-status">Carregando séries…</span></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Filmes recém-chegados aos streamings</h2><p>Lançamentos com disponibilidade de streaming no Brasil — sem títulos apenas em cartaz no cinema</p></div><a class="cp-home-seeall" href="/central-plus-filmes.html">Ver todos ↗</a></div><div class="cp-home-rail" id="cp-api-home-movies"><span class="cp-api-status">Carregando filmes…</span></div></section>
@@ -837,7 +839,7 @@
       const loadStreamingMovieRail=async()=>{
         const rail=$("#cp-api-home-movies",mount);
         try{
-          const items=await fetchItems("movie","streaming_new",false);
+          const items=await fetchItems("movie","streaming_new",true);
           // API results are already restricted to streaming availability in Brazil.
           const available=items
             .filter(item=>item&&item.id&&(item.backdrop_url||item.poster_url))
@@ -857,13 +859,29 @@
       const [streamingMovies,series,streamingSeries]=await Promise.all([
         loadStreamingMovieRail(),
         loadRail("cp-api-home-series","tv","streaming",18),
-        fetchItems("tv","streaming_new",false)
+        fetchItems("tv","streaming_new",true)
       ]);
       const streamingLaunches=[...streamingMovies,...streamingSeries]
         .filter(item=>item&&item.id)
         .sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")))
         .filter((item,index,all)=>all.findIndex(other=>String(other.id)===String(item.id)&&other.type===item.type)===index)
         .slice(0,6);
+      const renderHomeNovelties=items=>{
+        const rail=$("#cp-api-home-novelties",mount);if(!rail)return;
+        const sorted=(Array.isArray(items)?items:[])
+          .filter(item=>item&&item.id&&(item.backdrop_url||item.poster_url))
+          .sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")))
+          .filter((item,index,all)=>all.findIndex(other=>String(other.id)===String(item.id)&&other.type===item.type)===index)
+          .slice(0,12);
+        rail.innerHTML=sorted.map(item=>{
+          const image=esc(item.backdrop_url||item.poster_url||""),title=esc(item.title);
+          const kind=item.type==="tv"?"Série":"Filme";
+          const date=item.date?new Date(item.date+"T12:00:00").toLocaleDateString("pt-BR",{day:"2-digit",month:"short",year:"numeric"}):year(item);
+          const platforms=(item.provider_names||[]).slice(0,3).join(" · ");
+          return '<a class="cp-api-card cp-home-novelty-card" href="'+detailHref(item)+'" aria-label="Ver '+kind.toLowerCase()+': '+title+'"><div class="cp-home-novelty-art" style="background-image:url(&quot;'+image+'&quot;)"><span class="cp-home-novelty-type">'+kind+'</span></div><div class="cp-home-novelty-title">'+title+'</div><div class="cp-home-novelty-meta">'+esc(date||"Lançamento recente")+' · '+esc((item.genres||[]).slice(0,2).join(" · "))+'</div><div class="cp-home-novelty-providers">'+esc(platforms||"Disponível em streaming no Brasil")+'</div></a>';
+        }).join("")||'<div class="cp-home-error">Não encontramos lançamentos recentes disponíveis nos streamings do Brasil.</div>';
+      };
+      renderHomeNovelties(streamingLaunches);
       // Reuse the live RSS newsroom feed from the dedicated News page.
       const newsRail=$("#cp-api-home-news",mount);
       try{
@@ -1017,6 +1035,7 @@
             .slice(0,6);
           if(refreshed.length){
             streamingLaunches.splice(0,streamingLaunches.length,...refreshed);
+            renderHomeNovelties(refreshed);
             if(featuredItems.length&&typeof refreshHomeFeatured==="function")refreshHomeFeatured(refreshed);
             else{
               const feature=refreshed[0],hero=$("#cp-home-hero-art",mount),title=$("#cp-home-hero-title",mount);
