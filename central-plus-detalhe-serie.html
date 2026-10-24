@@ -161,6 +161,19 @@ episodeButton.addEventListener('click',()=>{
   }catch(_){showToast('Não foi possível salvar o progresso neste navegador')}
 });
 renderEpisodeProgress();
+const watchHistoryKey='centralplus-watch-history-v1';
+function saveSeriesToContinue(nextEpisode){
+  if(new URLSearchParams(location.search).has('tmdbId'))return;
+  try{
+    const entry={id:key,type:'tv',title:m.title,url:location.pathname+location.search,image:m.backdropImage||m.posterImage||'',provider:m.platform||'',nextEpisode:Number(nextEpisode)||readProgress()+1,updatedAt:Date.now()};
+    const old=JSON.parse(localStorage.getItem(watchHistoryKey)||'[]');
+    localStorage.setItem(watchHistoryKey,JSON.stringify([entry,...(Array.isArray(old)?old:[]).filter(x=>x&&!(String(x.id)===String(entry.id)&&x.type==='tv'))].slice(0,20)));
+  }catch(_){}
+}
+if(!new URLSearchParams(location.search).has('tmdbId')){
+  byId('streamBtn').addEventListener('click',()=>saveSeriesToContinue(readProgress()+1));
+  episodeButton.addEventListener('click',()=>saveSeriesToContinue(readProgress()+1));
+}
 byId('trailerBtn').href='https://www.youtube.com/results?search_query='+encodeURIComponent(m.search+' trailer oficial');
 const favoriteKey='centralplus-series-favoritos';
 function favorites(){try{return JSON.parse(localStorage.getItem(favoriteKey)||'[]')}catch(e){return[]}}
