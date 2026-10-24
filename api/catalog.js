@@ -107,7 +107,30 @@ module.exports = async function handler(req, res) {
       normalized.runtime = item.runtime || (item.episode_run_time && item.episode_run_time[0]) || null;
       return res.status(200).json({ item: normalized, source: "TMDB", region: "BR", updatedAt: new Date().toISOString() });
     }
-    if (section === "search") {
+    if (section === "streaming" || section === "streaming_new") {
+      // Restrict results to titles available online in Brazil; cinema-only titles are excluded.
+      const today = new Date().toISOString().slice(0, 10);
+      const providerIds = String(q.provider || "").split("|")
+        .map(value => value.trim())
+        .filter(value => /^\\d+$/.test(value))
+        .filter((value, index, all) => all.indexOf(value) === index)
+        .join("|");
+      const params = {
+        language: lang,
+        region: "BR",
+        watch_region: "BR",
+        with_watch_monetization_types: "flatrate|free|ads",
+        include_adult: "false",
+        sort_by: section === "streaming_new"
+          ? (type === "tv" ? "first_air_date.desc" : "primary_release_date.desc")
+          : "popularity.desc",
+        page: Math.max(1, Math.min(5, Number(q.page) || 1))
+      };
+      if (type === "tv") params["first_air_date.lte"] = today;
+      else params["primary_release_date.lte"] = today;
+      if (providerIds) params.with_watch_providers = providerIds;
+      data = await tmdb("/discover/" + type, params, auth);
+    } else if (section === "search") {
       const query = String(q.query || "").trim().slice(0,120);
       if (!query) return res.status(400).json({ error: "Informe query para pesquisar." });
       data = await tmdb("/search/" + type, { query, language: lang, region: "BR", include_adult: "false", page: 1 }, auth);
