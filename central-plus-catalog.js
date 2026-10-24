@@ -82,7 +82,7 @@
       @media(max-width:560px){.cp-api-card{flex-basis:130px}.cp-api-hero{align-items:flex-start;padding:14px}.cp-api-hero img{width:76px}}
     `;document.head.appendChild(style);
   }
-  async function fetchItems(type, section, providersEnabled=false) {
+  async function fetchItems(type, section, providersEnabled=true) {
     const response=await fetch(API+"?type="+type+"&section="+section+"&providers="+providersEnabled,{cache:"default"});
     const data=await response.json();
     if(!response.ok) throw new Error(data.error || "Catálogo indisponível");
@@ -752,11 +752,10 @@
       const loadStreamingMovieRail=async()=>{
         const rail=$("#cp-api-home-movies",mount);
         try{
-          const items=await fetchItems("movie","streaming_new");
-          // The API query itself is restricted to subscription/free streaming in Brazil.
-          // Provider enrichment is required for labels, not for deciding cinema availability.
+          const items=await fetchItems("movie","streaming_new",true);
+          // API results are already restricted to streaming availability in Brazil.
           const available=items
-            .filter(item=>item&&item.id&&item.backdrop_url||item&&item.id&&item.poster_url)
+            .filter(item=>item&&item.id&&(item.backdrop_url||item.poster_url))
             .sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
           rail.innerHTML=available.slice(0,18).map(item=>card(item,"home")).join("")||
             '<div class="cp-home-error">Não encontramos lançamentos recentes com disponibilidade de streaming confirmada no Brasil.</div>';
