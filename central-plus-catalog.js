@@ -778,7 +778,7 @@
       const loadStreamingMovieRail=async()=>{
         const rail=$("#cp-api-home-movies",mount);
         try{
-          const items=await fetchItems("movie","streaming_new",false);
+          const items=await fetchItems("movie","streaming_new",true);
           // API results are already restricted to streaming availability in Brazil.
           const available=items
             .filter(item=>item&&item.id&&(item.backdrop_url||item.poster_url))
@@ -795,7 +795,7 @@
       const [streamingMovies,series,streamingSeries]=await Promise.all([
         loadStreamingMovieRail(),
         loadRail("cp-api-home-series","tv","streaming",18),
-        fetchItems("tv","streaming_new",false)
+        fetchItems("tv","streaming_new",true)
       ]);
       const streamingLaunches=[...streamingMovies,...streamingSeries]
         .filter(item=>item&&item.id)
