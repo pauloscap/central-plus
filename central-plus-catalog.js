@@ -82,7 +82,7 @@
       @media(max-width:560px){.cp-api-card{flex-basis:130px}.cp-api-hero{align-items:flex-start;padding:14px}.cp-api-hero img{width:76px}}
     `;document.head.appendChild(style);
   }
-  async function fetchItems(type, section, providersEnabled=true) {
+  async function fetchItems(type, section, providersEnabled=false) {
     const response=await fetch(API+"?type="+type+"&section="+section+"&providers="+providersEnabled,{cache:"no-store"});
     const data=await response.json();
     if(!response.ok) throw new Error(data.error || "Catálogo indisponível");
@@ -173,7 +173,7 @@
       '<div class="cp-film-wide-meta"><span>'+esc(year(item)||"Filme")+'</span><span>Ver detalhes ↗</span></div></a>';
   }
   async function fetchStreamingProvider(provider,type="movie"){
-    const response=await fetch(API+"?type="+encodeURIComponent(type)+"&section=streaming&providers=true&provider="+encodeURIComponent(provider),{cache:"no-store"});
+    const response=await fetch(API+"?type="+encodeURIComponent(type)+"&section=streaming&providers=false&provider="+encodeURIComponent(provider));
     const data=await response.json();
     if(!response.ok)throw new Error(data.error||"Streaming indisponível");
     return data.items||[];
@@ -359,19 +359,22 @@
     const disclaimer=$("#filmes .film-disclaimer");
     if(disclaimer)disclaimer.textContent="Catálogo e disponibilidade para o Brasil consultados via TMDB/JustWatch. A oferta pode mudar; confirme no serviço antes de assistir.";
 
-    // Carrega uma fileira por vez para preservar a ordem editorial e não sobrecarregar a API.
-    for(const service of STREAMING_SERVICES){
-      const row=rails.querySelector('[data-service="'+service.label+'"]');
-      const track=row&&row.querySelector(".cp-streaming-row-track");
-      if(!track)continue;
-      try{
-        const titles=await fetchStreamingProvider(service.provider);
-        if(!titles.length){
-          track.innerHTML='<p class="cp-streaming-status">Nenhum filme disponível nesta plataforma nos resultados atuais do catálogo brasileiro.</p>';
-          continue;
-        }
-        track.innerHTML=titles.slice(0,12).map(item=>horizontalMovieCard(item,service.label)).join("");
-      }catch(_){track.innerHTML='<p class="cp-streaming-status">Não foi possível carregar esta fileira agora.</p>';}
+    // Carrega três fileiras em paralelo por lote: a página aparece antes e as plataformas não bloqueiam umas às outras.
+    for(let start=0;start<STREAMING_SERVICES.length;start+=3){
+      const batch=STREAMING_SERVICES.slice(start,start+3);
+      await Promise.all(batch.map(async service=>{
+        const row=rails.querySelector('[data-service="'+service.label+'"]');
+        const track=row&&row.querySelector(".cp-streaming-row-track");
+        if(!track)return;
+        try{
+          const titles=await fetchStreamingProvider(service.provider);
+          if(!titles.length){
+            track.innerHTML='<p class="cp-streaming-status">Nenhum filme disponível nesta plataforma nos resultados atuais do catálogo brasileiro.</p>';
+            return;
+          }
+          track.innerHTML=titles.slice(0,12).map(item=>horizontalMovieCard(item,service.label)).join("");
+        }catch(_){track.innerHTML='<p class="cp-streaming-status">Não foi possível carregar esta fileira agora.</p>';}
+      }));
     }
   }
   async function fillPage() {
@@ -770,7 +773,7 @@
         fetchItems("tv","streaming_new")
       ]);
       const streamingLaunches=[...streamingMovies,...streamingSeries]
-        .filter(item=>item&&(item.provider_names||[]).length>0)
+        .filter(item=>item&&item.id)
         .sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")))
         .filter((item,index,all)=>all.findIndex(other=>String(other.id)===String(item.id)&&other.type===item.type)===index)
         .slice(0,6);
@@ -909,7 +912,7 @@
             fetchItems("tv","streaming_new")
           ]);
           const refreshed=[...freshMovies,...freshLaunchSeries]
-            .filter(item=>item&&item.id&&(item.provider_names||[]).length>0)
+            .filter(item=>item&&item.id)
             .sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")))
             .filter((item,index,all)=>all.findIndex(other=>String(other.id)===String(item.id)&&other.type===item.type)===index)
             .slice(0,6);
