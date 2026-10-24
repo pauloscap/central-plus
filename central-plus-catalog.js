@@ -144,6 +144,7 @@
         .cp-home-links{display:flex;align-items:center;justify-content:center;gap:clamp(12px,1.8vw,26px);flex:1}.cp-home-links a{font-size:12px;color:#b7bdcb;text-decoration:none;white-space:nowrap;transition:color .2s}.cp-home-links a:hover,.cp-home-links a[aria-current="page"]{color:#fff}
         .cp-home-status{color:#7f8799;font-size:9px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
         .cp-home-news .cp-api-card,.cp-home-continue .cp-api-card{flex-basis:clamp(250px,30vw,390px);scroll-snap-align:start}
+        .cp-home-live .cp-home-live-card{display:block;flex:0 0 clamp(240px,27vw,350px);min-width:0;scroll-snap-align:start;color:inherit;text-decoration:none;border:1px solid #ffffff16;border-radius:12px;overflow:hidden;background:#11141c;transition:transform .2s,border-color .2s}.cp-home-live .cp-home-live-card:hover{transform:translateY(-3px);border-color:#ffffff45}.cp-home-live-art{position:relative;aspect-ratio:16/9;background:#171b25 center/cover no-repeat}.cp-home-live-art:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(4,5,9,.78),transparent 72%)}.cp-home-live-status{position:absolute;z-index:1;top:10px;left:10px;padding:5px 7px;border:1px solid #ffffff35;border-radius:4px;background:#08090dcc;font-size:9px;letter-spacing:.06em;text-transform:uppercase}.cp-home-live-status.is-live{border-color:#ff59686b;color:#fff1f2}.cp-home-live-status.is-live:before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:#ff5968;margin-right:6px}.cp-home-live-copy{padding:11px 12px 13px}.cp-home-live-title{font-size:13px;font-weight:800}.cp-home-live-meta{font-size:10px;color:#aab1c0;margin-top:5px}.cp-home-live-updated{font-size:9px;color:#cbd3e1;margin-top:7px}
         .cp-home-news .cp-api-poster,.cp-home-continue .cp-api-poster{width:100%;aspect-ratio:16/9;border-radius:12px}
         .cp-home-news .cp-api-title,.cp-home-continue .cp-api-title{font-size:14px}
         .cp-home-news-card{display:block;flex:0 0 clamp(280px,31vw,410px);min-width:0;scroll-snap-align:start;color:inherit;text-decoration:none}
@@ -185,7 +186,7 @@
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Apps recentes</h2><p>Seus serviços de streaming em um só lugar</p></div><a class="cp-home-seeall" href="/central-plus-apps.html">Ver apps ↗</a></div><div class="cp-home-rail" id="cp-api-home-apps"><a class="cp-api-card" href="/central-plus-apps.html"><div class="cp-api-poster" style="display:grid;place-items:center;font-size:34px;color:#e8eaf1">▶</div><div class="cp-api-title">Explorar aplicativos</div><div class="cp-api-meta">Seus serviços de streaming</div></a><a class="cp-api-card" href="/central-plus-apps.html"><div class="cp-api-poster" style="display:grid;place-items:center;font-size:30px;color:#e8eaf1">＋</div><div class="cp-api-title">Adicionar serviços</div><div class="cp-api-meta">Personalize sua Central+</div></a></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Séries</h2><p>Séries populares para sua próxima maratona</p></div><a class="cp-home-seeall" href="/central-plus-series.html">Ver todas ↗</a></div><div class="cp-home-rail" id="cp-api-home-series"><span class="cp-api-status">Carregando séries…</span></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Filmes</h2><p>Filmes populares para descobrir</p></div><a class="cp-home-seeall" href="/central-plus-filmes.html">Ver todos ↗</a></div><div class="cp-home-rail" id="cp-api-home-movies"><span class="cp-api-status">Carregando filmes…</span></div></section>
-        <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Ao vivo</h2><p>Acesse a programação e seus canais</p></div><a class="cp-home-seeall" href="/central-plus-ao-vivo.html">Abrir ao vivo ↗</a></div><div class="cp-home-rail" id="cp-api-home-live"><a class="cp-api-card" href="/central-plus-ao-vivo.html"><div class="cp-api-poster" style="display:grid;place-items:center;font-size:30px;color:#f6f7fb;background:radial-gradient(circle at 50% 50%,#373d50,#12141c)">▶</div><div class="cp-api-title">Central+ Ao vivo</div><div class="cp-api-meta">Abrir canais e programação</div></a></div></section>
+        <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Ao vivo</h2><p>Canais oficiais — os sinais e prévias atualizados aparecem primeiro</p></div><a class="cp-home-seeall" href="/central-plus-ao-vivo.html">Ver todos os canais ↗</a></div><div class="cp-home-rail cp-home-live" id="cp-api-home-live"><span class="cp-api-status">Atualizando canais…</span></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Favoritos</h2><p>Uma área para seus títulos salvos</p></div><a class="cp-home-seeall" href="/central-plus-favoritos.html">Ver favoritos ↗</a></div><div class="cp-home-rail" id="cp-api-home-favorites"><div class="cp-home-empty"><div><strong>Seus favoritos em um só lugar</strong>Explore filmes e séries e abra sua lista de favoritos.</div></div></div></section>
         <footer class="cp-home-footer"><span>Central+ · Descubra o que assistir</span><span>Metadados e imagens fornecidos pelo TMDB. A Central+ não é endossada pelo TMDB.</span></footer>`;
       const loadRail=async(id,type,section,limit=18)=>{
@@ -251,6 +252,52 @@
         newsRail.innerHTML='<div class="cp-home-error">Não foi possível carregar as notícias agora. <a href="/central-plus-noticias.html">Abrir a central de notícias ↗</a></div>';
         console.warn("Central+ live news:",error);
       }
+      // Home Ao vivo shares the channel registry and preview endpoint used by the dedicated Ao vivo page.
+      const liveRail=$("#cp-api-home-live",mount);
+      const liveChannels=[
+        {id:"tv-globo-pa",name:"TV Globo Pará",platform:"Globoplay",url:"https://globoplay.globo.com/tv-globo/ao-vivo/7832875/"},
+        {id:"sbt-para",name:"SBT Pará",platform:"SBT ao vivo",url:"https://www.sbt.com.br/ao-vivo"},
+        {id:"rbatv",name:"RBATV",platform:"Portal RBA",url:"https://rbatv.dol.com.br/aovivo/"},
+        {id:"tv-cultura-pa",name:"TV Cultura do Pará",platform:"Portal Cultura",url:"https://www.portalcultura.com.br/pt-br"},
+        {id:"cnn-brasil",name:"CNN Brasil",platform:"YouTube",url:"https://www.youtube.com/@CNNBrasil/live"},
+        {id:"globonews",name:"GloboNews",platform:"Globoplay",url:"https://globoplay.globo.com/globonews/ao-vivo/7339101/"},
+        {id:"band-jornalismo",name:"Band Jornalismo",platform:"YouTube",url:"https://www.youtube.com/@BandJornalismo/live"},
+        {id:"sportv",name:"sportv",platform:"Globoplay",url:"https://globoplay.globo.com/sportv/ao-vivo/9045469/"},
+        {id:"cazetv",name:"CazéTV",platform:"YouTube",url:"https://www.youtube.com/@CazeTV/live"},
+        {id:"tv-brasil",name:"TV Brasil",platform:"Web TV",url:"https://tvbrasil.ebc.com.br/webtv/"},
+        {id:"canal-gov",name:"Canal Gov",platform:"Canal Gov",url:"https://canalgov.ebc.com.br/ao-vivo"},
+        {id:"sbt-national",name:"SBT nacional",platform:"+SBT",url:"https://mais.sbt.com.br/"}
+      ];
+      const liveSafeUrl=value=>{try{const u=new URL(value,location.origin);return /^https?:$/.test(u.protocol)?u.href:"#"}catch(_){return "#"}};
+      const renderHomeLive=async()=>{
+        if(!liveRail)return;
+        try{
+          const response=await fetch("/api/live-previews",{headers:{"Accept":"application/json"},cache:"no-store"});
+          if(!response.ok)throw new Error("HTTP "+response.status);
+          const data=await response.json();
+          const previews=Array.isArray(data.items)?data.items:[];
+          const previewById=new Map(previews.filter(item=>item&&item.id).map(item=>[item.id,item]));
+          const channels=liveChannels.map((channel,index)=>({...channel,index,preview:previewById.get(channel.id)||null}))
+            .sort((a,b)=>{
+              const aLive=a.preview&&a.preview.kind==="live"?1:0,bLive=b.preview&&b.preview.kind==="live"?1:0;
+              if(aLive!==bLive)return bLive-aLive;
+              const aTime=Date.parse(a.preview&&a.preview.fetchedAt||0)||0,bTime=Date.parse(b.preview&&b.preview.fetchedAt||0)||0;
+              return bTime-aTime||a.index-b.index;
+            });
+          liveRail.innerHTML=channels.map(channel=>{
+            const preview=channel.preview||{},images=Array.isArray(preview.images)?preview.images:[],image=images.find(value=>/^https?:/i.test(value))||"";
+            const live=preview.kind==="live",status=live?"Transmissão detectada":(preview.kind==="official"?"Prévia oficial atualizada":"Prévia da página");
+            const updated=preview.fetchedAt?new Date(preview.fetchedAt).toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}):"";
+            return '<a class="cp-home-live-card" href="'+liveSafeUrl(channel.url)+'" aria-label="Abrir '+esc(channel.name)+' na plataforma oficial" target="_self"><div class="cp-home-live-art"'+(image?' style="background-image:url(&quot;'+esc(image)+'&quot;)"':"")+'><span class="cp-home-live-status'+(live?" is-live":"")+'">'+status+'</span></div><div class="cp-home-live-copy"><div class="cp-home-live-title">'+esc(channel.name)+'</div><div class="cp-home-live-meta">'+esc(channel.platform)+' · Abrir canal oficial ↗</div><div class="cp-home-live-updated">'+(updated?"Prévia consultada às "+esc(updated):"Consulte a transmissão na plataforma oficial")+'</div></div></a>';
+          }).join("")||'<div class="cp-home-error">Os canais aparecerão aqui quando as prévias estiverem disponíveis.</div>';
+        }catch(error){
+          liveRail.innerHTML='<a class="cp-api-card" href="/central-plus-ao-vivo.html"><div class="cp-api-poster" style="display:grid;place-items:center;font-size:30px;color:#f6f7fb;background:radial-gradient(circle at 50% 50%,#373d50,#12141c)">▶</div><div class="cp-api-title">Central+ Ao vivo</div><div class="cp-api-meta">Não foi possível atualizar as prévias. Abrir a lista completa.</div></a>';
+          console.warn("Central+ home live channels:",error);
+        }
+      };
+      renderHomeLive();
+      window.setInterval(()=>{if(!document.hidden)renderHomeLive()},5*60*1000);
+      document.addEventListener("visibilitychange",()=>{if(!document.hidden)renderHomeLive()});
       const featuredItems=movies.slice(0,6).length?movies.slice(0,6):series.slice(0,6);
       if(featuredItems.length){
         let activeSlide=0;
