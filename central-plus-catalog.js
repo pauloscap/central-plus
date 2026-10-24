@@ -1,5 +1,5 @@
 (() => {
-  const API = "/api/catalog?providers=true";
+  const API = "/api/catalog";
   const $ = (s, root=document) => root.querySelector(s);
   const esc = (s) => String(s || "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const poster = item => item.poster_url || item.backdrop_url || "";
@@ -54,7 +54,7 @@
     `;document.head.appendChild(style);
   }
   async function fetchItems(type, section, providersEnabled=true) {
-    const response=await fetch(API+"&type="+type+"&section="+section+"&providers="+providersEnabled);
+    const response=await fetch(API+"?type="+type+"&section="+section+"&providers="+providersEnabled);
     const data=await response.json();
     if(!response.ok) throw new Error(data.error || "Catálogo indisponível");
     return data.items || [];
@@ -125,7 +125,7 @@
       '<div class="cp-film-wide-meta"><span>'+esc(year(item)||"Filme")+'</span><span>Ver detalhes ↗</span></div></a>';
   }
   async function fetchStreamingProvider(provider){
-    const response=await fetch(API+"&type=movie&section=streaming&providers=false&provider="+encodeURIComponent(provider));
+    const response=await fetch(API+"?type=movie&section=streaming&providers=false&provider="+encodeURIComponent(provider));
     const data=await response.json();
     if(!response.ok)throw new Error(data.error||"Streaming indisponível");
     return data.items||[];
@@ -194,7 +194,7 @@
           const results=await Promise.all([fetchItems("movie","streaming"),fetchItems("movie","streaming_new")]);
           renderFilmStreamingPage(results[0],results[1]);
         } catch(error) {
-          if(grid){const note=document.createElement("p");note.className="cp-api-status";note.textContent="Não foi possível carregar os opções de streaming: "+error.message;grid.prepend(note)}
+          if(grid){const note=document.createElement("p");note.className="cp-api-status";note.textContent="Não foi possível carregar as opções de streaming: "+error.message;grid.prepend(note)}
         }
         return;
       }
@@ -217,7 +217,7 @@
       const params=new URLSearchParams(location.search),id=params.get("tmdbId"),type=params.get("tipo")==="tv"||path.includes("detalhe-serie")?"tv":"movie";
       if(id){
         try{
-          const res=await fetch(API+"&type="+type+"&section=details&id="+encodeURIComponent(id)),data=await res.json();
+          const res=await fetch(API+"?type="+type+"&section=details&id="+encodeURIComponent(id)),data=await res.json();
           if(!res.ok)throw new Error(data.error||"Ficha indisponível");
           const item=data.item;
           const set=(selector,value)=>{const el=$(selector);if(el&&value!==undefined&&value!==null)el.textContent=value};
