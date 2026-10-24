@@ -116,7 +116,8 @@
     {label:"Apple TV",provider:"350|2"},
     {label:"MUBI",provider:"11"},
     {label:"Paramount+",provider:"531"},
-    {label:"Crunchyroll",provider:"283"}
+    {label:"Crunchyroll",provider:"283"},
+    {label:"Pluto TV",provider:"300"}
   ];
   function movieGenreSlugs(item){
     return (item.genre_ids||[]).map(id=>{const g=MOVIE_GENRES.find(x=>x[0]===id);return g?g[1]:"";}).filter(Boolean).join(" ");
@@ -143,6 +144,10 @@
     if(title)title.innerHTML='Filmes para <span>assistir agora.</span>';
     const intro=$("#filmes .films-intro p");
     if(intro)intro.textContent="Lançamentos e descobertas disponíveis nos serviços de streaming no Brasil. Escolha um gênero ou explore por plataforma.";
+    const toolbarTitle=$("#filmes .film-toolbar .section-title");
+    if(toolbarTitle)toolbarTitle.textContent="Filmes disponíveis no streaming";
+    const toolbarSubtitle=$("#filmes .film-toolbar .section-subtitle");
+    if(toolbarSubtitle)toolbarSubtitle.textContent="Explore o catálogo por gênero e descubra onde assistir sem misturar estreias exclusivas de cinema.";
 
     // O destaque usa seis lançamentos recentes, já filtrados pela disponibilidade de streaming no Brasil.
     const featureItems=[];
