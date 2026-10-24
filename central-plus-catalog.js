@@ -329,7 +329,7 @@
         genreList.map(g=>'<button class="film-filter" data-filter="'+g[1]+'" type="button" aria-pressed="false">'+g[2]+'</button>').join("");
       filterRoot.setAttribute("aria-label","Filtrar filmes por gênero");
       const applyGenreFilter=selected=>{
-        const tiles=[...document.querySelectorAll("#filmes .cp-film-wide")];
+        const tiles=[...grid.querySelectorAll(".cp-film-wide")];
         let visible=0;
         tiles.forEach(tile=>{
           const genres=(tile.dataset.genre||"").split(/\s+/).filter(Boolean);
