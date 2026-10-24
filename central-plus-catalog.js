@@ -326,10 +326,17 @@
           return [];
         }
       };
-      const [movies,series]=await Promise.all([
+      const [movies,series,streamingMovies,streamingSeries]=await Promise.all([
         loadRail("cp-api-home-movies","movie","trending",18),
-        loadRail("cp-api-home-series","tv","trending",18)
+        loadRail("cp-api-home-series","tv","trending",18),
+        fetchItems("movie","streaming_new"),
+        fetchItems("tv","streaming_new")
       ]);
+      const streamingLaunches=[...streamingMovies,...streamingSeries]
+        .filter(item=>item&&(item.provider_names||[]).length>0)
+        .sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")))
+        .filter((item,index,all)=>all.findIndex(other=>String(other.id)===String(item.id)&&other.type===item.type)===index)
+        .slice(0,6);
       // Reuse the live RSS newsroom feed from the dedicated News page.
       const newsRail=$("#cp-api-home-news",mount);
       try{
@@ -423,22 +430,33 @@
       renderHomeLive();
       window.setInterval(()=>{if(!document.hidden)renderHomeLive()},5*60*1000);
       document.addEventListener("visibilitychange",()=>{if(!document.hidden)renderHomeLive()});
-      const featuredItems=movies.slice(0,6).length?movies.slice(0,6):series.slice(0,6);
+      const featuredItems=streamingLaunches;
+      const eyebrow=$(".cp-home-eyebrow",mount);
+      if(eyebrow)eyebrow.textContent="Novidades nos streamings · Brasil";
       if(featuredItems.length){
-        let activeSlide=0;
+        let activeSlide=0,autoTimer=null;
         const showFeature=(index)=>{
           activeSlide=(index+featuredItems.length)%featuredItems.length;
           const feature=featuredItems[activeSlide];
-          const hero=$("#cp-home-hero-art",mount);if(hero)hero.style.backgroundImage='url("'+(feature.backdrop_url||feature.poster_url||"")+'")';
+          const hero=$("#cp-home-hero-art",mount);if(hero)hero.style.backgroundImage='linear-gradient(90deg,rgba(5,7,12,.28),rgba(5,7,12,.06)),url("'+(feature.backdrop_url||feature.poster_url||"")+'")';
           const title=$("#cp-home-hero-title",mount);if(title)title.textContent=feature.title;
-          const meta=$("#cp-home-hero-meta",mount);if(meta)meta.innerHTML='<span class="cp-home-chip">'+esc(year(feature)||"Em destaque")+'</span><span>'+esc((feature.genres||[]).slice(0,3).join(" · "))+'</span><span>★ '+esc(feature.rating||"—")+'</span>';
-          const overview=$("#cp-home-hero-overview",mount);if(overview)overview.textContent=feature.overview||"Descubra mais sobre este título no catálogo Central+.";
-          const detail=$("#cp-home-hero-details",mount);if(detail)detail.href=detailHref(feature);
+          const dateLabel=feature.date?new Date(feature.date+"T12:00:00").toLocaleDateString("pt-BR",{day:"2-digit",month:"short",year:"numeric"}):year(feature);
+          const platforms=(feature.provider_names||[]).slice(0,3).join(" · ");
+          const meta=$("#cp-home-hero-meta",mount);if(meta)meta.innerHTML='<span class="cp-home-chip">'+esc(feature.type==="tv"?"Série":"Filme")+'</span><span class="cp-home-chip">'+esc(dateLabel||"Lançamento")+'</span><span>'+esc((feature.genres||[]).slice(0,2).join(" · "))+'</span>'+(platforms?'<span class="cp-home-chip">'+esc(platforms)+'</span>':"");
+          const overview=$("#cp-home-hero-overview",mount);if(overview)overview.textContent=feature.overview||"Descubra este lançamento disponível em streaming.";
+          const detail=$("#cp-home-hero-details",mount);if(detail){detail.href=detailHref(feature);detail.textContent="Ver título e opções";}
           const count=$("#cp-home-slide-count",mount);if(count)count.textContent=String(activeSlide+1).padStart(2,"0")+" / "+String(featuredItems.length).padStart(2,"0");
         };
-        $("#cp-home-prev",mount).onclick=()=>showFeature(activeSlide-1);
-        $("#cp-home-next",mount).onclick=()=>showFeature(activeSlide+1);
-        showFeature(0);
+        const restartAuto=()=>{if(autoTimer)window.clearInterval(autoTimer);autoTimer=window.setInterval(()=>{if(!document.hidden)showFeature(activeSlide+1)},7000)};
+        $("#cp-home-prev",mount).onclick=()=>{showFeature(activeSlide-1);restartAuto()};
+        $("#cp-home-next",mount).onclick=()=>{showFeature(activeSlide+1);restartAuto()};
+        const heroSection=$(".cp-home-hero",mount);
+        if(heroSection){heroSection.addEventListener("mouseenter",()=>{if(autoTimer)window.clearInterval(autoTimer)});heroSection.addEventListener("mouseleave",restartAuto);heroSection.addEventListener("focusin",()=>{if(autoTimer)window.clearInterval(autoTimer)});heroSection.addEventListener("focusout",restartAuto)}
+        showFeature(0);restartAuto();
+      }else{
+        const heroTitle=$("#cp-home-hero-title",mount);if(heroTitle)heroTitle.textContent="Novidades nos streamings em breve";
+        const heroOverview=$("#cp-home-hero-overview",mount);if(heroOverview)heroOverview.textContent="Não encontramos lançamentos recentes com disponibilidade confirmada para o Brasil. Tente novamente mais tarde.";
+        const controls=$(".cp-home-slide-controls",mount);if(controls)controls.hidden=true;
       }
     }
   }
