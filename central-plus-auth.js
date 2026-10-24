@@ -7,7 +7,6 @@
   const show = (id, visible) => { const el=$(id); if(el) el.hidden=!visible; };
   const safe = value => String(value || "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
   async function init() {
-    const status = $("accountStatus");
     const authPanel = $("authPanel");
     const profilePanel = $("profilePanel");
     const form = $("authForm");
@@ -23,6 +22,8 @@
     let currentUser = null;
     let loadingProfile = false;
     const setStatus = (message, kind) => {
+      const profileVisible=profilePanel&&!profilePanel.hidden;
+      const status=profileVisible?$("accountStatusProfile"):$("accountStatus");
       if(!status) return;
       status.textContent=message||"";
       status.dataset.kind=kind||"info";
@@ -33,6 +34,7 @@
       const signup=mode==="signup";
       show("authNameWrap",signup);
       show("authUsernameWrap",signup);
+      if(nameField)nameField.required=signup;
       if(modeLabel)modeLabel.textContent=signup?"Criar minha conta":"Entrar";
       if(modeToggle)modeToggle.textContent=signup?"Já tenho uma conta · Entrar":"Ainda não tenho conta · Criar perfil";
       text("authEyebrow",signup?"COMECE SUA JORNADA":"BEM-VINDO DE VOLTA");
@@ -126,8 +128,8 @@
             if($("profileUsername")&&!$("profileUsername").value)$("profileUsername").value=username;
             setStatus("Conta criada! Seu perfil já está conectado.","success");
           }else{
-            setStatus("Cadastro iniciado. Confira seu e-mail para confirmar a conta; depois volte aqui para entrar.","success");
             setMode("login");
+            setStatus("Cadastro iniciado. Confira seu e-mail para confirmar a conta; depois volte aqui para entrar.","success");
           }
         }else{
           const {data,error}=await client.auth.signInWithPassword({email,password});
