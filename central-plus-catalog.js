@@ -38,6 +38,13 @@
       .cp-film-wide-copy strong{font-size:clamp(14px,1.5vw,19px);line-height:1.1;letter-spacing:-.035em}
       .cp-film-wide-kicker{font-size:9px;color:#d0d4df;letter-spacing:.04em}
       .cp-film-wide-badge{position:absolute;left:10px;top:10px;z-index:2;border:1px solid #ffffff38;border-radius:4px;padding:5px 7px;background:#080a10c9;font-size:9px;font-weight:750}
+      .cp-film-provider-mark{position:absolute;z-index:3;top:10px;left:10px;min-width:38px;height:38px;padding:3px;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid #ffffff35;border-radius:9px;background:rgba(8,10,16,.88);box-shadow:0 5px 18px #0006;backdrop-filter:blur(8px)}
+      .cp-film-provider-mark img{display:block;width:32px;height:32px;object-fit:contain;border-radius:6px}
+      .cp-film-provider-mark>span{font-size:9px;font-weight:800;max-width:88px;padding:0 5px;line-height:1.1;text-align:center}
+      .cp-film-provider-mark img[src=""]{display:none}
+      .app[data-page="filmes"] .film-filter{cursor:pointer;user-select:none}
+      .app[data-page="filmes"] .film-filter[aria-pressed="true"]{box-shadow:0 0 0 1px #ffffff30}
+      .app[data-page="filmes"] #cp-film-streaming-rails .cp-film-wide[hidden]{display:none}
       .cp-film-wide-meta{display:flex;justify-content:space-between;gap:8px;padding:8px 2px 0;font-size:10px;color:#aeb4c2}
       .cp-streaming-rails-heading{padding:34px 0 10px}.cp-streaming-rails-heading h2{font-size:clamp(23px,3vw,34px);letter-spacing:-.05em;margin:8px 0}.cp-streaming-rails-heading p{font-size:12px;color:#aeb4c2}
       .cp-streaming-row{margin:28px 0 34px}.cp-streaming-row-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-right:var(--gutter);margin-bottom:12px}.cp-streaming-row-head h3{margin:0;font-size:clamp(17px,2vw,22px);letter-spacing:-.035em}.cp-streaming-row-head span{font-size:10px;color:#939aaa}
@@ -136,17 +143,26 @@
   function movieGenreSlugs(item){
     return (item.genre_ids||[]).map(id=>{const g=MOVIE_GENRES.find(x=>x[0]===id);return g?g[1]:"";}).filter(Boolean).join(" ");
   }
+  function serviceLogo(item, serviceLabel){
+    const service=STREAMING_SERVICES.find(s=>s.label===serviceLabel);
+    const ids=service?service.provider.split("|"):[];
+    const options=Array.isArray(item.provider_options)?item.provider_options:[];
+    const match=options.find(p=>ids.includes(String(p.id))&&p.logo_url)||
+      options.find(p=>String(p.name||"").toLowerCase()===String(serviceLabel||"").toLowerCase()&&p.logo_url);
+    return match?match.logo_url:"";
+  }
   function horizontalMovieCard(item, serviceLabel){
     const href=detailHref(item), image=item.backdrop_url||item.poster_url||"", title=esc(item.title);
     const genres=(item.genres||[]).slice(0,2).join(" · ");
+    const logo=serviceLogo(item,serviceLabel);
+    const badge=serviceLabel?'<span class="cp-film-provider-mark" title="'+esc(serviceLabel)+'">'+(logo?'<img src="'+esc(logo)+'" alt="'+esc(serviceLabel)+'" loading="lazy">':'<span>'+esc(serviceLabel)+'</span>')+'</span>':'<span class="cp-film-wide-badge">'+esc(providers(item)||"Streaming")+'</span>';
     return '<a class="cp-film-wide" href="'+href+'" data-genre="'+movieGenreSlugs(item)+'" data-title="'+title+'">'+
-      '<div class="cp-film-wide-art" style="background-image:linear-gradient(0deg,rgba(4,5,9,.9),rgba(4,5,9,.02) 78%),url(&quot;'+esc(image)+'&quot;)">'+
-      '<span class="cp-film-wide-badge">'+esc(serviceLabel||providers(item)||"Streaming")+'</span>'+
+      '<div class="cp-film-wide-art" style="background-image:linear-gradient(0deg,rgba(4,5,9,.9),rgba(4,5,9,.02) 78%),url(&quot;'+esc(image)+'&quot;)">'+badge+
       '<div class="cp-film-wide-copy"><span class="cp-film-wide-kicker">'+esc(genres||"Filme")+'</span><strong>'+title+'</strong></div></div>'+
       '<div class="cp-film-wide-meta"><span>'+esc(year(item)||"Filme")+'</span><span>Ver detalhes ↗</span></div></a>';
   }
   async function fetchStreamingProvider(provider,type="movie"){
-    const response=await fetch(API+"?type="+encodeURIComponent(type)+"&section=streaming&providers=false&provider="+encodeURIComponent(provider));
+    const response=await fetch(API+"?type="+encodeURIComponent(type)+"&section=streaming&providers=true&provider="+encodeURIComponent(provider));
     const data=await response.json();
     if(!response.ok)throw new Error(data.error||"Streaming indisponível");
     return data.items||[];
@@ -301,11 +317,25 @@
       filterRoot.innerHTML='<button class="film-filter active" data-filter="todos" type="button" aria-pressed="true">Todos</button>'+
         genreList.map(g=>'<button class="film-filter" data-filter="'+g[1]+'" type="button" aria-pressed="false">'+g[2]+'</button>').join("");
       filterRoot.setAttribute("aria-label","Filtrar filmes por gênero");
-      filterRoot.querySelectorAll("[data-filter]").forEach(button=>button.addEventListener("click",()=>{
-        const selected=button.dataset.filter||"todos";
-        grid.querySelectorAll(".cp-film-wide").forEach(tile=>{tile.hidden=selected!=="todos"&&tile.dataset.genre.split(" ").indexOf(selected)<0;});
-        filterRoot.querySelectorAll(".film-filter").forEach(b=>{const active=b===button;b.classList.toggle("active",active);b.setAttribute("aria-pressed",active?"true":"false");});
-        const count=$("#film-count");if(count)count.textContent=String([...grid.querySelectorAll(".cp-film-wide")].filter(tile=>!tile.hidden).length);
+      const applyGenreFilter=selected=>{
+        const tiles=[...document.querySelectorAll("#filmes .cp-film-wide")];
+        let visible=0;
+        tiles.forEach(tile=>{
+          const genres=(tile.dataset.genre||"").split(/\\s+/).filter(Boolean);
+          const show=selected==="todos"||genres.includes(selected);
+          tile.hidden=!show;
+          if(show&&grid.contains(tile))visible++;
+        });
+        filterRoot.querySelectorAll("[data-filter]").forEach(button=>{
+          const active=(button.dataset.filter||"todos")===selected;
+          button.classList.toggle("active",active);button.setAttribute("aria-pressed",active?"true":"false");
+        });
+        const count=$("#film-count");if(count)count.textContent=String(visible);
+        const empty=$("#film-empty");if(empty)empty.hidden=visible>0;
+      };
+      filterRoot.querySelectorAll("[data-filter]").forEach(button=>button.addEventListener("click",event=>{
+        event.preventDefault();event.stopPropagation();
+        applyGenreFilter(button.dataset.filter||"todos");
       }));
     }
     const count=$("#film-count");if(count)count.textContent=String((items||[]).length);
