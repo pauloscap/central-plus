@@ -863,8 +863,6 @@
         try{const old=JSON.parse(localStorage.getItem(RECENT_APPS_KEY)||"[]");const list=[entry,...(Array.isArray(old)?old:[]).filter(x=>x&&String(x.name).toLowerCase()!==name.toLowerCase())].slice(0,12);localStorage.setItem(RECENT_APPS_KEY,JSON.stringify(list));}catch(_){}
       };
       mount.addEventListener("click",event=>{const link=event.target.closest(".cp-home-app-card");if(link){recordRecentApp(link);if(link.parentElement)link.parentElement.prepend(link);}},true);
-      renderRecentApps();
-      renderContinueWatching();
       const WATCH_HISTORY_KEY="centralplus-watch-history-v1";
       const renderContinueWatching=()=>{
         const rail=$("#cp-api-home-continue",mount);if(!rail)return;
@@ -886,6 +884,8 @@
           return '<a class="cp-api-card cp-home-history-card" href="'+href+'"><div class="cp-api-poster cp-home-history-art"'+art+'><span class="cp-home-history-type">'+type+'</span><span class="cp-home-history-resume">'+esc(resume)+' ↗</span></div><div class="cp-api-title">'+title+'</div><div class="cp-api-meta">'+provider+' · '+esc(resume)+'</div></a>';
         }).join("");
       };
+      renderRecentApps();
+      renderContinueWatching();
       window.addEventListener("storage",event=>{
         if(event.key===WATCH_HISTORY_KEY)renderContinueWatching();
         if(event.key===RECENT_APPS_KEY)renderRecentApps();
