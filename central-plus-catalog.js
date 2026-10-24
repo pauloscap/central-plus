@@ -124,8 +124,8 @@
       @media(max-width:560px){.cp-api-card{flex-basis:130px}.cp-api-hero{align-items:flex-start;padding:14px}.cp-api-hero img{width:76px}}
     `;document.head.appendChild(style);
   }
-  async function fetchItems(type, section, providersEnabled=true) {
-    const response=await fetch(API+"?type="+type+"&section="+section+"&providers="+providersEnabled,{cache:"default"});
+  async function fetchItems(type, section, providersEnabled=true, page=1) {
+    const response=await fetch(API+"?type="+type+"&section="+section+"&providers="+providersEnabled+"&page="+Math.max(1,Math.min(5,Number(page)||1)),{cache:"default"});
     const data=await response.json();
     if(!response.ok) throw new Error(data.error || "Catálogo indisponível");
     return data.items || [];
@@ -463,8 +463,16 @@
       const grid=$(isSeriesPage?"#series-grid":"#film-grid");
       if(isFilmPage){
         try {
-          const results=await Promise.all([fetchItems("movie","streaming",false),fetchItems("movie","streaming_new",false)]);
-          await renderFilmStreamingPage(results[0],results[1]);
+          const results=await Promise.all([
+            fetchItems("movie","streaming",false,1),
+            fetchItems("movie","streaming_new",false,1),
+            fetchItems("movie","streaming",false,2),
+            fetchItems("movie","streaming_new",false,2)
+          ]);
+          const uniqueMovies=list=>(list||[]).filter((item,index,all)=>item&&item.id&&all.findIndex(other=>other&&String(other.id)===String(item.id))===index);
+          const streamingMovies=uniqueMovies([...results[0],...results[2]]);
+          const streamingLaunches=uniqueMovies([...results[1],...results[3]]).sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
+          await renderFilmStreamingPage(streamingMovies,streamingLaunches);
         } catch(error) {
           if(grid){const note=document.createElement("p");note.className="cp-api-status";note.textContent="Não foi possível carregar as opções de streaming: "+error.message;grid.prepend(note)}
         }
@@ -740,8 +748,8 @@
         <section class="cp-home-hero"><div class="cp-home-hero-art" id="cp-home-hero-art"></div><div class="cp-home-slide-controls"><button class="cp-home-slide-btn" id="cp-home-prev" aria-label="Destaque anterior">‹</button><span class="cp-home-slide-count" id="cp-home-slide-count">01 / 06</span><button class="cp-home-slide-btn" id="cp-home-next" aria-label="Próximo destaque">›</button></div><div class="cp-home-hero-copy"><div class="cp-home-eyebrow">Em destaque · catálogo atualizado</div><h1 id="cp-home-hero-title">Descubra sua próxima história</h1><div class="cp-home-hero-meta" id="cp-home-hero-meta"><span class="cp-home-chip">Central+ seleção</span></div><p id="cp-home-hero-overview">Filmes e séries para sua próxima maratona.</p><div class="cp-home-actions"><a class="cp-home-btn" id="cp-home-hero-details" href="/central-plus-filmes.html">＋ Explorar título</a><a class="cp-home-btn secondary" href="/central-plus-filmes.html">Explorar catálogo <span>↗</span></a></div></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Notícias atualizadas</h2><p>Novos títulos e lançamentos do universo do entretenimento</p></div><div class="cp-home-news-actions"><button class="cp-home-news-control" id="cp-home-news-prev" type="button" aria-label="Notícias anteriores">‹</button><button class="cp-home-news-control" id="cp-home-news-next" type="button" aria-label="Próximas notícias">›</button><a class="cp-home-seeall" href="/central-plus-noticias.html">Ver notícias ↗</a></div></div><div class="cp-home-rail cp-home-news" id="cp-api-home-news"><span class="cp-api-status">Carregando atualizações…</span></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Continue assistindo</h2><p>Retome sua próxima maratona</p></div><a class="cp-home-inline-action" href="/central-plus-favoritos.html">Sua lista ↗</a></div><div class="cp-home-rail cp-home-continue" id="cp-api-home-continue"><div class="cp-home-empty"><div><strong>Sua jornada começa aqui</strong>Abra um filme ou série para começar a montar seu histórico.</div></div></div></section>
+        <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Apps recentes</h2><p>Seus serviços de streaming em um só lugar</p></div><a class="cp-home-seeall" href="/central-plus-apps.html">Ver apps ↗</a></div><div class="cp-home-rail" id="cp-api-home-apps"><span class="cp-api-status">Carregando apps recentes…</span></div></section>
         <section class="cp-home-section cp-home-novelties-section"><div class="cp-home-section-head"><div><h2>Novidades</h2><p>Um mix de filmes e séries que chegaram aos streamings no Brasil</p></div><a class="cp-home-seeall" href="/central-plus-filmes.html">Explorar lançamentos ↗</a></div><div class="cp-home-rail cp-home-novelties" id="cp-api-home-novelties"><span class="cp-api-status">Carregando novidades…</span></div></section>
-        <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Apps recentes</h2><p>Seus serviços de streaming em um só lugar</p></div><a class="cp-home-seeall" href="/central-plus-apps.html">Ver apps ↗</a></div><div class="cp-home-rail" id="cp-api-home-apps"><a class="cp-api-card" href="/central-plus-apps.html"><div class="cp-api-poster" style="display:grid;place-items:center;font-size:34px;color:#e8eaf1">▶</div><div class="cp-api-title">Explorar aplicativos</div><div class="cp-api-meta">Seus serviços de streaming</div></a><a class="cp-api-card" href="/central-plus-apps.html"><div class="cp-api-poster" style="display:grid;place-items:center;font-size:30px;color:#e8eaf1">＋</div><div class="cp-api-title">Adicionar serviços</div><div class="cp-api-meta">Personalize sua Central+</div></a></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Séries</h2><p>Séries populares para sua próxima maratona</p></div><a class="cp-home-seeall" href="/central-plus-series.html">Ver todas ↗</a></div><div class="cp-home-rail" id="cp-api-home-series"><span class="cp-api-status">Carregando séries…</span></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Filmes recém-chegados aos streamings</h2><p>Lançamentos com disponibilidade de streaming no Brasil — sem títulos apenas em cartaz no cinema</p></div><a class="cp-home-seeall" href="/central-plus-filmes.html">Ver todos ↗</a></div><div class="cp-home-rail" id="cp-api-home-movies"><span class="cp-api-status">Carregando filmes…</span></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Ao vivo</h2><p>Canais oficiais — os sinais e prévias atualizados aparecem primeiro</p></div><a class="cp-home-seeall" href="/central-plus-ao-vivo.html">Ver todos os canais ↗</a></div><div class="cp-home-rail cp-home-live" id="cp-api-home-live"><span class="cp-api-status">Atualizando canais…</span></div></section>
@@ -861,11 +869,21 @@
         loadRail("cp-api-home-series","tv","streaming",18),
         fetchItems("tv","streaming_new",true)
       ]);
-      const streamingLaunches=[...streamingMovies,...streamingSeries]
-        .filter(item=>item&&item.id)
+      const uniqueTitles=items=>(items||[])
+        .filter(item=>item&&item.id&&(item.backdrop_url||item.poster_url))
         .sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")))
-        .filter((item,index,all)=>all.findIndex(other=>String(other.id)===String(item.id)&&other.type===item.type)===index)
-        .slice(0,6);
+        .filter((item,index,all)=>all.findIndex(other=>String(other.id)===String(item.id)&&other.type===item.type)===index);
+      let homeStreamingPool=uniqueTitles([...streamingMovies,...series,...streamingSeries]);
+      if(homeStreamingPool.length<6){
+        const fallbackPages=await Promise.all([
+          fetchItems("movie","streaming_new",true,2),
+          fetchItems("movie","streaming",true,1),
+          fetchItems("tv","streaming_new",true,2),
+          fetchItems("tv","streaming",true,2)
+        ].map(p=>p.catch(()=>[])));
+        homeStreamingPool=uniqueTitles([...homeStreamingPool,...fallbackPages.flat()]);
+      }
+      const streamingLaunches=homeStreamingPool.slice(0,6);
       const renderHomeNovelties=items=>{
         const rail=$("#cp-api-home-novelties",mount);if(!rail)return;
         const sorted=(Array.isArray(items)?items:[])
@@ -881,7 +899,7 @@
           return '<a class="cp-api-card cp-home-novelty-card" href="'+detailHref(item)+'" aria-label="Ver '+kind.toLowerCase()+': '+title+'"><div class="cp-home-novelty-art" style="background-image:url(&quot;'+image+'&quot;)"><span class="cp-home-novelty-type">'+kind+'</span></div><div class="cp-home-novelty-title">'+title+'</div><div class="cp-home-novelty-meta">'+esc(date||"Lançamento recente")+' · '+esc((item.genres||[]).slice(0,2).join(" · "))+'</div><div class="cp-home-novelty-providers">'+esc(platforms||"Disponível em streaming no Brasil")+'</div></a>';
         }).join("")||'<div class="cp-home-error">Não encontramos lançamentos recentes disponíveis nos streamings do Brasil.</div>';
       };
-      renderHomeNovelties(streamingLaunches);
+      renderHomeNovelties(homeStreamingPool.slice(0,12));
       // Reuse the live RSS newsroom feed from the dedicated News page.
       const newsRail=$("#cp-api-home-news",mount);
       try{
@@ -891,7 +909,7 @@
         const newsItems=(Array.isArray(newsData.items)?newsData.items:[])
           .filter(item=>item&&item.title&&item.url)
           .sort((a,b)=>new Date(b.publishedAt||0)-new Date(a.publishedAt||0))
-          .slice(0,12);
+          .slice(0,6);
         const newsCategories={nacionais:"Brasil e mundo",para:"Pará e Belém",cinema:"Cinema e séries",celebridades:"Cultura pop",ciencia:"Ciência",ia:"IA e tecnologia",jornalismo:"Jornalismo",patrimonio:"História e patrimônio"};
         const safeUrl=value=>{try{const u=new URL(value,location.origin);return /^https?:$/.test(u.protocol)?u.href:"#"}catch(_){return "#"}};
         const newsDate=value=>{if(!value)return "";const date=new Date(value);if(Number.isNaN(date.getTime()))return "";return date.toLocaleDateString("pt-BR",{day:"2-digit",month:"short"})};
