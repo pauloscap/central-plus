@@ -142,7 +142,9 @@ module.exports = async function handler(req, res) {
     const items = (data.results || []).filter(x => x.poster_path).map(x => normalize(x, type));
     const enrich = String(q.providers || "true") !== "false";
     if (enrich) {
-      await Promise.all(items.slice(0, 12).map(async item => {
+      // Streaming discovery returns 20 candidates; enrich every one so home and provider rails can show verified services.
+      const enrichLimit = section === "streaming" || section === "streaming_new" ? 20 : 12;
+      await Promise.all(items.slice(0, enrichLimit).map(async item => {
         const availability = await providers(type, item.id, auth);
         item.provider_names = availability.names;
         item.provider_options = availability.options;
