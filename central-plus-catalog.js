@@ -106,10 +106,16 @@
     [27,"terror","Terror"],[9648,"misterio","Mistério"],[10749,"romance","Romance"],
     [878,"ficcao","Ficção científica"],[53,"suspense","Suspense"],[10752,"guerra","Guerra"]
   ];
+  // Ordem editorial solicitada para as fileiras de filmes por plataforma.
   const STREAMING_SERVICES = [
-    {label:"Netflix",provider:"8"},{label:"Prime Video",provider:"9"},
-    {label:"Disney+",provider:"337"},{label:"Apple TV+",provider:"350"},
-    {label:"Max / HBO Max",provider:"1899|384"},{label:"Paramount+",provider:"531"},
+    {label:"Netflix",provider:"8"},
+    {label:"Disney+",provider:"337"},
+    {label:"Prime Video",provider:"119|9"},
+    {label:"HBO Max",provider:"384|1899"},
+    {label:"Globoplay",provider:"307"},
+    {label:"Apple TV",provider:"350|2"},
+    {label:"MUBI",provider:"11"},
+    {label:"Paramount+",provider:"531"},
     {label:"Crunchyroll",provider:"283"}
   ];
   function movieGenreSlugs(item){
@@ -130,30 +136,65 @@
     if(!response.ok)throw new Error(data.error||"Streaming indisponível");
     return data.items||[];
   }
-  function renderFilmStreamingPage(items, launches){
+  async function renderFilmStreamingPage(items, launches){
     const grid=$("#film-grid"),filterRoot=$(".film-filters");
     if(!grid)return;
     const title=$("#filmes .films-intro h1");
     if(title)title.innerHTML='Filmes para <span>assistir agora.</span>';
     const intro=$("#filmes .films-intro p");
     if(intro)intro.textContent="Lançamentos e descobertas disponíveis nos serviços de streaming no Brasil. Escolha um gênero ou explore por plataforma.";
-    const featured=(launches||[]).find(item=>(item.provider_names||[]).length)||((launches||[])[0]);
+
+    // O destaque usa seis lançamentos recentes, já filtrados pela disponibilidade de streaming no Brasil.
+    const featureItems=[];
+    (launches||[]).concat(items||[]).forEach(item=>{
+      if(!item||!item.id||featureItems.some(x=>String(x.id)===String(item.id)))return;
+      featureItems.push(item);
+    });
+    const slides=featureItems.slice(0,6);
     const featureNode=$("#film-feature");
-    if(featured){
-      updateFeature(featured,"movie");
-      const kicker=$("#film-feature-kicker");
-      if(kicker)kicker.textContent="LANÇAMENTO NO STREAMING · "+(providers(featured)||"DISPONÍVEL NO BRASIL");
-      const runtime=$("#film-feature-runtime");if(runtime)runtime.textContent="Filme";
-      const index=$("#film-feature-index-number");if(index)index.textContent="01";
-      const dots=$(".film-feature-dots");if(dots)dots.hidden=true;
-      const controls=$(".film-feature-controls");if(controls)controls.hidden=true;
-      if(featureNode)featureNode.dataset.apiManaged="true";
-    } else if(featureNode){featureNode.hidden=true;}
+    if(slides.length&&featureNode){
+      featureNode.hidden=false;
+      featureNode.dataset.apiManaged="true";
+      const dotsRoot=$(".film-feature-dots");
+      if(dotsRoot){
+        dotsRoot.hidden=false;
+        dotsRoot.innerHTML=slides.map((item,i)=>'<button class="film-feature-dot'+(i===0?' active':'')+'" type="button" data-api-feature-slide="'+i+'" aria-label="Ver destaque: '+esc(item.title)+'" aria-current="'+(i===0?'true':'false')+'"></button>').join("");
+      }
+      const controls=$(".film-feature-controls");if(controls)controls.hidden=false;
+      let current=0,timer=null,paused=false;
+      const reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const renderSlide=index=>{
+        current=(index+slides.length)%slides.length;
+        const item=slides[current];
+        updateFeature(item,"movie");
+        const kicker=$("#film-feature-kicker");
+        if(kicker)kicker.textContent="LANÇAMENTO NO STREAMING · "+(providers(item)||"DISPONÍVEL NO BRASIL");
+        const runtime=$("#film-feature-runtime");if(runtime)runtime.textContent="Filme";
+        const quality=$("#film-feature-quality");if(quality)quality.textContent=providers(item)||"Streaming";
+        const number=$("#film-feature-index-number");if(number)number.textContent=String(current+1).padStart(2,"0");
+        if(dotsRoot)dotsRoot.querySelectorAll("[data-api-feature-slide]").forEach((dot,i)=>{
+          const active=i===current;dot.classList.toggle("active",active);dot.setAttribute("aria-current",active?"true":"false");
+        });
+      };
+      const stop=()=>{if(timer){clearInterval(timer);timer=null;}};
+      const start=()=>{stop();if(!paused&&!reduced&&slides.length>1)timer=setInterval(()=>renderSlide(current+1),5000);};
+      const choose=index=>{renderSlide(index);start();};
+      if(dotsRoot)dotsRoot.querySelectorAll("[data-api-feature-slide]").forEach(dot=>dot.addEventListener("click",()=>choose(Number(dot.dataset.apiFeatureSlide))));
+      const prev=$("#film-feature-prev"),next=$("#film-feature-next");
+      if(prev)prev.onclick=()=>choose(current-1);
+      if(next)next.onclick=()=>choose(current+1);
+      featureNode.onmouseenter=()=>{paused=true;stop();};
+      featureNode.onmouseleave=()=>{paused=false;start();};
+      featureNode.onfocusin=()=>{paused=true;stop();};
+      featureNode.onfocusout=event=>{if(!featureNode.contains(event.relatedTarget)){paused=false;start();}};
+      renderSlide(0);start();
+    }else if(featureNode){featureNode.hidden=true;}
+
     grid.innerHTML=(items||[]).map(item=>horizontalMovieCard(item)).join("");
     const genreList=MOVIE_GENRES.filter(g=>(items||[]).some(item=>(item.genre_ids||[]).includes(g[0])));
     if(filterRoot){
-      filterRoot.innerHTML='<button class="film-filter active" data-filter="todos" type="button">Todos</button>'+
-        genreList.map(g=>'<button class="film-filter" data-filter="'+g[1]+'" type="button">'+g[2]+'</button>').join("");
+      filterRoot.innerHTML='<button class="film-filter active" data-filter="todos" type="button" aria-pressed="true">Todos</button>'+
+        genreList.map(g=>'<button class="film-filter" data-filter="'+g[1]+'" type="button" aria-pressed="false">'+g[2]+'</button>').join("");
       filterRoot.setAttribute("aria-label","Filtrar filmes por gênero");
       filterRoot.querySelectorAll("[data-filter]").forEach(button=>button.addEventListener("click",()=>{
         const selected=button.dataset.filter||"todos";
@@ -164,22 +205,25 @@
     }
     const count=$("#film-count");if(count)count.textContent=String((items||[]).length);
     const empty=$("#film-empty");if(empty)empty.hidden=(items||[]).length>0;
+
     let rails=$("#cp-film-streaming-rails");
     if(!rails){rails=document.createElement("div");rails.id="cp-film-streaming-rails";grid.insertAdjacentElement("afterend",rails);}
     rails.innerHTML='<div class="cp-streaming-rails-heading"><div class="eyebrow">EXPLORE POR PLATAFORMA</div><h2>O que assistir em cada streaming</h2><p>Filmes disponíveis para assistir por assinatura ou gratuitamente no Brasil.</p></div>'+
-      STREAMING_SERVICES.map(service=>'<section class="cp-streaming-row" data-service="'+esc(service.label)+'"><div class="cp-streaming-row-head"><h3>'+esc(service.label)+'</h3><span>Disponíveis no Brasil</span></div><div class="cp-streaming-row-track"><p class="cp-streaming-status">Carregando filmes…</p></div></section>').join("");
+      STREAMING_SERVICES.map(service=>'<section class="cp-streaming-row" data-service="'+esc(service.label)+'"><div class="cp-streaming-row-head"><h3>'+esc(service.label)+'</h3><span>Disponíveis no Brasil</span></div><div class="cp-streaming-row-track" aria-label="Filmes na plataforma '+esc(service.label)+'"><p class="cp-streaming-status">Carregando filmes…</p></div></section>').join("");
     const disclaimer=$("#filmes .film-disclaimer");
     if(disclaimer)disclaimer.textContent="Catálogo e disponibilidade para o Brasil consultados via TMDB/JustWatch. A oferta pode mudar; confirme no serviço antes de assistir.";
-    STREAMING_SERVICES.forEach(async service=>{
+
+    // Carrega uma fileira por vez para preservar a ordem editorial e não sobrecarregar a API.
+    for(const service of STREAMING_SERVICES){
       const row=rails.querySelector('[data-service="'+service.label+'"]');
       const track=row&&row.querySelector(".cp-streaming-row-track");
-      if(!track)return;
+      if(!track)continue;
       try{
         const titles=await fetchStreamingProvider(service.provider);
-        if(!titles.length){row.remove();return;}
-        track.innerHTML=titles.map(item=>horizontalMovieCard(item,service.label)).join("");
-      }catch(_){track.innerHTML='<p class="cp-streaming-status">Não foi possível carregar esta fileira agora.</p>';}
-    });
+        if(!titles.length){row.remove();continue;}
+        track.innerHTML=titles.slice(0,12).map(item=>horizontalMovieCard(item,service.label)).join("");
+      }catch(_){row.remove();}
+    }
   }
   async function fillPage() {
     ensureStyles();
