@@ -740,7 +740,7 @@
       const loadRail=async(id,type,section,limit=18)=>{
         const rail=$("#"+id,mount);
         try{
-          const items=await fetchItems(type,section);
+          const items=await fetchItems(type,section,false);
           rail.innerHTML=items.slice(0,limit).map(x=>card(x,"home")).join("")||'<div class="cp-home-error">Nenhum título encontrado nesta seleção.</div>';
           return items;
         }catch(error){
