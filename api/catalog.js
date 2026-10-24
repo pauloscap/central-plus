@@ -47,7 +47,9 @@ function normalize(item, type) {
     seasons: item.number_of_seasons || null,
     episodes: item.number_of_episodes || null,
     tmdb_url: "https://www.themoviedb.org/" + (isTv ? "tv/" : "movie/") + item.id,
-    provider_names: [],\n    provider_options: [],\n    provider_link: ""
+    provider_names: [],
+    provider_options: [],
+    provider_link: ""
   };
 }
 async function providers(type, id, auth) {
@@ -98,7 +100,10 @@ module.exports = async function handler(req, res) {
       if (!Number.isInteger(id) || id <= 0) return res.status(400).json({ error: "ID inválido." });
       const item = await tmdb("/" + type + "/" + id, { language: lang }, auth);
       const normalized = normalize(item, type);
-      const availability = await providers(type, id, auth);\n      normalized.provider_names = availability.names;\n      normalized.provider_options = availability.options;\n      normalized.provider_link = availability.link;
+      const availability = await providers(type, id, auth);
+      normalized.provider_names = availability.names;
+      normalized.provider_options = availability.options;
+      normalized.provider_link = availability.link;
       normalized.runtime = item.runtime || (item.episode_run_time && item.episode_run_time[0]) || null;
       return res.status(200).json({ item: normalized, source: "TMDB", region: "BR", updatedAt: new Date().toISOString() });
     }
@@ -119,7 +124,12 @@ module.exports = async function handler(req, res) {
     const items = (data.results || []).filter(x => x.poster_path).map(x => normalize(x, type));
     const enrich = String(q.providers || "true") !== "false";
     if (enrich) {
-      await Promise.all(items.slice(0, 12).map(async item => {\n        const availability = await providers(type, item.id, auth);\n        item.provider_names = availability.names;\n        item.provider_options = availability.options;\n        item.provider_link = availability.link;\n      }));
+      await Promise.all(items.slice(0, 12).map(async item => {
+        const availability = await providers(type, item.id, auth);
+        item.provider_names = availability.names;
+        item.provider_options = availability.options;
+        item.provider_link = availability.link;
+      }));
     }
     return res.status(200).json({
       items, page: data.page || 1, total_pages: data.total_pages || 1,
