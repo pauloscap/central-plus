@@ -676,7 +676,7 @@
       };
       const [streamingMovies,series,streamingSeries]=await Promise.all([
         loadStreamingMovieRail(),
-        loadRail("cp-api-home-series","tv","trending",18),
+        loadRail("cp-api-home-series","tv","streaming",18),
         fetchItems("tv","streaming_new")
       ]);
       const streamingLaunches=[...streamingMovies,...streamingSeries]
@@ -778,6 +778,7 @@
       window.setInterval(()=>{if(!document.hidden)renderHomeLive()},5*60*1000);
       document.addEventListener("visibilitychange",()=>{if(!document.hidden)renderHomeLive()});
       const featuredItems=streamingLaunches;
+      let refreshHomeFeatured=()=>{};
       const eyebrow=$(".cp-home-eyebrow",mount);
       if(eyebrow)eyebrow.textContent="Novidades nos streamings · Brasil";
       if(featuredItems.length){
@@ -795,6 +796,7 @@
           const count=$("#cp-home-slide-count",mount);if(count)count.textContent=String(activeSlide+1).padStart(2,"0")+" / "+String(featuredItems.length).padStart(2,"0");
         };
         const restartAuto=()=>{if(autoTimer)window.clearInterval(autoTimer);autoTimer=window.setInterval(()=>{if(!document.hidden)showFeature(activeSlide+1)},7000)};
+        refreshHomeFeatured=(items)=>{featuredItems.splice(0,featuredItems.length,...items);if(featuredItems.length)showFeature(Math.min(activeSlide,featuredItems.length-1));};
         $("#cp-home-prev",mount).onclick=()=>{showFeature(activeSlide-1);restartAuto()};
         $("#cp-home-next",mount).onclick=()=>{showFeature(activeSlide+1);restartAuto()};
         const heroSection=$(".cp-home-hero",mount);
@@ -805,6 +807,40 @@
         const heroOverview=$("#cp-home-hero-overview",mount);if(heroOverview)heroOverview.textContent="Não encontramos lançamentos recentes com disponibilidade confirmada para o Brasil. Tente novamente mais tarde.";
         const controls=$(".cp-home-slide-controls",mount);if(controls)controls.hidden=true;
       }
+      // Atualiza as fileiras e os destaques sem recarregar a página inteira.
+      let homeRefreshRunning=false,lastHomeRefresh=Date.now();
+      const refreshHomeCatalog=async()=>{
+        if(homeRefreshRunning||document.hidden)return;
+        homeRefreshRunning=true;
+        try{
+          const [freshMovies,freshSeries,freshLaunchSeries]=await Promise.all([
+            loadStreamingMovieRail(),
+            loadRail("cp-api-home-series","tv","streaming",18),
+            fetchItems("tv","streaming_new")
+          ]);
+          const refreshed=[...freshMovies,...freshLaunchSeries]
+            .filter(item=>item&&item.id&&(item.provider_names||[]).length>0)
+            .sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")))
+            .filter((item,index,all)=>all.findIndex(other=>String(other.id)===String(item.id)&&other.type===item.type)===index)
+            .slice(0,6);
+          streamingLaunches.splice(0,streamingLaunches.length,...refreshed);
+          if(refreshed.length){
+            if(featuredItems.length&&typeof refreshHomeFeatured==="function")refreshHomeFeatured(refreshed);
+            else{
+              const feature=refreshed[0],hero=$("#cp-home-hero-art",mount),title=$("#cp-home-hero-title",mount);
+              if(hero)hero.style.backgroundImage='linear-gradient(90deg,rgba(5,7,12,.28),rgba(5,7,12,.06)),url("'+(feature.backdrop_url||feature.poster_url||"")+'")';
+              if(title)title.textContent=feature.title;
+              const meta=$("#cp-home-hero-meta",mount);if(meta)meta.textContent=[feature.type==="tv"?"Série":"Filme",year(feature),(feature.provider_names||[]).slice(0,3).join(" · ")].filter(Boolean).join(" · ");
+              const overview=$("#cp-home-hero-overview",mount);if(overview)overview.textContent=feature.overview||"Descubra este lançamento disponível em streaming.";
+              const detail=$("#cp-home-hero-details",mount);if(detail)detail.href=detailHref(feature);
+            }
+          }
+          lastHomeRefresh=Date.now();
+        }catch(error){console.warn("Central+ atualização automática do catálogo:",error);}
+        finally{homeRefreshRunning=false;}
+      };
+      window.setInterval(()=>{if(!document.hidden&&Date.now()-lastHomeRefresh>=15*60*1000)refreshHomeCatalog();},60*1000);
+      document.addEventListener("visibilitychange",()=>{if(!document.hidden&&Date.now()-lastHomeRefresh>=5*60*1000)refreshHomeCatalog();});
     }
   }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",fillPage,{once:true});else fillPage();
