@@ -71,12 +71,14 @@
   if(media)recordMedia(media);
  },true);
  function initAuth(){
-  import("https://esm.sh/@supabase/supabase-js@2").then(function(mod){
-   client=mod.createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+  function connect(){
+   if(!window.supabase||!window.supabase.createClient){console.warn("Central+ histórico: biblioteca Supabase indisponível");return}
+   client=window.supabase.createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
    client.auth.onAuthStateChange(function(_event,session){user=session&&session.user||null;if(user)syncLocal()});
-   return client.auth.getSession();
-  }).then(function(res){user=res.data&&res.data.session&&res.data.session.user||null;if(user)syncLocal()})
-  .catch(function(e){console.warn("Central+ histórico/auth:",e.message)});
+   client.auth.getSession().then(function(res){user=res.data&&res.data.session&&res.data.session.user||null;if(user)syncLocal()}).catch(function(e){console.warn("Central+ sessão:",e.message)});
+  }
+  if(window.supabase&&window.supabase.createClient){connect();return}
+  var script=document.createElement("script");script.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js";script.async=true;script.onload=connect;script.onerror=function(){console.warn("Central+ histórico: não foi possível carregar a biblioteca Supabase")};document.head.appendChild(script);
  }
  function start(){render();initAuth();window.addEventListener("pageshow",render);window.addEventListener("storage",function(e){if(e.key===MEDIA||e.key===APPS)render()})}
  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start,{once:true});else start();
