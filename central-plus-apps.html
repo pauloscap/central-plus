@@ -309,5 +309,28 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
   setSlide(0);startCarousel();
 })();
 </script>
+
+<script>
+(function(){
+  const STORAGE_KEY="centralplus-recent-apps-v1";
+  function saveRecent(card){
+    const name=(card.getAttribute("data-title")||card.querySelector(".card-caption span")?.textContent||"").trim();
+    const rawUrl=card.href||"";
+    if(!name||!/^https:\/\//i.test(rawUrl))return;
+    const image=card.querySelector(".app-logo img");
+    const fallback=card.querySelector(".app-logo .logo-fallback");
+    const item={name,url:rawUrl,logo:image?(image.getAttribute("src")||""):"",fallback:fallback?(fallback.textContent||"").trim():name.slice(0,1),visitedAt:Date.now()};
+    try{
+      const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
+      const next=[item,...(Array.isArray(saved)?saved:[]).filter(old=>old&&String(old.name).toLowerCase()!==name.toLowerCase())].slice(0,12);
+      localStorage.setItem(STORAGE_KEY,JSON.stringify(next));
+    }catch(_){}
+  }
+  document.addEventListener("click",function(event){
+    const card=event.target.closest("a.app-card");
+    if(card)saveRecent(card);
+  },true);
+})();
+</script>
 </body>
 </html>
