@@ -110,6 +110,7 @@ module.exports = async function handler(req, res) {
     if (section === "streaming" || section === "streaming_new") {
       // Restrict results to titles available online in Brazil; cinema-only titles are excluded.
       const today = new Date().toISOString().slice(0, 10);
+      const since = new Date(Date.now() - 180 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
       const providerIds = String(q.provider || "").split("|")
         .map(value => value.trim())
         .filter(value => /^\d+$/.test(value))
@@ -126,6 +127,7 @@ module.exports = async function handler(req, res) {
           : "popularity.desc",
         page: Math.max(1, Math.min(5, Number(q.page) || 1))
       };
+      if (section === "streaming_new") params[type === "tv" ? "first_air_date.gte" : "primary_release_date.gte"] = since;
       if (type === "tv") params["first_air_date.lte"] = today;
       else params["primary_release_date.lte"] = today;
       if (providerIds) params.with_watch_providers = providerIds;
@@ -134,24 +136,6 @@ module.exports = async function handler(req, res) {
       const query = String(q.query || "").trim().slice(0,120);
       if (!query) return res.status(400).json({ error: "Informe query para pesquisar." });
       data = await tmdb("/search/" + type, { query, language: lang, region: "BR", include_adult: "false", page: 1 }, auth);
-    } else if (section === "streaming" || section === "streaming_new") {
-      // Streaming-only discovery for Brazil; streaming_new limits results to recent releases.
-      const today = new Date().toISOString().slice(0, 10);
-      const since = new Date(Date.now() - 180 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
-      const params = {
-        language: lang, region: "BR", watch_region: "BR",
-        with_watch_monetization_types: "flatrate|free|ads",
-        sort_by: section === "streaming_new"
-          ? (type === "tv" ? "first_air_date.desc" : "primary_release_date.desc")
-          : "popularity.desc",
-        "vote_count.gte": 3, page: Math.max(1, Math.min(5, Number(q.page) || 1))
-      };
-      if (q.provider) params.with_watch_providers = String(q.provider).slice(0, 40);
-      if (section === "streaming_new") {
-        params[type === "tv" ? "first_air_date.gte" : "primary_release_date.gte"] = since;
-        params[type === "tv" ? "first_air_date.lte" : "primary_release_date.lte"] = today;
-      }
-      data = await tmdb("/discover/" + type, params, auth);
     } else {
       const routes = type === "tv"
         ? { trending:"/trending/tv/week", popular:"/tv/popular", top_rated:"/tv/top_rated", upcoming:"/tv/on_the_air", now_playing:"/tv/airing_today", new:"/tv/on_the_air" }
