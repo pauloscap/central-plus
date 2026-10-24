@@ -32,7 +32,7 @@
     if(cr){
       var track=cr.querySelector(".flex.gap-3,.flex.gap-4,[class*=overflow-x-auto]")||cr;
       read(MEDIA_KEY).slice(0,8).reverse().forEach(function(item){
-        if(!item||!item.title||track.querySelector('[data-history-id="'+CSS.escape(String(item.id))+'"]'))return;
+        if(!item||!item.title||Array.prototype.some.call(track.querySelectorAll("[data-history-id]"),function(el){return el.getAttribute("data-history-id")===String(item.id)}))return;
         var a=document.createElement("a");a.className="cp-history-card";a.setAttribute("data-history-id",String(item.id));a.href=item.href||"#";
         var img=document.createElement("img");img.loading="lazy";img.alt=item.title;img.src=item.poster||"";img.onerror=function(){this.style.display="none"};
         var t=document.createElement("strong");t.textContent=item.title;
@@ -45,7 +45,7 @@
     if(ar){
       var appTrack=ar.querySelector(".flex.gap-3,.flex.gap-4,[class*=overflow-x-auto]")||ar;
       read(APPS_KEY).slice(0,8).reverse().forEach(function(item){
-        if(!item||!item.name||appTrack.querySelector('[data-history-app="'+String(item.name).replace(/["\\]/g,"")+'"]'))return;
+        if(!item||!item.name||Array.prototype.some.call(appTrack.querySelectorAll("[data-history-app]"),function(el){return el.getAttribute("data-history-app")===item.name}))return;
         var a=document.createElement("a");a.className="cp-history-app";a.href=item.url||"/apps/";
         a.setAttribute("data-history-app",item.name);var logo=document.createElement("div");logo.className="cp-history-logo";
         if(item.logo){var img=document.createElement("img");img.src=item.logo;img.alt="";img.onerror=function(){this.style.display="none";logo.textContent=item.fallback||item.name.slice(0,2)};logo.appendChild(img)}else logo.textContent=item.fallback||item.name.slice(0,2);
@@ -54,7 +54,7 @@
     }
   }
   document.addEventListener("click",function(e){
-    var app=e.target.closest("#apps-row [data-app-id],#apps-row .app-card,#apps-row [data-app],#apps-row a");
+    var app=e.target.closest("#apps-row [data-app-id],#apps-row .app-card,#apps-row [data-app],#apps-row a,#apps-row .group");
     if(app){recordApp(app);return}
     var media=e.target.closest("#continue-row a,#filmes-row a,#series-row a,#fav-row a,.cp-api-card,.cp-film-wide,.cp-series-wide,.film-tile,.series-tile");
     if(media)recordMedia(media);
