@@ -464,7 +464,7 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
       if (!filmFeature.contains(event.relatedTarget)) { featurePaused = false; startFeatureTimer(); }
     });
     function currentFeatureKey(){const title=featureFilms[featureIndex].title.toLocaleLowerCase('pt-BR');if(title.includes('duna'))return'duna';if(title.includes('interestelar'))return'interestelar';if(title.includes('blade runner'))return'blade-runner';return'duna';}
-    function openFeatureDetail(){window.location.assign('central-plus-detalhe-filme.html?filme='+currentFeatureKey());}
+    function openFeatureDetail(){if(filmFeature.dataset.apiManaged==="true")return;window.location.assign("central-plus-detalhe-filme.html?filme="+currentFeatureKey());}
     document.getElementById('film-feature-play').addEventListener('click',openFeatureDetail);
     document.getElementById('film-feature-details').addEventListener('click',openFeatureDetail);
     renderFeature(0);
