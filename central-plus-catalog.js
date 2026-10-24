@@ -83,7 +83,7 @@
     `;document.head.appendChild(style);
   }
   async function fetchItems(type, section, providersEnabled=false) {
-    const response=await fetch(API+"?type="+type+"&section="+section+"&providers="+providersEnabled,{cache:"no-store"});
+    const response=await fetch(API+"?type="+type+"&section="+section+"&providers="+providersEnabled,{cache:"default"});
     const data=await response.json();
     if(!response.ok) throw new Error(data.error || "Catálogo indisponível");
     return data.items || [];
