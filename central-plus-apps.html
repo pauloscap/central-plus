@@ -376,7 +376,11 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
     const item={name,url:rawUrl,logo:image?(image.getAttribute("src")||""):"",fallback:fallback?(fallback.textContent||"").trim():name.slice(0,1),visitedAt:Date.now()};
     try{
       const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
-      const next=[item,...(Array.isArray(saved)?saved:[]).filter(old=>old&&String(old.name).toLowerCase()!==name.toLowerCase())].slice(0,12);
+      const session=JSON.parse(sessionStorage.getItem(STORAGE_KEY)||"[]");
+      const merged=[...(Array.isArray(saved)?saved:[]),...(Array.isArray(session)?session:[])];
+      const next=[item,...merged.filter(old=>old&&String(old.name).toLowerCase()!==name.toLowerCase())]
+        .sort((x,y)=>(Number(y.visitedAt)||0)-(Number(x.visitedAt)||0))
+        .filter((x,i,all)=>all.findIndex(y=>String(y.name).toLowerCase()===String(x.name).toLowerCase())===i).slice(0,12);
       const serialized=JSON.stringify(next);
       localStorage.setItem(STORAGE_KEY,serialized);
       try{sessionStorage.setItem(STORAGE_KEY,serialized);}catch(_){}
