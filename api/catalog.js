@@ -114,7 +114,7 @@ module.exports = async function handler(req, res) {
       // Restrict the catalog to services already integrated into Central+.
       // Without an explicit provider, a monetization-type-only discover query can
       // return titles that are not actually available on the user's streaming apps.
-      const centralPlusProviderIds = "8|337|119|9|384|1899|307|350|2|11|531|283|300";
+      const centralPlusProviderIds = "8|337|119|9|384|1899|307|350";
       const providerIds = String(q.provider || centralPlusProviderIds).split("|")
         .map(value => value.trim())
         .filter(value => /^\d+$/.test(value))
