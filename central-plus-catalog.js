@@ -94,7 +94,7 @@
       .app[data-page="filmes"] #cp-film-streaming-rails .cp-film-wide[hidden]{display:none}
       .cp-film-wide-meta{display:flex;justify-content:space-between;gap:8px;padding:8px 2px 0;font-size:10px;color:#aeb4c2}
       .cp-streaming-rails-heading{padding:34px 0 10px}.cp-streaming-rails-heading h2{font-size:clamp(23px,3vw,34px);letter-spacing:-.05em;margin:8px 0}.cp-streaming-rails-heading p{font-size:12px;color:#aeb4c2}
-      .cp-streaming-row{margin:28px 0 34px}.cp-streaming-row-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-right:var(--gutter);margin-bottom:12px}.cp-streaming-row-head h3{margin:0;font-size:clamp(17px,2vw,22px);letter-spacing:-.035em}.cp-streaming-row-head span{font-size:10px;color:#939aaa}
+      .cp-streaming-row{margin:28px 0 34px}.cp-streaming-row-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-right:var(--gutter);margin-bottom:12px}.cp-streaming-service-brand{display:flex;align-items:center;gap:10px;min-width:0}.cp-streaming-service-brand>img{width:26px;height:26px;object-fit:contain;flex:0 0 26px}.cp-streaming-row-head h3{margin:0;font-size:clamp(17px,2vw,22px);letter-spacing:-.035em}.cp-streaming-row-head span{font-size:10px;color:#939aaa}
       .cp-streaming-row-track{display:flex;gap:14px;overflow-x:auto;overflow-y:hidden;padding:3px var(--gutter) 18px 3px;scroll-snap-type:x mandatory;scrollbar-width:none}.cp-streaming-row-track::-webkit-scrollbar{display:none}
       .cp-streaming-status{font-size:12px;color:#aeb4c2;padding:12px 0}
       .app[data-page="filmes"] #film-grid{display:flex;gap:14px;overflow-x:auto;overflow-y:hidden;padding:5px var(--gutter) 18px 3px;scroll-snap-type:x mandatory;scrollbar-width:none}
@@ -423,7 +423,7 @@
     let rails=$("#cp-film-streaming-rails");
     if(!rails){rails=document.createElement("div");rails.id="cp-film-streaming-rails";grid.insertAdjacentElement("afterend",rails);}
     rails.innerHTML='<div class="cp-streaming-rails-heading"><div class="eyebrow">EXPLORE POR PLATAFORMA</div><h2>Filmes em cada streaming</h2><p>Fileiras no estilo Netflix com filmes disponíveis online no Brasil nas plataformas integradas à Central+.</p></div>'+
-      STREAMING_SERVICES.map(service=>'<section class="cp-streaming-row" data-service="'+esc(service.label)+'"><div class="cp-streaming-row-head"><h3>'+esc(service.label)+'</h3><span>Disponíveis no Brasil</span></div><div class="cp-streaming-row-track" aria-label="Filmes na plataforma '+esc(service.label)+'"><p class="cp-streaming-status">Carregando filmes…</p></div></section>').join("");
+      STREAMING_SERVICES.map(service=>'<section class="cp-streaming-row" data-service="'+esc(service.label)+'"><div class="cp-streaming-row-head"><div class="cp-streaming-service-brand">'+(serviceLogo({},service.label)?'<img src="'+esc(serviceLogo({},service.label))+'" alt="" loading="lazy">':"")+'<h3>'+esc(service.label)+'</h3></div><span>Disponíveis no Brasil</span></div><div class="cp-streaming-row-track" aria-label="Filmes na plataforma '+esc(service.label)+'"><p class="cp-streaming-status">Carregando filmes…</p></div></section>').join("");
     const disclaimer=$("#filmes .film-disclaimer");
     if(disclaimer)disclaimer.textContent="Catálogo e disponibilidade para o Brasil consultados via TMDB/JustWatch. A oferta pode mudar; confirme no serviço antes de assistir.";
 
@@ -779,8 +779,8 @@
         <section class="cp-home-hero"><div class="cp-home-hero-art" id="cp-home-hero-art"></div><div class="cp-home-slide-controls"><button class="cp-home-slide-btn" id="cp-home-prev" aria-label="Destaque anterior">‹</button><span class="cp-home-slide-count" id="cp-home-slide-count">01 / 06</span><button class="cp-home-slide-btn" id="cp-home-next" aria-label="Próximo destaque">›</button></div><div class="cp-home-hero-copy"><div class="cp-home-eyebrow">Em destaque · catálogo atualizado</div><h1 id="cp-home-hero-title">Descubra sua próxima história</h1><div class="cp-home-hero-meta" id="cp-home-hero-meta"><span class="cp-home-chip">Central+ seleção</span></div><p id="cp-home-hero-overview">Filmes e séries para sua próxima maratona.</p><div class="cp-home-actions"><a class="cp-home-btn" id="cp-home-hero-details" href="/central-plus-filmes.html">＋ Explorar título</a><a class="cp-home-btn secondary" href="/central-plus-filmes.html">Explorar catálogo <span>↗</span></a></div></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Notícias atualizadas</h2><p>Novos títulos e lançamentos do universo do entretenimento</p></div><div class="cp-home-news-actions"><button class="cp-home-news-control" id="cp-home-news-prev" type="button" aria-label="Notícias anteriores">‹</button><button class="cp-home-news-control" id="cp-home-news-next" type="button" aria-label="Próximas notícias">›</button><a class="cp-home-seeall" href="/central-plus-noticias.html">Ver notícias ↗</a></div></div><div class="cp-home-rail cp-home-news" id="cp-api-home-news"><span class="cp-api-status">Carregando atualizações…</span></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Continue assistindo</h2><p>Retome sua próxima maratona</p></div><a class="cp-home-inline-action" href="/central-plus-favoritos.html">Sua lista ↗</a></div><div class="cp-home-rail cp-home-continue" id="cp-api-home-continue"><div class="cp-home-empty"><div><strong>Sua jornada começa aqui</strong>Abra um filme ou série para começar a montar seu histórico.</div></div></div></section>
-        <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Apps recentes</h2><p>Seus serviços de streaming em um só lugar</p></div><a class="cp-home-seeall" href="/central-plus-apps.html">Ver apps ↗</a></div><div class="cp-home-rail" id="cp-api-home-apps"><span class="cp-api-status">Carregando apps recentes…</span></div></section>
         <section class="cp-home-section cp-home-novelties-section"><div class="cp-home-section-head"><div><h2>Novidades</h2><p>Um mix de filmes e séries que chegaram aos streamings no Brasil</p></div><a class="cp-home-seeall" href="/central-plus-filmes.html">Explorar lançamentos ↗</a></div><div class="cp-home-rail cp-home-novelties" id="cp-api-home-novelties"><span class="cp-api-status">Carregando novidades…</span></div></section>
+        <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Apps recentes</h2><p>Seus serviços de streaming em um só lugar</p></div><a class="cp-home-seeall" href="/central-plus-apps.html">Ver apps ↗</a></div><div class="cp-home-rail" id="cp-api-home-apps"><span class="cp-api-status">Carregando apps recentes…</span></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Séries</h2><p>Séries populares para sua próxima maratona</p></div><a class="cp-home-seeall" href="/central-plus-series.html">Ver todas ↗</a></div><div class="cp-home-rail" id="cp-api-home-series"><span class="cp-api-status">Carregando séries…</span></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Filmes recém-chegados aos streamings</h2><p>Lançamentos com disponibilidade de streaming no Brasil — sem títulos apenas em cartaz no cinema</p></div><a class="cp-home-seeall" href="/central-plus-filmes.html">Ver todos ↗</a></div><div class="cp-home-rail" id="cp-api-home-movies"><span class="cp-api-status">Carregando filmes…</span></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Ao vivo</h2><p>Canais oficiais — os sinais e prévias atualizados aparecem primeiro</p></div><a class="cp-home-seeall" href="/central-plus-ao-vivo.html">Ver todos os canais ↗</a></div><div class="cp-home-rail cp-home-live" id="cp-api-home-live"><span class="cp-api-status">Atualizando canais…</span></div></section>
@@ -956,9 +956,14 @@
       if(homeStreamingPool.length<6){
         const fallbackPages=await Promise.all([
           fetchItems("movie","streaming_new",true,2),
+          fetchItems("movie","streaming_new",true,3),
           fetchItems("movie","streaming",true,1),
+          fetchItems("movie","streaming",true,2),
+          fetchItems("movie","streaming",true,3),
           fetchItems("tv","streaming_new",true,2),
-          fetchItems("tv","streaming",true,2)
+          fetchItems("tv","streaming_new",true,3),
+          fetchItems("tv","streaming",true,2),
+          fetchItems("tv","streaming",true,3)
         ].map(p=>p.catch(()=>[])));
         homeStreamingPool=uniqueTitles([...homeStreamingPool,...fallbackPages.flat()]);
       }
