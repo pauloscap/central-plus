@@ -124,8 +124,9 @@
       @media(max-width:560px){.cp-api-card{flex-basis:130px}.cp-api-hero{align-items:flex-start;padding:14px}.cp-api-hero img{width:76px}}
     `;document.head.appendChild(style);
   }
-  async function fetchItems(type, section, providersEnabled=true, page=1) {
-    const response=await fetch(API+"?type="+type+"&section="+section+"&providers="+providersEnabled+"&page="+Math.max(1,Math.min(5,Number(page)||1)),{cache:"default"});
+  async function fetchItems(type, section, providersEnabled=true, page=1, provider="") {
+    const providerQuery=provider?"&provider="+encodeURIComponent(provider):"";
+    const response=await fetch(API+"?type="+type+"&section="+section+"&providers="+providersEnabled+"&page="+Math.max(1,Math.min(5,Number(page)||1))+providerQuery,{cache:"default"});
     const data=await response.json();
     if(!response.ok) throw new Error(data.error || "Catálogo indisponível");
     return data.items || [];
@@ -463,15 +464,21 @@
       const grid=$(isSeriesPage?"#series-grid":"#film-grid");
       if(isFilmPage){
         try {
+          const coreProviders="8|337|119|9|384|1899|307|350";
+          const additionalProviders="2|11|531|283|300";
           const results=await Promise.all([
-            fetchItems("movie","streaming",false,1),
-            fetchItems("movie","streaming_new",false,1),
-            fetchItems("movie","streaming",false,2),
-            fetchItems("movie","streaming_new",false,2)
+            fetchItems("movie","streaming",false,1,coreProviders),
+            fetchItems("movie","streaming_new",false,1,coreProviders),
+            fetchItems("movie","streaming",false,2,coreProviders),
+            fetchItems("movie","streaming_new",false,2,coreProviders),
+            fetchItems("movie","streaming",false,1,additionalProviders),
+            fetchItems("movie","streaming_new",false,1,additionalProviders),
+            fetchItems("movie","streaming",false,2,additionalProviders),
+            fetchItems("movie","streaming_new",false,2,additionalProviders)
           ]);
           const uniqueMovies=list=>(list||[]).filter((item,index,all)=>item&&item.id&&all.findIndex(other=>other&&String(other.id)===String(item.id))===index);
-          const streamingMovies=uniqueMovies([...results[0],...results[2]]);
-          const streamingLaunches=uniqueMovies([...results[1],...results[3]]).sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
+          const streamingMovies=uniqueMovies([...results[0],...results[2],...results[4],...results[6]]);
+          const streamingLaunches=uniqueMovies([...results[1],...results[3],...results[5],...results[7]]).sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
           await renderFilmStreamingPage(streamingMovies,streamingLaunches);
         } catch(error) {
           if(grid){const note=document.createElement("p");note.className="cp-api-status";note.textContent="Não foi possível carregar as opções de streaming: "+error.message;grid.prepend(note)}
@@ -480,8 +487,16 @@
       }
       if(isSeriesPage){
         try {
-          const results=await Promise.all([fetchItems("tv","streaming",false),fetchItems("tv","streaming_new",false)]);
-          await renderSeriesStreamingPage(results[0],results[1]);
+          const coreProviders="8|337|119|9|384|1899|307|350";
+          const additionalProviders="2|11|531|283|300";
+          const results=await Promise.all([
+            fetchItems("tv","streaming",false,1,coreProviders),
+            fetchItems("tv","streaming_new",false,1,coreProviders),
+            fetchItems("tv","streaming",false,1,additionalProviders),
+            fetchItems("tv","streaming_new",false,1,additionalProviders)
+          ]);
+          const uniqueSeries=list=>(list||[]).filter((item,index,all)=>item&&item.id&&all.findIndex(other=>other&&String(other.id)===String(item.id))===index);
+          await renderSeriesStreamingPage(uniqueSeries([...results[0],...results[2]]),uniqueSeries([...results[1],...results[3]]));
         } catch(error) {
           if(grid){const note=document.createElement("p");note.className="cp-api-status";note.textContent="Não foi possível carregar as séries disponíveis no streaming: "+error.message;grid.prepend(note)}
         }
