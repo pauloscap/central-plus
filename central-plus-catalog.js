@@ -823,8 +823,8 @@
             .sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")))
             .filter((item,index,all)=>all.findIndex(other=>String(other.id)===String(item.id)&&other.type===item.type)===index)
             .slice(0,6);
-          streamingLaunches.splice(0,streamingLaunches.length,...refreshed);
           if(refreshed.length){
+            streamingLaunches.splice(0,streamingLaunches.length,...refreshed);
             if(featuredItems.length&&typeof refreshHomeFeatured==="function")refreshHomeFeatured(refreshed);
             else{
               const feature=refreshed[0],hero=$("#cp-home-hero-art",mount),title=$("#cp-home-hero-title",mount);
@@ -837,7 +837,7 @@
           }
           lastHomeRefresh=Date.now();
         }catch(error){console.warn("Central+ atualização automática do catálogo:",error);}
-        finally{homeRefreshRunning=false;}
+        finally{lastHomeRefresh=Date.now();homeRefreshRunning=false;}
       };
       window.setInterval(()=>{if(!document.hidden&&Date.now()-lastHomeRefresh>=15*60*1000)refreshHomeCatalog();},60*1000);
       document.addEventListener("visibilitychange",()=>{if(!document.hidden&&Date.now()-lastHomeRefresh>=5*60*1000)refreshHomeCatalog();});
