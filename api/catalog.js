@@ -151,29 +151,6 @@ module.exports = async function handler(req, res) {
       }));
       const available = items.filter(item => item.provider_names.length > 0);
       return res.status(200).json({ items: available, page: data.page || 1, total_pages: data.total_pages || 1, source: "TMDB", region: "BR", updatedAt: new Date().toISOString() });
-    } else if (section === "streaming" || section === "streaming_new") {
-      // Descoberta por disponibilidade no Brasil: títulos apenas em cartaz no cinema ficam de fora.
-      const today = new Date().toISOString().slice(0,10);
-      const recentStart = today.slice(0,4) + "-01-01";
-      const params = {
-        language: lang,
-        page: Math.max(1, Math.min(5, Number(q.page) || 1)),
-        watch_region: "BR",
-        with_watch_monetization_types: "flatrate|free|ads",
-        sort_by: section === "streaming_new" ? (type === "tv" ? "first_air_date.desc" : "primary_release_date.desc") : "popularity.desc",
-        include_adult: "false"
-      };
-      if (q.provider) params.with_watch_providers = String(q.provider).slice(0,160);
-      if (section === "streaming_new") {
-        if (type === "tv") {
-          params["first_air_date.gte"] = recentStart;
-          params["first_air_date.lte"] = today;
-        } else {
-          params["primary_release_date.gte"] = recentStart;
-          params["primary_release_date.lte"] = today;
-        }
-      }
-      data = await tmdb("/discover/" + type, params, auth);
     } else {
       const routes = type === "tv"
         ? { trending:"/trending/tv/week", popular:"/tv/popular", top_rated:"/tv/top_rated", upcoming:"/tv/on_the_air", now_playing:"/tv/airing_today", new:"/tv/on_the_air" }
