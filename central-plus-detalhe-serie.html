@@ -167,7 +167,15 @@ function saveSeriesToContinue(nextEpisode){
   try{
     const entry={id:key,type:'tv',title:m.title,url:location.pathname+location.search,image:m.backdropImage||m.posterImage||'',provider:m.platform||'',nextEpisode:Number(nextEpisode)||readProgress()+1,updatedAt:Date.now()};
     const old=JSON.parse(localStorage.getItem(watchHistoryKey)||'[]');
-    localStorage.setItem(watchHistoryKey,JSON.stringify([entry,...(Array.isArray(old)?old:[]).filter(x=>x&&!(String(x.id)===String(entry.id)&&x.type==='tv'))].slice(0,20)));
+    const session=JSON.parse(sessionStorage.getItem(watchHistoryKey)||'[]');
+    const merged=[...(Array.isArray(old)?old:[]),...(Array.isArray(session)?session:[])];
+    const list=[entry,...merged.filter(x=>x&&!(String(x.id)===String(entry.id)&&x.type==='tv'))]
+      .sort((a,b)=>(Number(b.updatedAt)||0)-(Number(a.updatedAt)||0))
+      .filter((x,i,all)=>all.findIndex(y=>String(y.id)===String(x.id)&&y.type===x.type)===i).slice(0,20);
+    const serialized=JSON.stringify(list);
+    localStorage.setItem(watchHistoryKey,serialized);
+    sessionStorage.setItem(watchHistoryKey,serialized);
+    window.dispatchEvent(new CustomEvent('centralplus:history-updated',{detail:{key:watchHistoryKey}}));
   }catch(_){}
 }
 if(!new URLSearchParams(location.search).has('tmdbId')){
