@@ -57,7 +57,10 @@
       .app[data-page="filmes"] #film-grid{display:flex;gap:14px;overflow-x:auto;overflow-y:hidden;padding:5px var(--gutter) 18px 3px;scroll-snap-type:x mandatory;scrollbar-width:none}
       .app[data-page="filmes"] #film-grid::-webkit-scrollbar{display:none}
       .app[data-page="filmes"] #film-grid .cp-film-wide[hidden]{display:none}
-      .app[data-page="filmes"] .film-toolbar{align-items:center}\n      .app[data-page="filmes"] .film-filters{display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;white-space:nowrap;padding:2px var(--gutter) 12px 0;scrollbar-width:none;scroll-snap-type:x proximity}\n      .app[data-page="filmes"] .film-filters::-webkit-scrollbar{display:none}\n      .app[data-page="filmes"] .film-filter{flex:0 0 auto;scroll-snap-align:start}
+      .app[data-page="filmes"] .film-toolbar{align-items:center}
+      .app[data-page="filmes"] .film-filters{display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;white-space:nowrap;padding:2px var(--gutter) 12px 0;scrollbar-width:none;scroll-snap-type:x proximity}
+      .app[data-page="filmes"] .film-filters::-webkit-scrollbar{display:none}
+      .app[data-page="filmes"] .film-filter{flex:0 0 auto;scroll-snap-align:start}
       @media(max-width:600px){.cp-film-wide{flex-basis:78vw}.cp-streaming-row-head span{display:none}.cp-streaming-row{margin:22px 0}.cp-streaming-rails-heading{padding-top:25px}}
       .cp-api-live{padding:32px clamp(18px,4vw,64px);background:#08090d;color:#f6f7fb;font-family:Inter,system-ui,sans-serif}
       .cp-api-live h2{font-size:clamp(20px,2.2vw,28px);letter-spacing:-.04em;margin:0 0 6px;font-weight:750}
