@@ -520,8 +520,15 @@
               const progress=Number.isInteger(savedProgress[String(item.id||item.title).toLowerCase()])?savedProgress[String(item.id||item.title).toLowerCase()]:0;
               const entry={id:String(item.id),type,title:item.title,url:location.pathname+location.search,image:item.backdrop_url||item.poster_url||"",provider:(item.provider_names||[]).slice(0,2).join(" · "),nextEpisode:type==="tv"?(Number(nextEpisode)||progress+1):null,updatedAt:Date.now()};
               const old=JSON.parse(localStorage.getItem(watchHistoryKey)||"[]");
-              const list=[entry,...(Array.isArray(old)?old:[]).filter(x=>x&&!(String(x.id)===entry.id&&x.type===entry.type))].slice(0,20);
-              localStorage.setItem(watchHistoryKey,JSON.stringify(list));
+              const session=JSON.parse(sessionStorage.getItem(watchHistoryKey)||"[]");
+              const merged=[...(Array.isArray(old)?old:[]),...(Array.isArray(session)?session:[])];
+              const list=[entry,...merged.filter(x=>x&&!(String(x.id)===entry.id&&x.type===entry.type))]
+                .sort((a,b)=>(Number(b.updatedAt)||0)-(Number(a.updatedAt)||0))
+                .filter((x,i,all)=>all.findIndex(y=>String(y.id)===String(x.id)&&y.type===x.type)===i).slice(0,20);
+              const serialized=JSON.stringify(list);
+              localStorage.setItem(watchHistoryKey,serialized);
+              sessionStorage.setItem(watchHistoryKey,serialized);
+              window.dispatchEvent(new CustomEvent("centralplus:history-updated",{detail:{key:watchHistoryKey}}));
             }catch(_){}
           };
           const set=(selector,value)=>{const el=$(selector);if(el&&value!==undefined&&value!==null)el.textContent=value};
@@ -845,7 +852,16 @@
       }[String(name||"").toLowerCase()]||"#242936");
       const renderRecentApps=()=>{
         const rail=$("#cp-api-home-apps",mount);if(!rail)return;
-        let saved=[];try{const raw=JSON.parse(localStorage.getItem(RECENT_APPS_KEY)||"[]");saved=Array.isArray(raw)?raw.filter(x=>x&&x.name&&/^https:\/\//i.test(x.url||"")):[]}catch(_){}
+        let saved=[];
+        try{
+          const local=JSON.parse(localStorage.getItem(RECENT_APPS_KEY)||"[]");
+          const session=JSON.parse(sessionStorage.getItem(RECENT_APPS_KEY)||"[]");
+          saved=[...(Array.isArray(local)?local:[]),...(Array.isArray(session)?session:[])]
+            .filter(x=>x&&x.name&&/^https:\/\//i.test(x.url||""))
+            .sort((a,b)=>(Number(b.visitedAt)||0)-(Number(a.visitedAt)||0))
+            .filter((x,i,all)=>all.findIndex(y=>String(y.name).toLowerCase()===String(x.name).toLowerCase())===i).slice(0,12);
+          const serialized=JSON.stringify(saved);localStorage.setItem(RECENT_APPS_KEY,serialized);sessionStorage.setItem(RECENT_APPS_KEY,serialized);
+        }catch(_){}
         if(!saved.length){
           rail.innerHTML='<div class="cp-home-empty"><div><strong>Seus streamings favoritos começam aqui</strong>Abra um card na aba Apps e ele aparecerá nesta seção, do mais recente ao mais antigo.</div></div>';
           return;
@@ -862,7 +878,14 @@
         const image=link.querySelector(".cp-home-app-logo img");
         const fallback=link.querySelector(".cp-home-app-fallback");
         const entry={name,url,logo:image?(image.getAttribute("src")||""):"",fallback:fallback?(fallback.textContent||"").trim():name.slice(0,1),visitedAt:Date.now()};
-        try{const old=JSON.parse(localStorage.getItem(RECENT_APPS_KEY)||"[]");const list=[entry,...(Array.isArray(old)?old:[]).filter(x=>x&&String(x.name).toLowerCase()!==name.toLowerCase())].slice(0,12);localStorage.setItem(RECENT_APPS_KEY,JSON.stringify(list));}catch(_){}
+        try{
+          const local=JSON.parse(localStorage.getItem(RECENT_APPS_KEY)||"[]"),session=JSON.parse(sessionStorage.getItem(RECENT_APPS_KEY)||"[]");
+          const old=[...(Array.isArray(local)?local:[]),...(Array.isArray(session)?session:[])];
+          const list=[entry,...old.filter(x=>x&&String(x.name).toLowerCase()!==name.toLowerCase())]
+            .sort((a,b)=>(Number(b.visitedAt)||0)-(Number(a.visitedAt)||0))
+            .filter((x,i,all)=>all.findIndex(y=>String(y.name).toLowerCase()===String(x.name).toLowerCase())===i).slice(0,12);
+          const serialized=JSON.stringify(list);localStorage.setItem(RECENT_APPS_KEY,serialized);sessionStorage.setItem(RECENT_APPS_KEY,serialized);
+        }catch(_){}
       };
       mount.addEventListener("click",event=>{const link=event.target.closest(".cp-home-app-card");if(link){recordRecentApp(link);if(link.parentElement)link.parentElement.prepend(link);}},true);
       const WATCH_HISTORY_KEY="centralplus-watch-history-v1";
@@ -870,8 +893,13 @@
         const rail=$("#cp-api-home-continue",mount);if(!rail)return;
         let history=[];
         try{
-          const raw=JSON.parse(localStorage.getItem(WATCH_HISTORY_KEY)||"[]");
-          history=Array.isArray(raw)?raw.filter(x=>x&&x.id&&x.title&&x.url&&x.url.startsWith("/")): [];
+          const local=JSON.parse(localStorage.getItem(WATCH_HISTORY_KEY)||"[]");
+          const session=JSON.parse(sessionStorage.getItem(WATCH_HISTORY_KEY)||"[]");
+          history=[...(Array.isArray(local)?local:[]),...(Array.isArray(session)?session:[])]
+            .filter(x=>x&&x.id&&x.title&&x.url&&String(x.url).startsWith("/"))
+            .sort((a,b)=>(Number(b.updatedAt)||0)-(Number(a.updatedAt)||0))
+            .filter((x,i,all)=>all.findIndex(y=>String(y.id)===String(x.id)&&y.type===x.type)===i).slice(0,20);
+          const serialized=JSON.stringify(history);localStorage.setItem(WATCH_HISTORY_KEY,serialized);sessionStorage.setItem(WATCH_HISTORY_KEY,serialized);
         }catch(_){}
         history.sort((a,b)=>(Number(b.updatedAt)||0)-(Number(a.updatedAt)||0));
         if(!history.length){
@@ -892,7 +920,11 @@
         if(event.key===WATCH_HISTORY_KEY)renderContinueWatching();
         if(event.key===RECENT_APPS_KEY)renderRecentApps();
       });
-      window.addEventListener("pageshow",()=>{renderContinueWatching();renderRecentApps();});
+      const refreshPersistentRails=()=>{renderContinueWatching();renderRecentApps();};
+      window.addEventListener("pageshow",refreshPersistentRails);
+      window.addEventListener("focus",refreshPersistentRails);
+      window.addEventListener("centralplus:history-updated",refreshPersistentRails);
+      window.setInterval(()=>{if(!document.hidden)refreshPersistentRails();},5000);
       const setHomeHeroImage=(element,item)=>{
         if(!element||!item)return;
         const candidates=[item.backdrop_url,item.poster_url].filter((url,index,all)=>url&&(url.startsWith("https://")||url.startsWith("http://"))&&all.indexOf(url)===index);
