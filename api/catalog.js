@@ -150,7 +150,7 @@ module.exports = async function handler(req, res) {
     const enrich = String(q.providers || "false") === "true";
     if (enrich) {
       // Streaming discovery returns many candidates; enrich only the first four so the featured titles can show verified services without delaying the whole catalog.
-      const enrichLimit = section === "streaming" || section === "streaming_new" ? 4 : 12;
+      const enrichLimit = section === "streaming" || section === "streaming_new" ? 8 : 12;
       await Promise.all(items.slice(0, enrichLimit).map(async item => {
         const availability = await providers(type, item.id, auth);
         item.provider_names = availability.names;
