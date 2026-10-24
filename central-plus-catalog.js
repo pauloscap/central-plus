@@ -54,6 +54,21 @@
       @media(max-width:600px){.app[data-page="filmes"] .cp-film-wide{flex-basis:78vw}}
       @media(max-width:600px){.cp-series-wide{flex-basis:78vw}}
       .cp-film-wide{display:block;flex:0 0 clamp(245px,27vw,390px);min-width:0;color:inherit;text-decoration:none;scroll-snap-align:start;transition:transform .22s}
+      /* A grade principal de filmes funciona como uma fileira horizontal no estilo Netflix. */
+      #filmes #film-grid{display:flex;align-items:stretch;gap:16px;overflow-x:auto;overflow-y:hidden;padding:4px 2px 18px;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:#4a5060 transparent}
+      #filmes #film-grid::-webkit-scrollbar{height:6px}
+      #filmes #film-grid::-webkit-scrollbar-thumb{background:#414757;border-radius:999px}
+      #filmes #film-grid .cp-film-wide{flex:0 0 clamp(260px,29vw,390px)}
+      #filmes #film-grid .cp-film-wide[hidden]{display:none!important}
+      #filmes #film-grid .cp-film-wide-art{aspect-ratio:16/9}
+      #filmes .film-toolbar{margin-top:22px}
+      #filmes .film-filters{padding-bottom:20px}
+      #cp-film-streaming-rails{margin-top:46px}
+      #cp-film-streaming-rails .cp-streaming-rails-heading{margin-bottom:20px}
+      #cp-film-streaming-rails .cp-streaming-rails-heading h2{font-size:clamp(22px,2.8vw,32px);letter-spacing:-.045em;margin:8px 0}
+      #cp-film-streaming-rails .cp-streaming-rails-heading p{color:#a8afbd;font-size:12px;line-height:1.55}
+      @media(max-width:600px){#filmes #film-grid .cp-film-wide{flex-basis:78vw}#cp-film-streaming-rails{margin-top:34px}}
+
       .cp-film-wide:hover{transform:translateY(-4px)}
       .cp-film-wide-art{position:relative;aspect-ratio:16/9;border-radius:11px;overflow:hidden;border:1px solid #ffffff16;background:#151923 center/cover no-repeat}
       .cp-film-wide-art>.cp-film-wide-image{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;transition:transform .35s ease}
@@ -449,7 +464,7 @@
       const grid=$(isSeriesPage?"#series-grid":"#film-grid");
       if(isFilmPage){
         try {
-          const results=await Promise.all([fetchItems("movie","streaming",false),fetchItems("movie","streaming_new",false)]);
+          const results=await Promise.all([fetchItems("movie","streaming",true),fetchItems("movie","streaming_new",true)]);
           await renderFilmStreamingPage(results[0],results[1]);
         } catch(error) {
           if(grid){const note=document.createElement("p");note.className="cp-api-status";note.textContent="Não foi possível carregar as opções de streaming: "+error.message;grid.prepend(note)}
