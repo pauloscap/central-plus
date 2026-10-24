@@ -165,8 +165,8 @@ module.exports = async function handler(req, res) {
     const items = (data.results || []).filter(x => x.poster_path).map(x => normalize(x, type));
     const enrich = String(q.providers || "false") === "true";
     if (enrich) {
-      // Streaming discovery returns 20 candidates; enrich every one so home and provider rails can show verified services.
-      const enrichLimit = section === "streaming" || section === "streaming_new" ? 20 : 12;
+      // Streaming discovery returns many candidates; enrich only the first four so the featured titles can show verified services without delaying the whole catalog.
+      const enrichLimit = section === "streaming" || section === "streaming_new" ? 4 : 12;
       await Promise.all(items.slice(0, enrichLimit).map(async item => {
         const availability = await providers(type, item.id, auth);
         item.provider_names = availability.names;
