@@ -122,8 +122,44 @@
           if(hero&&item.backdrop_url)hero.style.backgroundImage='linear-gradient(90deg,rgba(5,6,10,.28),rgba(5,6,10,.08)),url("'+item.backdrop_url+'")';
           if(posterEl&&item.poster_url)posterEl.style.backgroundImage='url("'+item.poster_url+'")';
           set("#platformTag",(item.provider_names||[]).join(" · ")||"Consulte a disponibilidade no Brasil");
-          const stream=$("#streamBtn");if(stream){stream.href="https://www.justwatch.com/br/busca?q="+encodeURIComponent(item.title);stream.textContent="▶ Conferir onde assistir";}
-          const options=$("#watchOptionsBtn");if(options){options.href="https://www.justwatch.com/br/busca?q="+encodeURIComponent(item.title);options.textContent="Ver opções no Brasil";}
+          const stream=$("#streamBtn");
+          if(stream){
+            const provider=(item.provider_names||[]).find(Boolean)||"";
+            const providerUrl=provider.toLowerCase().includes("netflix")?"https://www.netflix.com/search?q=":
+              provider.toLowerCase().includes("prime")?"https://www.primevideo.com/search/ref=atv_nb_sr?phrase=":
+              provider.toLowerCase().includes("disney")?"https://www.disneyplus.com/search?q=":
+              provider.toLowerCase().includes("apple")?"https://tv.apple.com/br/search?term=":
+              provider.toLowerCase().includes("max")||provider.toLowerCase().includes("hbo")?"https://play.max.com/search?q=":
+              provider.toLowerCase().includes("paramount")?"https://www.paramountplus.com/search/?query=":"";
+            const progressKey="centralplus-series-progress-v1";
+            const seriesKey=String(new URLSearchParams(location.search).get("serie")||item.id||item.title).toLowerCase();
+            const readEpisode=()=>{try{const saved=JSON.parse(localStorage.getItem(progressKey)||"{}");return Number.isInteger(saved[seriesKey])&&saved[seriesKey]>=0?saved[seriesKey]+1:1}catch(_){return 1}};
+            const renderEpisode=()=>{stream.textContent="▶ Assista o episódio "+String(readEpisode()).padStart(2,"0");};
+            if(type==="tv"){
+              stream.href=providerUrl?providerUrl+encodeURIComponent(item.title):"#";
+              stream.textContent="▶ Assista o episódio "+String(readEpisode()).padStart(2,"0");
+              const watched=$("#episodeWatchedBtn");
+              if(watched){
+                const updateWatched=()=>{watched.textContent="✓ Marcar episódio "+String(readEpisode()).padStart(2,"0")+" como assistido";};
+                updateWatched();
+                if(!watched.dataset.progressBound){
+                  watched.dataset.progressBound="true";
+                  watched.addEventListener("click",()=>{
+                    try{
+                      const saved=JSON.parse(localStorage.getItem(progressKey)||"{}");
+                      saved[seriesKey]=readEpisode();
+                      localStorage.setItem(progressKey,JSON.stringify(saved));
+                      renderEpisode();updateWatched();
+                    }catch(_){}
+                  });
+                }
+              }
+            }else{
+              stream.href=providerUrl?providerUrl+encodeURIComponent(item.title):"#";
+              stream.textContent="▶ Assistir";
+            }
+          }
+          const options=$("#watchOptionsBtn");if(options){options.href="#";options.textContent="Ver opções no Brasil";options.addEventListener("click",event=>event.preventDefault());}
           document.title="Central+ | "+item.title;
         }catch(error){console.warn("Central+ TMDB detail:",error)}
       }
