@@ -16,6 +16,15 @@
     return '<a class="cp-api-card" href="'+href+'"><div class="cp-api-poster cp-home-card-art" data-title="'+title+'"><img loading="'+(kind==="home"&&index<2?"eager":"lazy")+'" '+(kind==="home"&&index===0?'fetchpriority="high" ':'')+'decoding="async" src="'+esc(primaryImage)+'"'+(secondaryImage?' data-fallback="'+esc(secondaryImage)+'"':'')+' alt="Imagem de '+title+'" onerror="if(this.dataset.fallback){const next=this.dataset.fallback;this.dataset.fallback=\'\';this.src=next;}else{this.remove();this.parentElement.classList.add(\'cp-art-fallback\')}"><span class="cp-art-fallback-title">'+title+'</span></div><div class="cp-api-title">'+title+'</div><div class="cp-api-meta">'+esc([year(item), (item.genres||[]).slice(0,1).join("")].filter(Boolean).join(" · "))+'</div><div class="cp-api-provider">'+esc(provider || "Ver onde assistir")+'</div></a>';
   }
   function ensureStyles(){
+    if(!document.documentElement.dataset.cpImageFallbackBound){
+      document.documentElement.dataset.cpImageFallbackBound="true";
+      document.addEventListener("error",event=>{
+        const img=event.target;
+        if(!(img instanceof HTMLImageElement)||!img.matches(".cp-home-news-image,.cp-series-wide-image,.cp-film-wide-image"))return;
+        if(img.dataset.fallback){const fallback=img.dataset.fallback;img.dataset.fallback="";img.src=fallback;}
+        else{img.remove();if(img.parentElement)img.parentElement.classList.add("cp-home-news-no-image","cp-series-art-fallback","cp-film-art-fallback");}
+      },true);
+    }
     if($("#cp-api-styles")) return;
     const style=document.createElement("style");style.id="cp-api-styles";style.textContent=`
 
@@ -23,6 +32,12 @@
       .cp-series-wide:hover{transform:translateY(-4px)}
       .cp-series-wide[hidden]{display:none!important}
       .cp-series-wide-art{position:relative;aspect-ratio:16/9;border-radius:11px;overflow:hidden;border:1px solid #ffffff16;background:#151923 center/cover no-repeat}
+      .cp-series-wide-image,.cp-film-wide-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:0}
+      .cp-series-wide-art:after,.cp-film-wide-art:after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(0deg,rgba(4,5,9,.94),rgba(4,5,9,.02) 82%)}
+      .cp-series-wide-copy,.cp-film-wide-copy{z-index:2}
+      .cp-series-art-fallback,.cp-film-art-fallback{background:radial-gradient(ellipse at 72% 18%,#49546b,transparent 48%),linear-gradient(135deg,#202635,#10131c)}
+      .cp-film-wide-art{position:relative;aspect-ratio:16/9;border-radius:11px;overflow:hidden;border:1px solid #ffffff16;background:#151923}
+      .cp-film-provider-mark img{width:100%;height:100%;object-fit:contain;padding:3px}
       .cp-series-wide-copy{position:absolute;left:14px;right:12px;bottom:13px;display:flex;flex-direction:column;gap:5px}
       .cp-series-wide-copy strong{font-size:clamp(14px,1.5vw,19px);line-height:1.1;letter-spacing:-.035em}
       .app[data-page="series"] #series-grid{display:flex;gap:14px;overflow-x:auto;overflow-y:hidden;padding:5px var(--gutter) 18px 3px;scroll-snap-type:x mandatory;scrollbar-width:none}
@@ -157,7 +172,19 @@
     const options=Array.isArray(item.provider_options)?item.provider_options:[];
     const match=options.find(p=>ids.includes(String(p.id))&&p.logo_url)||
       options.find(p=>String(p.name||"").toLowerCase()===String(serviceLabel||"").toLowerCase()&&p.logo_url);
-    return match?match.logo_url:"";
+    const staticLogos={
+      "Netflix":"https://cdn.simpleicons.org/netflix/FFFFFF",
+      "Disney+":"https://cdn.simpleicons.org/disneyplus/FFFFFF",
+      "Prime Video":"https://cdn.simpleicons.org/primevideo/FFFFFF",
+      "HBO Max":"https://cdn.simpleicons.org/max/FFFFFF",
+      "Globoplay":"https://cdn.simpleicons.org/globoplay/FFFFFF",
+      "Apple TV":"https://cdn.simpleicons.org/appletv/FFFFFF",
+      "MUBI":"https://cdn.simpleicons.org/mubi/FFFFFF",
+      "Paramount+":"https://cdn.simpleicons.org/paramountplus/FFFFFF",
+      "Crunchyroll":"https://cdn.simpleicons.org/crunchyroll/F47521",
+      "Pluto TV":"https://cdn.simpleicons.org/plutotv/FFFFFF"
+    };
+    return match?match.logo_url:(staticLogos[serviceLabel]||"");
   }
   function horizontalMovieCard(item, serviceLabel){
     const href=detailHref(item), image=item.backdrop_url||item.poster_url||"", title=esc(item.title);
@@ -168,7 +195,7 @@
     const logoStack=itemLogos.length?'<span class="cp-film-provider-stack" aria-label="Disponível em '+esc(itemLogos.map(p=>p.name).join(", "))+'">'+itemLogos.map(p=>'<span class="cp-film-provider-mark" title="'+esc(p.name)+'"><img src="'+esc(p.logo_url)+'" alt="'+esc(p.name)+'" loading="lazy"></span>').join("")+'</span>':'<span class="cp-film-wide-badge">'+esc(providers(item)||"Streaming")+'</span>';
     const badge=serviceLabel?'<span class="cp-film-provider-mark" title="'+esc(serviceLabel)+'">'+(logo?'<img src="'+esc(logo)+'" alt="'+esc(serviceLabel)+'" loading="lazy">':'<span>'+esc(serviceLabel)+'</span>')+'</span>':logoStack;
     return '<a class="cp-film-wide" href="'+href+'" data-genre="'+movieGenreSlugs(item)+'" data-title="'+title+'">'+
-      '<div class="cp-film-wide-art" style="background-image:linear-gradient(0deg,rgba(4,5,9,.9),rgba(4,5,9,.02) 78%),url(&quot;'+esc(image)+'&quot;)">'+badge+
+      '<div class="cp-film-wide-art"><img class="cp-film-wide-image" src="'+esc(image)+'"'+(item.poster_url&&item.poster_url!==image?' data-fallback="'+esc(item.poster_url)+'"':'')+' alt="" loading="lazy" decoding="async">'+badge+
       '<div class="cp-film-wide-copy"><span class="cp-film-wide-kicker">'+esc(genres||"Filme")+'</span><strong>'+title+'</strong></div></div>'+
       '<div class="cp-film-wide-meta"><span>'+esc(year(item)||"Filme")+'</span><span>Ver detalhes ↗</span></div></a>';
   }
@@ -192,7 +219,7 @@
     const href=detailHref(item),image=item.backdrop_url||item.poster_url||"",title=esc(item.title);
     const genres=(item.genres||[]).slice(0,2).join(" · ");
     return '<a class="cp-series-wide" href="'+href+'" data-genre="'+seriesGenreSlugs(item)+'" data-title="'+title+'">'+
-      '<div class="cp-series-wide-art" style="background-image:linear-gradient(0deg,rgba(4,5,9,.9),rgba(4,5,9,.02) 78%),url(&quot;'+esc(image)+'&quot;)">'+
+      '<div class="cp-series-wide-art"><img class="cp-series-wide-image" src="'+esc(image)+'"'+(item.poster_url&&item.poster_url!==image?' data-fallback="'+esc(item.poster_url)+'"':'')+' alt="" loading="lazy" decoding="async">'+
       '<span class="cp-film-wide-badge">'+esc(serviceLabel||providers(item)||"Streaming")+'</span>'+
       '<div class="cp-series-wide-copy"><span class="cp-film-wide-kicker">'+esc(genres||"Série")+'</span><strong>'+title+'</strong></div></div>'+
       '<div class="cp-film-wide-meta"><span>'+esc(year(item)||"Série")+'</span><span>Ver detalhes ↗</span></div></a>';
@@ -643,6 +670,11 @@
         .cp-home-news .cp-api-title,.cp-home-continue .cp-api-title{font-size:14px}
         .cp-home-news-card{display:block;flex:0 0 clamp(280px,31vw,410px);min-width:0;scroll-snap-align:start;color:inherit;text-decoration:none}
         .cp-home-news-art{position:relative;aspect-ratio:16/9;border:1px solid #ffffff16;border-radius:12px;overflow:hidden;background-color:#151923;background-size:cover;background-position:center;transition:transform .25s,border-color .25s}
+        .cp-home-news-art{background:radial-gradient(ellipse at 75% 18%,#444d65,transparent 48%),linear-gradient(135deg,#202635,#10131c)}
+        .cp-home-news-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+        .cp-home-news-art:after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(0deg,rgba(4,5,9,.95),rgba(4,5,9,.08) 88%)}
+        .cp-home-news-badge,.cp-home-news-copy{z-index:1}
+        .cp-home-news-no-image{background:radial-gradient(ellipse at 75% 18%,#4a5672,transparent 48%),linear-gradient(135deg,#202635,#10131c)}
         .cp-home-news-card:hover .cp-home-news-art{transform:translateY(-3px);border-color:#ffffff50}
         .cp-home-news-badge{position:absolute;top:10px;left:10px;padding:5px 8px;border:1px solid #ffffff35;border-radius:5px;background:#08090dcc;color:#f5f6fa;font-size:9px;backdrop-filter:blur(8px)}
         .cp-home-news-copy{position:absolute;left:14px;right:12px;bottom:13px}
@@ -815,11 +847,22 @@
         const newsCategories={nacionais:"Brasil e mundo",para:"Pará e Belém",cinema:"Cinema e séries",celebridades:"Cultura pop",ciencia:"Ciência",ia:"IA e tecnologia",jornalismo:"Jornalismo",patrimonio:"História e patrimônio"};
         const safeUrl=value=>{try{const u=new URL(value,location.origin);return /^https?:$/.test(u.protocol)?u.href:"#"}catch(_){return "#"}};
         const newsDate=value=>{if(!value)return "";const date=new Date(value);if(Number.isNaN(date.getTime()))return "";return date.toLocaleDateString("pt-BR",{day:"2-digit",month:"short"})};
+        const newsFallbackImages={
+          nacionais:"https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80",
+          para:"https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=1200&q=80",
+          cinema:"https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1200&q=80",
+          celebridades:"https://images.unsplash.com/photo-1492681290082-e932832941e6?auto=format&fit=crop&w=1200&q=80",
+          ciencia:"https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=1200&q=80",
+          ia:"https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=80",
+          jornalismo:"https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80",
+          patrimonio:"https://images.unsplash.com/photo-1461360228754-6e81c478b882?auto=format&fit=crop&w=1200&q=80"
+        };
         newsRail.innerHTML=newsItems.map(item=>{
-          const image=safeUrl(item.image),link=safeUrl(item.url),title=esc(item.title);
+          const original=safeUrl(item.image),fallback=newsFallbackImages[item.category]||newsFallbackImages.nacionais;
+          const image=original!=="#"?original:fallback,link=safeUrl(item.url),title=esc(item.title);
           const category=esc(newsCategories[item.category]||"Notícias"),source=esc(item.source||"Fonte jornalística");
           const summary=esc((item.summary||"Leia a matéria completa diretamente no portal de origem.").trim()),date=newsDate(item.publishedAt);
-          return '<a class="cp-home-news-card" href="'+link+'" aria-label="Ler notícia: '+title+'"><div class="cp-home-news-art"'+(image!=="#"? ' style="background-image:linear-gradient(0deg,rgba(4,5,9,.95),rgba(4,5,9,.08) 88%),url(&quot;'+esc(image)+'&quot;)"':"")+'><span class="cp-home-news-badge">'+category+'</span><div class="cp-home-news-copy"><div class="cp-home-news-source">'+source+(date?" · "+esc(date):"")+'</div><div class="cp-home-news-title">'+title+'</div></div></div><div class="cp-home-news-summary">'+summary+'</div><div class="cp-home-news-link">Ler matéria original ↗</div></a>';
+          return '<a class="cp-home-news-card" href="'+link+'" aria-label="Ler notícia: '+title+'"><div class="cp-home-news-art"><img class="cp-home-news-image" src="'+esc(image)+'"'+(original!=="#"? ' data-fallback="'+esc(fallback)+'"':'')+' alt="" loading="lazy" decoding="async"><span class="cp-home-news-badge">'+category+'</span><div class="cp-home-news-copy"><div class="cp-home-news-source">'+source+(date?" · "+esc(date):"")+'</div><div class="cp-home-news-title">'+title+'</div></div></div><div class="cp-home-news-summary">'+summary+'</div><div class="cp-home-news-link">Ler matéria original ↗</div></a>';
         }).join("")||'<div class="cp-home-error">As manchetes aparecerão aqui quando o feed estiver disponível.</div>';
         if(newsItems.length>1){
           const reduceMotion=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
