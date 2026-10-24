@@ -39,6 +39,10 @@
       .cp-film-wide-kicker{font-size:9px;color:#d0d4df;letter-spacing:.04em}
       .cp-film-wide-badge{position:absolute;left:10px;top:10px;z-index:2;border:1px solid #ffffff38;border-radius:4px;padding:5px 7px;background:#080a10c9;font-size:9px;font-weight:750}
       .cp-film-provider-mark{position:absolute;z-index:3;top:10px;left:10px;min-width:38px;height:38px;padding:3px;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid #ffffff35;border-radius:9px;background:rgba(8,10,16,.88);box-shadow:0 5px 18px #0006;backdrop-filter:blur(8px)}
+      .cp-film-provider-stack{position:absolute;z-index:3;top:10px;left:10px;display:flex;align-items:center;gap:6px}
+      .cp-film-provider-stack .cp-film-provider-mark{position:static;min-width:34px;width:34px;height:34px;padding:2px;border-radius:8px}
+      .cp-film-provider-stack .cp-film-provider-mark img{width:28px;height:28px}
+      .cp-film-provider-stack .cp-film-provider-mark:nth-child(n+4){display:none}
       .cp-film-provider-mark img{display:block;width:32px;height:32px;object-fit:contain;border-radius:6px}
       .cp-film-provider-mark>span{font-size:9px;font-weight:800;max-width:88px;padding:0 5px;line-height:1.1;text-align:center}
       .cp-film-provider-mark img[src=""]{display:none}
@@ -155,7 +159,10 @@
     const href=detailHref(item), image=item.backdrop_url||item.poster_url||"", title=esc(item.title);
     const genres=(item.genres||[]).slice(0,2).join(" · ");
     const logo=serviceLogo(item,serviceLabel);
-    const badge=serviceLabel?'<span class="cp-film-provider-mark" title="'+esc(serviceLabel)+'">'+(logo?'<img src="'+esc(logo)+'" alt="'+esc(serviceLabel)+'" loading="lazy">':'<span>'+esc(serviceLabel)+'</span>')+'</span>':'<span class="cp-film-wide-badge">'+esc(providers(item)||"Streaming")+'</span>';
+    const itemOptions=Array.isArray(item.provider_options)?item.provider_options:[];
+    const itemLogos=itemOptions.filter((p,i,arr)=>p.logo_url&&arr.findIndex(x=>String(x.id)===String(p.id))===i).slice(0,3);
+    const logoStack=itemLogos.length?'<span class="cp-film-provider-stack" aria-label="Disponível em '+esc(itemLogos.map(p=>p.name).join(", "))+'">'+itemLogos.map(p=>'<span class="cp-film-provider-mark" title="'+esc(p.name)+'"><img src="'+esc(p.logo_url)+'" alt="'+esc(p.name)+'" loading="lazy"></span>').join("")+'</span>':'<span class="cp-film-wide-badge">'+esc(providers(item)||"Streaming")+'</span>';
+    const badge=serviceLabel?'<span class="cp-film-provider-mark" title="'+esc(serviceLabel)+'">'+(logo?'<img src="'+esc(logo)+'" alt="'+esc(serviceLabel)+'" loading="lazy">':'<span>'+esc(serviceLabel)+'</span>')+'</span>':logoStack;
     return '<a class="cp-film-wide" href="'+href+'" data-genre="'+movieGenreSlugs(item)+'" data-title="'+title+'">'+
       '<div class="cp-film-wide-art" style="background-image:linear-gradient(0deg,rgba(4,5,9,.9),rgba(4,5,9,.02) 78%),url(&quot;'+esc(image)+'&quot;)">'+badge+
       '<div class="cp-film-wide-copy"><span class="cp-film-wide-kicker">'+esc(genres||"Filme")+'</span><strong>'+title+'</strong></div></div>'+
@@ -321,7 +328,7 @@
         const tiles=[...document.querySelectorAll("#filmes .cp-film-wide")];
         let visible=0;
         tiles.forEach(tile=>{
-          const genres=(tile.dataset.genre||"").split(/\\s+/).filter(Boolean);
+          const genres=(tile.dataset.genre||"").split(/\s+/).filter(Boolean);
           const show=selected==="todos"||genres.includes(selected);
           tile.hidden=!show;
           if(show&&grid.contains(tile))visible++;
