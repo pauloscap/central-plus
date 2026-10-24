@@ -377,7 +377,10 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
     try{
       const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
       const next=[item,...(Array.isArray(saved)?saved:[]).filter(old=>old&&String(old.name).toLowerCase()!==name.toLowerCase())].slice(0,12);
-      localStorage.setItem(STORAGE_KEY,JSON.stringify(next));
+      const serialized=JSON.stringify(next);
+      localStorage.setItem(STORAGE_KEY,serialized);
+      try{sessionStorage.setItem(STORAGE_KEY,serialized);}catch(_){}
+      window.dispatchEvent(new CustomEvent("centralplus:history-updated",{detail:{key:STORAGE_KEY}}));
     }catch(_){}
   }
   document.addEventListener("click",function(event){
