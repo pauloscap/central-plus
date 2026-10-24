@@ -289,9 +289,12 @@
     const intro=$("#filmes .films-intro p");
     if(intro)intro.textContent="Lançamentos e descobertas disponíveis nos serviços de streaming no Brasil. Escolha um gênero ou explore por plataforma.";
     const toolbarTitle=$("#filmes .film-toolbar .section-title");
-    if(toolbarTitle)toolbarTitle.textContent="Filmes disponíveis no streaming";
+    if(toolbarTitle)toolbarTitle.textContent="Explore por gênero";
     const toolbarSubtitle=$("#filmes .film-toolbar .section-subtitle");
-    if(toolbarSubtitle)toolbarSubtitle.textContent="Explore o catálogo por gênero e descubra onde assistir sem misturar estreias exclusivas de cinema.";
+    if(toolbarSubtitle)toolbarSubtitle.textContent="Filmes disponíveis para assistir online no Brasil — não inclui títulos apenas em cartaz nos cinemas.";
+    const featureKicker=$("#film-feature-kicker");
+    if(featureKicker&&!featureNodeIsManaged())featureKicker.textContent="LANÇAMENTOS NO STREAMING · DESTAQUES CENTRAL+";
+    function featureNodeIsManaged(){const node=$("#film-feature");return !!(node&&node.dataset.apiManaged==="true");}
 
     // O destaque usa seis lançamentos recentes, já filtrados pela disponibilidade de streaming no Brasil.
     const featureItems=[];
@@ -371,7 +374,7 @@
 
     let rails=$("#cp-film-streaming-rails");
     if(!rails){rails=document.createElement("div");rails.id="cp-film-streaming-rails";grid.insertAdjacentElement("afterend",rails);}
-    rails.innerHTML='<div class="cp-streaming-rails-heading"><div class="eyebrow">EXPLORE POR PLATAFORMA</div><h2>O que assistir em cada streaming</h2><p>Filmes disponíveis para assistir por assinatura ou gratuitamente no Brasil.</p></div>'+
+    rails.innerHTML='<div class="cp-streaming-rails-heading"><div class="eyebrow">EXPLORE POR PLATAFORMA</div><h2>Filmes em cada streaming</h2><p>Fileiras no estilo Netflix com filmes disponíveis online no Brasil nas plataformas integradas à Central+.</p></div>'+
       STREAMING_SERVICES.map(service=>'<section class="cp-streaming-row" data-service="'+esc(service.label)+'"><div class="cp-streaming-row-head"><h3>'+esc(service.label)+'</h3><span>Disponíveis no Brasil</span></div><div class="cp-streaming-row-track" aria-label="Filmes na plataforma '+esc(service.label)+'"><p class="cp-streaming-status">Carregando filmes…</p></div></section>').join("");
     const disclaimer=$("#filmes .film-disclaimer");
     if(disclaimer)disclaimer.textContent="Catálogo e disponibilidade para o Brasil consultados via TMDB/JustWatch. A oferta pode mudar; confirme no serviço antes de assistir.";
