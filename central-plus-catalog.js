@@ -292,9 +292,6 @@
     if(toolbarTitle)toolbarTitle.textContent="Explore por gênero";
     const toolbarSubtitle=$("#filmes .film-toolbar .section-subtitle");
     if(toolbarSubtitle)toolbarSubtitle.textContent="Filmes disponíveis para assistir online no Brasil — não inclui títulos apenas em cartaz nos cinemas.";
-    const featureKicker=$("#film-feature-kicker");
-    if(featureKicker&&!featureNodeIsManaged())featureKicker.textContent="LANÇAMENTOS NO STREAMING · DESTAQUES CENTRAL+";
-    function featureNodeIsManaged(){const node=$("#film-feature");return !!(node&&node.dataset.apiManaged==="true");}
 
     // O destaque usa seis lançamentos recentes, já filtrados pela disponibilidade de streaming no Brasil.
     const featureItems=[];
