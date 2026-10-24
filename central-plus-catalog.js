@@ -425,6 +425,13 @@
         .cp-home-status{color:#7f8799;font-size:9px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
         .cp-home-news .cp-api-card,.cp-home-continue .cp-api-card{flex-basis:clamp(250px,30vw,390px);scroll-snap-align:start}
         .cp-home-live .cp-home-live-card{display:block;flex:0 0 clamp(240px,27vw,350px);min-width:0;scroll-snap-align:start;color:inherit;text-decoration:none;border:1px solid #ffffff16;border-radius:12px;overflow:hidden;background:#11141c;transition:transform .2s,border-color .2s}.cp-home-live .cp-home-live-card:hover{transform:translateY(-3px);border-color:#ffffff45}.cp-home-live-art{position:relative;aspect-ratio:16/9;background:#171b25 center/cover no-repeat}.cp-home-live-art:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(4,5,9,.78),transparent 72%)}.cp-home-live-status{position:absolute;z-index:1;top:10px;left:10px;padding:5px 7px;border:1px solid #ffffff35;border-radius:4px;background:#08090dcc;font-size:9px;letter-spacing:.06em;text-transform:uppercase}.cp-home-live-status.is-live{border-color:#ff59686b;color:#fff1f2}.cp-home-live-status.is-live:before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:#ff5968;margin-right:6px}.cp-home-live-copy{padding:11px 12px 13px}.cp-home-live-title{font-size:13px;font-weight:800}.cp-home-live-meta{font-size:10px;color:#aab1c0;margin-top:5px}.cp-home-live-updated{font-size:9px;color:#cbd3e1;margin-top:7px}
+        .cp-home-app-card{flex-basis:clamp(125px,13vw,165px);scroll-snap-align:start}
+        .cp-home-app-art{height:88px;position:relative;display:grid;place-items:center;overflow:hidden;border:1px solid #ffffff20;border-radius:13px;background:#1a1d26}
+        .cp-home-app-glow{position:absolute;width:100px;height:100px;right:-28px;top:-38px;border-radius:50%;background:#ffffff20}
+        .cp-home-app-logo{position:relative;z-index:1;width:52px;height:52px;border-radius:13px;background:#10111635;display:grid;place-items:center;color:#fff;font-size:16px;font-weight:850;text-align:center;overflow:hidden;box-shadow:0 8px 24px #0005}
+        .cp-home-app-logo img{width:100%;height:100%;object-fit:contain;padding:8px}
+        .cp-home-app-fallback{font-size:11px;font-weight:850;line-height:1.05;overflow-wrap:anywhere}
+        .cp-home-app-card:hover .cp-home-app-art{border-color:#ffffff55}
         .cp-home-news .cp-api-poster,.cp-home-continue .cp-api-poster{width:100%;aspect-ratio:16/9;border-radius:12px}
         .cp-home-news .cp-api-title,.cp-home-continue .cp-api-title{font-size:14px}
         .cp-home-news-card{display:block;flex:0 0 clamp(280px,31vw,410px);min-width:0;scroll-snap-align:start;color:inherit;text-decoration:none}
@@ -469,6 +476,36 @@
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Ao vivo</h2><p>Canais oficiais — os sinais e prévias atualizados aparecem primeiro</p></div><a class="cp-home-seeall" href="/central-plus-ao-vivo.html">Ver todos os canais ↗</a></div><div class="cp-home-rail cp-home-live" id="cp-api-home-live"><span class="cp-api-status">Atualizando canais…</span></div></section>
         <section class="cp-home-section"><div class="cp-home-section-head"><div><h2>Favoritos</h2><p>Uma área para seus títulos salvos</p></div><a class="cp-home-seeall" href="/central-plus-favoritos.html">Ver favoritos ↗</a></div><div class="cp-home-rail" id="cp-api-home-favorites"><div class="cp-home-empty"><div><strong>Seus favoritos em um só lugar</strong>Explore filmes e séries e abra sua lista de favoritos.</div></div></div></section>
         <footer class="cp-home-footer"><span>Central+ · Descubra o que assistir</span><span>Metadados e imagens fornecidos pelo TMDB. A Central+ não é endossada pelo TMDB.</span></footer>`;
+      const RECENT_APPS_KEY="centralplus-recent-apps-v1";
+      const appBrandColor=name=>({
+        "netflix":"#e50914","prime video":"#0879bd","disney+":"#132f82","hbo max":"#5424a8",
+        "globoplay":"#ed2735","apple tv":"#252a32","paramount+":"#1262a5","mubi":"#b5a88a",
+        "pluto tv":"#6d39db","crunchyroll":"#f47521","wow presents":"#e94c9a",
+        "youtube":"#e62117","amazon music":"#f47521","spotify":"#1d6c42"
+      }[String(name||"").toLowerCase()]||"#242936");
+      const renderRecentApps=()=>{
+        const rail=$("#cp-api-home-apps",mount);if(!rail)return;
+        let saved=[];try{const raw=JSON.parse(localStorage.getItem(RECENT_APPS_KEY)||"[]");saved=Array.isArray(raw)?raw.filter(x=>x&&x.name&&/^https:\/\//i.test(x.url||"")):[]}catch(_){}
+        if(!saved.length){
+          rail.innerHTML='<div class="cp-home-empty"><div><strong>Seus streamings favoritos começam aqui</strong>Abra um card na aba Apps e ele aparecerá nesta seção, do mais recente ao mais antigo.</div></div>';
+          return;
+        }
+        rail.innerHTML=saved.slice(0,8).map(app=>{
+          const name=esc(app.name),url=esc(app.url),logo=app.logo?'<img loading="lazy" src="'+esc(app.logo)+'" alt="" onload="this.nextElementSibling.style.display=\'none\'" onerror="this.style.display=\'none\'">':"";
+          const fallback=esc((app.fallback||app.name||"?").slice(0,9));
+          return '<a class="cp-api-card cp-home-app-card" href="'+url+'" target="_blank" rel="noopener noreferrer" data-app-name="'+name+'"><div class="cp-home-app-art" style="background:'+appBrandColor(app.name)+'"><span class="cp-home-app-glow"></span><span class="cp-home-app-logo">'+logo+'<span class="cp-home-app-fallback">'+fallback+'</span></span></div><div class="cp-api-title">'+name+'</div><div class="cp-api-meta">Aberto recentemente</div></a>';
+        }).join("");
+      };
+      const recordRecentApp=link=>{
+        const name=(link.dataset.appName||link.querySelector(".cp-api-title")?.textContent||"").trim(),url=link.href||"";
+        if(!name||!/^https:\/\//i.test(url))return;
+        const image=link.querySelector(".cp-home-app-logo img");
+        const fallback=link.querySelector(".cp-home-app-fallback");
+        const entry={name,url,logo:image?(image.getAttribute("src")||""):"",fallback:fallback?(fallback.textContent||"").trim():name.slice(0,1),visitedAt:Date.now()};
+        try{const old=JSON.parse(localStorage.getItem(RECENT_APPS_KEY)||"[]");const list=[entry,...(Array.isArray(old)?old:[]).filter(x=>x&&String(x.name).toLowerCase()!==name.toLowerCase())].slice(0,12);localStorage.setItem(RECENT_APPS_KEY,JSON.stringify(list));}catch(_){}
+      };
+      mount.addEventListener("click",event=>{const link=event.target.closest(".cp-home-app-card");if(link){recordRecentApp(link);renderRecentApps();}},true);
+      renderRecentApps();
       const loadRail=async(id,type,section,limit=18)=>{
         const rail=$("#"+id,mount);
         try{
