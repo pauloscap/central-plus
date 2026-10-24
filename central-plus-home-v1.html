@@ -66,6 +66,15 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
 .apps-rail .app-card .app-note{font-size:10px;color:#aeb4c2}
 @media(max-width:760px){.apps-rail .card{flex-basis:220px}.apps-rail .app-tile{aspect-ratio:16/10}.apps-rail .app-logo{width:78%;height:72%;margin:0 0 7% 8%}.apps-rail .app-logo .logo-fallback{font-size:32px}}
 
+
+.recent-app-rail .recent-app-empty{min-width:280px;padding:18px 20px;border:1px dashed #ffffff25;border-radius:12px;color:#aeb4c2;font-size:12px;line-height:1.55}
+.recent-app-rail .recent-app-empty strong{display:block;color:#f5f6fa;font-size:13px;margin-bottom:5px}
+.recent-app-rail .recent-app-tile{height:100px;border-radius:12px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border:1px solid #ffffff20;background:#20232c}
+.recent-app-rail .recent-app-tile:after{content:"";position:absolute;width:100px;height:100px;border-radius:50%;background:#ffffff15;right:-25px;top:-35px}
+.recent-app-rail .recent-app-card .app-logo{position:relative;z-index:1}
+.recent-app-rail .recent-app-card .app-logo img{width:100%;height:100%;object-fit:contain;padding:5px}
+.recent-app-rail .recent-app-card .logo-fallback{font-size:clamp(14px,1.8vw,24px);font-weight:850;letter-spacing:-.04em;text-align:center;overflow-wrap:anywhere}
+.recent-app-rail .recent-app-card .app-note{font-size:10px;color:#aeb4c2}
 </style>
 </head>
 <body>
@@ -103,6 +112,7 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
     <a class="card" href="#continuar" data-focusable data-title="Planeta Azul"><div class="poster"><div class="poster-art art-sea"></div><span class="poster-badge">Ep. 2</span><div class="poster-copy"><div class="poster-kicker">Documentário</div><div class="poster-title">Planeta Azul</div></div></div><div class="progress"><span style="width:81%"></span></div><div class="card-caption"><span>Planeta Azul</span><small>81%</small></div></a>
     <a class="card" href="#continuar" data-focusable data-title="A Última Fronteira"><div class="poster"><div class="poster-art art-orbit"></div><span class="poster-badge">S1:E4</span><div class="poster-copy"><div class="poster-kicker">Aventura · 51 min</div><div class="poster-title">A Última Fronteira</div></div></div><div class="progress"><span style="width:24%"></span></div><div class="card-caption"><span>A Última Fronteira</span><small>24%</small></div></a>
   </div></section>
+  <section class="content-section" id="recent-apps"><div class="section-head"><div><h2 class="section-title">Apps recentes</h2><p class="section-subtitle">Os serviços que você abriu por último aparecem aqui.</p></div><a class="section-link" href="central-plus-apps.html" data-focusable>Ver todos os apps <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m9 5 7 7-7 7"/></svg></a></div><div class="rail apps-rail recent-app-rail" id="recent-apps-rail"><div class="recent-app-empty">Abra um streaming na aba Apps para ele aparecer aqui.</div></div></section>
   <section class="content-section" id="apps"><div class="section-head"><div><h2 class="section-title">Seus aplicativos</h2><p class="section-subtitle">14 serviços com acesso direto às plataformas oficiais.</p></div><a class="section-link" href="#apps" data-focusable>Explorar serviços <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m9 5 7 7-7 7"/></svg></a></div><div class="rail apps-rail">
     <a class="card app-card" href="https://www.netflix.com/browse" data-focusable data-title="Netflix"><div class="app-tile"><div class="app-logo"><img loading="lazy" src="https://cdn.simpleicons.org/netflix/FFFFFF" alt="Logomarca Netflix" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'"><span class="logo-fallback">NETFLIX</span></div></div><div class="card-caption"><span>Netflix</span><div class="app-note">Filmes e séries</div></div></a>
     <a class="card app-card" href="https://www.primevideo.com/" data-focusable data-title="Prime Video"><div class="app-tile"><div class="app-logo"><img loading="lazy" src="https://cdn.simpleicons.org/primevideo/FFFFFF" alt="Logomarca Prime Video" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'"><span class="logo-fallback">prime video</span></div></div><div class="card-caption"><span>Prime Video</span><div class="app-note">Filmes e séries</div></div></a>
@@ -235,6 +245,35 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
   // Keyboard/remote carousel browsing while a card is focused.
   document.querySelectorAll('.rail').forEach(rail=>rail.addEventListener('keydown',e=>{if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;const cards=[...rail.querySelectorAll('[data-focusable]')];const idx=cards.indexOf(document.activeElement);if(idx<0)return;const next=cards[idx+(e.key==='ArrowRight'?1:-1)];if(next){e.preventDefault();next.focus();next.scrollIntoView({block:'nearest',inline:'nearest',behavior:'smooth'})}}));
   setSlide(0);startCarousel();
+})();
+</script>
+
+<script>
+(function(){
+  const KEY="centralplus-recent-apps-v1";
+  const rail=document.getElementById("recent-apps-rail");
+  const esc=value=>String(value||"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+  const colors={"netflix":"#e50914","prime video":"#0879bd","disney+":"#132f82","hbo max":"#5424a8","globoplay":"#ed2735","apple tv":"#252a32","paramount+":"#1262a5","mubi":"#b5a88a","pluto tv":"#6d39db","crunchyroll":"#f47521","wow presents":"#e94c9a","youtube":"#e62117","amazon music":"#f47521","spotify":"#1d6c42"};
+  function read(){try{const data=JSON.parse(localStorage.getItem(KEY)||"[]");return Array.isArray(data)?data.filter(x=>x&&x.name&&/^https:\/\//i.test(x.url||"")):[]}catch(_){return[]}}
+  function save(card){
+    const name=(card.getAttribute("data-title")||card.querySelector(".card-caption span")?.textContent||"").trim(),url=card.href||"";
+    if(!name||!/^https:\/\//i.test(url))return;
+    const img=card.querySelector(".app-logo img"),fallback=card.querySelector(".app-logo .logo-fallback");
+    const entry={name,url,logo:img?(img.getAttribute("src")||""):"",fallback:fallback?(fallback.textContent||"").trim():name.slice(0,1),visitedAt:Date.now()};
+    try{const previous=read();localStorage.setItem(KEY,JSON.stringify([entry,...previous.filter(x=>String(x.name).toLowerCase()!==name.toLowerCase())].slice(0,12)));}catch(_){}
+  }
+  function render(){
+    if(!rail)return;
+    const apps=read();
+    if(!apps.length){rail.innerHTML='<div class="recent-app-empty"><strong>Sua central de streaming começa aqui</strong>Clique em um card na aba Apps. O serviço ficará salvo nesta seção para acesso rápido.</div>';return;}
+    rail.innerHTML=apps.slice(0,8).map(app=>{
+      const name=esc(app.name),url=esc(app.url),logo=app.logo?'<img loading="lazy" src="'+esc(app.logo)+'" alt="" onload="this.nextElementSibling.style.display=\'none\'" onerror="this.style.display=\'none\'">':"";
+      const fallback=esc((app.fallback||app.name).slice(0,12)),color=colors[String(app.name).toLowerCase()]||"#20232c";
+      return '<a class="card app-card recent-app-card" href="'+url+'" data-focusable data-title="'+name+'"><div class="recent-app-tile" style="background:'+color+'"><div class="app-logo">'+logo+'<span class="logo-fallback">'+fallback+'</span></div></div><div class="card-caption"><span>'+name+'</span><div class="app-note">Aberto recentemente</div></div></a>';
+    }).join("");
+  }
+  document.addEventListener("click",event=>{const card=event.target.closest("a.app-card");if(card)save(card);},true);
+  render();
 })();
 </script>
 </body>
