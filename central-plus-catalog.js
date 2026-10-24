@@ -695,9 +695,9 @@
         .cp-home-news-card{display:block;flex:0 0 clamp(280px,31vw,410px);min-width:0;scroll-snap-align:start;color:inherit;text-decoration:none}
         .cp-home-news-art{position:relative;aspect-ratio:16/9;border:1px solid #ffffff16;border-radius:12px;overflow:hidden;background-color:#151923;background-size:cover;background-position:center;transition:transform .25s,border-color .25s}
         .cp-home-news-art{background:radial-gradient(ellipse at 75% 18%,#444d65,transparent 48%),linear-gradient(135deg,#202635,#10131c)}
-        .cp-home-news-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-        .cp-home-news-art:after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(0deg,rgba(4,5,9,.95),rgba(4,5,9,.08) 88%)}
-        .cp-home-news-badge,.cp-home-news-copy{z-index:1}
+        .cp-home-news-image{position:absolute;inset:0;z-index:0;width:100%;height:100%;object-fit:cover;display:block}
+        .cp-home-news-art:after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(0deg,rgba(4,5,9,.88),rgba(4,5,9,.04) 88%)}
+        .cp-home-news-badge,.cp-home-news-copy{z-index:2}
         .cp-home-news-no-image{background:radial-gradient(ellipse at 75% 18%,#4a5672,transparent 48%),linear-gradient(135deg,#202635,#10131c)}
         .cp-home-news-card:hover .cp-home-news-art{transform:translateY(-3px);border-color:#ffffff50}
         .cp-home-news-badge{position:absolute;top:10px;left:10px;padding:5px 8px;border:1px solid #ffffff35;border-radius:5px;background:#08090dcc;color:#f5f6fa;font-size:9px;backdrop-filter:blur(8px)}
@@ -812,10 +812,13 @@
             element.classList.add("cp-art-fallback");
             return;
           }
+          const url=candidates[index];
+          // Paint the candidate immediately; the preload below only decides whether to try the next image.
+          element.style.backgroundImage=base+',url("'+url+'")';
           const probe=new Image();
-          probe.onload=()=>{element.style.backgroundImage=base+',url("'+candidates[index]+'")';element.classList.remove("cp-art-fallback");};
+          probe.onload=()=>{element.style.backgroundImage=base+',url("'+url+'")';element.classList.remove("cp-art-fallback");};
           probe.onerror=()=>tryImage(index+1);
-          probe.src=candidates[index];
+          probe.src=url;
         };
         tryImage(0);
       };
