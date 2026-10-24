@@ -248,7 +248,7 @@
               stream.textContent="▶ Assistir";
             }
           }
-          const options=$("#watchOptionsBtn");if(options){options.href="#";options.textContent="Ver opções no Brasil";options.addEventListener("click",event=>event.preventDefault());}
+          const options=$("#watchOptionsBtn");if(options){options.href="#cp-provider-cartela";options.textContent="Ver opções no Brasil";options.addEventListener("click",event=>{event.preventDefault();const panel=$("#cp-provider-cartela");if(panel)panel.scrollIntoView({behavior:"smooth",block:"start"});});}
           document.title="Central+ | "+item.title;
         }catch(error){console.warn("Central+ TMDB detail:",error)}
       }
