@@ -13,6 +13,14 @@
   if(!avatar)return;
   avatar.setAttribute("role","button");avatar.setAttribute("tabindex","0");avatar.setAttribute("aria-label","Perfil e login");avatar.style.cursor="pointer";avatar.title="Entrar / Meu perfil";
   avatar.addEventListener("click",open);avatar.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();open()}});
+  /* O avatar original fica dentro de um grupo hidden md:flex e some em celulares.
+     Cria um atalho móvel visível sem alterar o layout principal. */
+  var mobileStyle=el("style",{text:""});
+  mobileStyle.textContent="@media(max-width:767px){#cp-mobile-profile{display:flex!important}}@media(min-width:768px){#cp-mobile-profile{display:none!important}}";
+  document.head.appendChild(mobileStyle);
+  var mobile=el("button",{id:"cp-mobile-profile",type:"button","aria-label":"Perfil e login",text:"A",style:"display:none;position:fixed;top:12px;right:64px;z-index:9998;width:32px;height:32px;border-radius:50%;background:#fff;color:#000;font:700 13px Arial,sans-serif;border:1px solid #ffffff40;box-shadow:0 4px 18px #0008;align-items:center;justify-content:center;cursor:pointer"});
+  mobile.addEventListener("click",open);
+  document.body.appendChild(mobile);
   loadClient();
  }
  function loadClient(){
