@@ -72,19 +72,19 @@ const movies={
 };
 const params=new URLSearchParams(location.search);const key=(params.get('filme')||'duna').toLowerCase();const m=movies[key]||movies.duna;
 const streamOptions={
-'duna':{label:'HBO Max',button:'HBO Max',type:'max',justwatch:'https://www.justwatch.com/br/filme/dune-part-two'},
-'oppenheimer':{label:'Universal+ · Prime Video',button:'Prime Video',type:'prime',justwatch:'https://www.justwatch.com/br/filme/oppenheimer'},
-'interestelar':{label:'HBO Max',button:'HBO Max',type:'max',justwatch:'https://www.justwatch.com/br/filme/interestelar'},
-'origem':{label:'HBO Max',button:'HBO Max',type:'max',justwatch:'https://www.justwatch.com/br/filme/a-origem'},
-'hotel':{label:'Disney+',button:'Disney+',type:'disney',direct:'https://www.disneyplus.com/pt-br/browse/entity-6a6e4a89-b567-47af-9943-1b5230a2d6cd',justwatch:'https://www.justwatch.com/br/filme/o-grande-hotel-budapeste'},
-'aranhaverso':{label:'Netflix · confirme disponibilidade',button:'Netflix',type:'netflix',justwatch:'https://www.justwatch.com/br/filme/spider-man-into-the-spider-verse-2'},
-'blade-runner':{label:'HBO Max',button:'HBO Max',type:'max',justwatch:'https://www.justwatch.com/br/filme/blade-runner-2049'},
-'batman':{label:'HBO Max',button:'HBO Max',type:'max',justwatch:'https://www.justwatch.com/br/filme/o-cavaleiro-das-trevas'},
-'walter-mitty':{label:'Disney+',button:'Disney+',type:'disney',justwatch:'https://www.justwatch.com/br/filme/a-vida-secreta-de-walter-mitty'},
-'menino-garca':{label:'Netflix',button:'Netflix',type:'netflix',justwatch:'https://www.justwatch.com/br/busca?q='+encodeURIComponent('O Menino e a Garça')}
+'duna':{label:'HBO Max',button:'HBO Max',type:'max'},
+'oppenheimer':{label:'Universal+ · Prime Video',button:'Prime Video',type:'prime'},
+'interestelar':{label:'HBO Max',button:'HBO Max',type:'max'},
+'origem':{label:'HBO Max',button:'HBO Max',type:'max'},
+'hotel':{label:'Disney+',button:'Disney+',type:'disney',direct:'https://www.disneyplus.com/pt-br/browse/entity-6a6e4a89-b567-47af-9943-1b5230a2d6cd'},
+'aranhaverso':{label:'Netflix · confirme disponibilidade',button:'Netflix',type:'netflix'},
+'blade-runner':{label:'HBO Max',button:'HBO Max',type:'max'},
+'batman':{label:'HBO Max',button:'HBO Max',type:'max'},
+'walter-mitty':{label:'Disney+',button:'Disney+',type:'disney'},
+'menino-garca':{label:'Netflix',button:'Netflix',type:'netflix'}
 };
 const service=streamOptions[key]||streamOptions.duna;
-function getServiceSearch(type,title){const q=encodeURIComponent(title);if(type==='max')return 'https://play.max.com/search?q='+q;if(type==='disney')return 'https://www.disneyplus.com/search?q='+q;if(type==='netflix')return 'https://www.netflix.com/search?q='+q;if(type==='prime')return 'https://www.primevideo.com/search/ref=atv_nb_sr?phrase='+q;return 'https://www.justwatch.com/br/busca?q='+q;}
+function getServiceSearch(type,title){const q=encodeURIComponent(title);if(type==='max')return 'https://play.max.com/search?q='+q;if(type==='disney')return 'https://www.disneyplus.com/search?q='+q;if(type==='netflix')return 'https://www.netflix.com/search?q='+q;if(type==='prime')return 'https://www.primevideo.com/search/ref=atv_nb_sr?phrase='+q;return 'https://play.max.com/search?q='+q;}
 function set(id,value){const el=document.getElementById(id);if(el)el.textContent=value}
 set('title',m.title);set('platformTag',service.label);set('posterTitle',m.poster.replace('\\n','\n'));set('year',m.year);set('yearFact',m.year);set('duration',m.duration);set('durationFact',m.minutes);set('genre',m.genre);set('genreFact',m.genreFact);set('rating',m.rating);set('ratingFact',m.rating+' anos (referência)');set('director',m.director);set('cast',m.cast);set('synopsis',m.synopsis);set('longSynopsis',m.synopsis);document.title='Central+ | '+m.title;
 const hero=document.getElementById('heroBg');const posterEl=document.getElementById('poster');
@@ -122,7 +122,7 @@ if(!params.has('tmdbId')){
     }catch(_){}
   });
 }
-const optionsBtn=document.getElementById('watchOptionsBtn');optionsBtn.href=service.justwatch;optionsBtn.title='Conferir serviços de assinatura, aluguel e compra para '+m.title;
+const optionsBtn=document.getElementById('watchOptionsBtn');if(optionsBtn){optionsBtn.remove();}
 document.getElementById('trailerBtn').href='https://www.youtube.com/results?search_query='+encodeURIComponent(m.search+' trailer oficial');
 const favKey='centralplus-favoritos';function getFavs(){try{return JSON.parse(localStorage.getItem(favKey)||'[]')}catch(e){return []}}function isFav(){return getFavs().includes(key)}const fav=document.getElementById('favoriteBtn');function updateFav(){fav.textContent=isFav()?'✓ Na minha lista':'♡ Adicionar aos favoritos'}updateFav();fav.addEventListener('click',()=>{let arr=getFavs();if(arr.includes(key)){arr=arr.filter(x=>x!==key);showToast('Filme removido dos favoritos')}else{arr.push(key);showToast('Filme adicionado aos favoritos')}try{localStorage.setItem(favKey,JSON.stringify(arr))}catch(e){showToast('O navegador não permitiu salvar favoritos')}updateFav()});function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
 })();
