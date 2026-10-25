@@ -202,7 +202,7 @@ module.exports = async function handler(req, res) {
     // Regra central: nenhum filme/série aparece em listas públicas sem disponibilidade
     // confirmada em pelo menos um serviço integrado na região BR (assinatura/grátis/anúncios).
     const candidates = (data.results || []).filter(x => x.poster_path).slice(0, 20).map(x => Object.assign(normalize(x, type), { _centralPlusProviderIds: x._centralPlusProviderIds || [] }));
-    const requestedProviderIds = String(q.provider || "").split(/[|,]/).map(x => Number(x.trim())).filter(Number.isInteger);
+    const requestedProviderIds = String(q.provider || "").split(/[|,]/).map(x => x.trim()).filter(x => x.length > 0 && [...x].every(ch => ch >= "0" && ch <= "9")).map(Number);
     const items = candidates.map(item => {
       const matchedIds = item._centralPlusProviderIds.filter(id => CENTRAL_PLUS_PROVIDER_IDS.has(Number(id)) && (!requestedProviderIds.length || requestedProviderIds.includes(Number(id))));
       item.provider_names = [...new Set(matchedIds.map(id => PROVIDERS[Number(id)]).filter(Boolean))];
