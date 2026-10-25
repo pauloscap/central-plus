@@ -81,6 +81,18 @@ async function providers(type, id, auth) {
     return { names: names.slice(0, 8), options: unique.slice(0, 16), link: br.link || "" };
   } catch (_) { return { names: [], options: [], link: "" }; }
 }
+async function discoverAcrossProviders(type, params, providerIds, auth) {
+  const ids = [...new Set(String(providerIds || "").split(/[|,]/).map(x => x.trim()).filter(x => /^\\d+$/.test(x)))];
+  if (ids.length <= 1) return tmdb("/discover/" + type, { ...params, with_watch_providers: ids[0] || params.with_watch_providers }, auth);
+  const pages = await Promise.all(ids.map(id => tmdb("/discover/" + type, { ...params, with_watch_providers: id }, auth)));
+  const unique = new Map();
+  for (const page of pages) for (const item of (page.results || [])) {
+    const key = item.id;
+    if (!unique.has(key) || Number(item.popularity || 0) > Number(unique.get(key).popularity || 0)) unique.set(key, item);
+  }
+  const results = [...unique.values()].sort((a, b) => Number(b.popularity || 0) - Number(a.popularity || 0)).slice(0, 20);
+  return { results, page: params.page || 1, total_pages: Math.max(1, ...pages.map(page => Number(page.total_pages) || 1)) };
+}
 module.exports = async function handler(req, res) {
   res.setHeader("Content-Type", "application/json; charset=utf-8");
   res.setHeader("X-Content-Type-Options", "nosniff");
@@ -137,7 +149,7 @@ module.exports = async function handler(req, res) {
       if (type === "tv") params["first_air_date.lte"] = today;
       else params["primary_release_date.lte"] = today;
       if (providerIds) params.with_watch_providers = providerIds;
-      data = await tmdb("/discover/" + type, params, auth);
+      data = await discoverAcrossProviders(type, params, providerIds, auth);
     } else if (section === "search") {
       const query = String(q.query || "").trim().slice(0,120);
       if (!query) return res.status(400).json({ error: "Informe query para pesquisar." });
@@ -176,11 +188,11 @@ module.exports = async function handler(req, res) {
         params[type === "tv" ? "first_air_date.gte" : "primary_release_date.gte"] = since;
       }
       if (section === "top_rated") params["vote_count.gte"] = 100;
-      data = await tmdb("/discover/" + type, params, auth);
+      data = await discoverAcrossProviders(type, params, providerIds, auth);
     }
     // Regra central: nenhum filme/série aparece em listas públicas sem disponibilidade
     // confirmada em pelo menos um serviço integrado na região BR (assinatura/grátis/anúncios).
-    const candidates = (data.results || []).filter(x => x.poster_path).map(x => normalize(x, type));
+    const candidates = (data.results || []).filter(x => x.poster_path).slice(0, 20).map(x => normalize(x, type));
     const requestedProviderIds = String(q.provider || "").split(/[|,]/).map(x => Number(x.trim())).filter(Number.isInteger);
     const items = await Promise.all(candidates.map(async item => {
       const availability = await providers(type, item.id, auth);
