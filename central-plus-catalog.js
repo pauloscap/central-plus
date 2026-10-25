@@ -689,7 +689,14 @@
           }
           const options=$("#watchOptionsBtn");if(options){options.href="#cp-provider-cartela";options.textContent="Ver opções no Brasil";options.addEventListener("click",event=>{event.preventDefault();const panel=$("#cp-provider-cartela");if(panel)panel.scrollIntoView({behavior:"smooth",block:"start"});});}
           document.title="Central+ | "+item.title;
-        }catch(error){console.warn("Central+ TMDB detail:",error)}
+        }catch(error){
+          console.warn("Central+ TMDB detail:",error);
+          const title=$("#title"),synopsis=$("#synopsis"),longSynopsis=$("#longSynopsis");
+          if(title)title.textContent="Não foi possível carregar esta série";
+          if(synopsis)synopsis.textContent="Não conseguimos carregar os dados do título selecionado. Volte ao catálogo e tente novamente.";
+          if(longSynopsis)longSynopsis.textContent="Confira sua conexão e tente abrir esta série novamente.";
+          document.title="Central+ | Série indisponível";
+        }
       }
       return;
     }
