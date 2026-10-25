@@ -158,7 +158,7 @@ module.exports = async function handler(req, res) {
       // Assim, tendências/populares/mais bem avaliados nunca incluem títulos sem serviço de streaming confirmado.
       const today = new Date().toISOString().slice(0, 10);
       const since = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
-      const providerIds = [...CENTRAL_PLUS_PROVIDER_IDS].join("|");
+      const providerIds = "8|337|119|9|384|1899|307|350"; // conjunto validado para as vitrines gerais; as fileiras por serviço consultam cada provedor individualmente
       const sortBy = section === "top_rated" ? "vote_average.desc"
         : ["new","now_playing","upcoming"].includes(section)
           ? (type === "tv" ? "first_air_date.desc" : "primary_release_date.desc")
