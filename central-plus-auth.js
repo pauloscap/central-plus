@@ -71,8 +71,11 @@
         if(error)throw error;
         if($("profileName"))$("profileName").value=data?.display_name||user.user_metadata?.display_name||user.user_metadata?.full_name||user.user_metadata?.name||"";
         if($("profileUsername"))$("profileUsername").value=user.user_metadata?.username||"";
-        if($("profileAvatarUrl"))$("profileAvatarUrl").value=data?.avatar_url||"";
-        if($("profileBio"))$("profileBio").value="";
+        if($("profileAvatarUrl"))$("profileAvatarUrl").value=data?.avatar_url||user.user_metadata?.avatar_url||user.user_metadata?.picture||"";
+        let extras={};
+        try{extras=JSON.parse(localStorage.getItem("centralPlusProfileExtras:"+user.id)||"{}");}catch(_){}
+        if($("profileUsername"))$("profileUsername").value=extras.username||user.user_metadata?.username||"";
+        if($("profileBio"))$("profileBio").value=extras.bio||"";
         if(!data){
           const {error:insertError}=await client.from("profiles").upsert({
             id:user.id,
