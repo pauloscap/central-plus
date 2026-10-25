@@ -1,7 +1,7 @@
 (() => {
   "use strict";
-  const SUPABASE_URL = "https://pnwzbnmvpzipnlwrewjf.supabase.co";
-  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_zguQqBdOdy13OBxBSQTGmQ_8SGrZTfr";
+  const SUPABASE_URL = "https://bdprhaxyarmxkwdvfqab.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_eZlq5PTGsThQNZsxqsrXEg_S9ZrbH0x";
   const $ = id => document.getElementById(id);
   const text = (id, value) => { const el=$(id); if(el) el.textContent=value; };
   const show = (id, visible) => { const el=$(id); if(el) el.hidden=!visible; };
@@ -107,6 +107,21 @@
       console.error("Central+ Supabase initialization:",error);
       return;
     }
+    const googleButton=$("googleSignIn");
+    if(googleButton)googleButton.addEventListener("click",async()=>{
+      if(!client){setStatus("Conectando ao serviço de conta…","info");return;}
+      googleButton.disabled=true;setStatus("Abrindo o acesso seguro do Google…","info");
+      try{
+        const {error}=await client.auth.signInWithOAuth({
+          provider:"google",
+          options:{redirectTo:window.location.origin+"/central-plus-conta.html"}
+        });
+        if(error)throw error;
+      }catch(error){
+        setStatus(error.message||"Não foi possível iniciar o login com Google.","error");
+        googleButton.disabled=false;
+      }
+    });
     if(modeToggle)modeToggle.addEventListener("click",()=>setMode(mode==="signup"?"login":"signup"));
     if(form)form.addEventListener("submit",async event=>{
       event.preventDefault();
