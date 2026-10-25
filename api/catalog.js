@@ -82,7 +82,7 @@ async function providers(type, id, auth) {
   } catch (_) { return { names: [], options: [], link: "" }; }
 }
 async function discoverAcrossProviders(type, params, providerIds, auth) {
-  const ids = [...new Set(String(providerIds || "").split(/[|,]/).map(x => x.trim()).filter(x => /^\\d+$/.test(x)))];
+  const ids = [...new Set(String(providerIds || "").split(/[|,]/).map(x => x.trim()).filter(x => /^\d+$/.test(x)))];
   if (ids.length <= 1) return tmdb("/discover/" + type, { ...params, with_watch_providers: ids[0] || params.with_watch_providers }, auth);
   const pages = await Promise.all(ids.map(id => tmdb("/discover/" + type, { ...params, with_watch_providers: id }, auth)));
   const unique = new Map();
