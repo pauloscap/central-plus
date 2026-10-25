@@ -103,7 +103,7 @@ Object.entries(movies).filter(([relKey])=>relKey!==key).slice(0,6).forEach(([rel
 });
 function loadArtwork(url, target, isPoster){const img=new Image();img.onload=()=>{target.style.backgroundImage='linear-gradient(0deg,#08090d10,#08090d10),url(\"'+url+'\")';if(isPoster)target.classList.add('has-image')};img.onerror=()=>{target.style.backgroundImage=m.art;if(isPoster)target.classList.remove('has-image')};img.src=url;}
 loadArtwork(m.backdropImage||m.posterImage,hero,false);loadArtwork(m.posterImage,posterEl,true);
-const streamBtn=document.getElementById('streamBtn');streamBtn.href=service.direct||getServiceSearch(service.type,m.search);streamBtn.innerHTML='▶ Assistir no '+service.button;streamBtn.title='Buscar '+m.title+' no '+service.button;
+const streamBtn=document.getElementById('streamBtn');const verifiedDirect=typeof service.direct==='string'&&/^https:\/\/(www\.)?(netflix\.com|primevideo\.com|disneyplus\.com|tv\.apple\.com|play\.max\.com|paramountplus\.com|globoplay\.globo\.com|mubi\.com|crunchyroll\.com|pluto\.tv)\//i.test(service.direct);streamBtn.href=verifiedDirect?service.direct:'#';streamBtn.innerHTML=verifiedDirect?'▶ Abrir no '+service.button:'Link direto indisponível';streamBtn.title=verifiedDirect?'Abrir página oficial cadastrada do título':'Ainda não há link oficial específico verificado para este título';streamBtn.setAttribute('aria-disabled',verifiedDirect?'false':'true');if(!verifiedDirect){streamBtn.addEventListener('click',event=>{event.preventDefault();showToast('Link direto deste título ainda não verificado')});}
 if(!params.has('tmdbId')){
   streamBtn.addEventListener('click',()=>{
     try{
