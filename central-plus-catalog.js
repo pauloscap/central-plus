@@ -536,26 +536,58 @@
           set("#title",item.title);set("#posterTitle",item.title);set("#year",item.year);set("#yearFact",item.year);
           set("#genre",(item.genres||[]).join(" · "));set("#genreFact",(item.genres||[]).join(" · "));
           set("#rating",item.rating);set("#synopsis",item.overview);set("#longSynopsis",item.overview);
+          set("#director",item.director||item.creator||"");set("#cast",item.cast||"");set("#creator",item.creator||"");
+          set("#countryFact",item.country||"");set("#languageFact",item.language?String(item.language).toUpperCase():"");
+          set("#productionFact",item.production||"");
           if(type==="tv"){set("#seasons",item.seasons?item.seasons+" temporadas":"");set("#seasonsFact",item.seasons?item.seasons+" temporadas":"");}
           else {set("#duration",item.runtime?item.runtime+" min":"");set("#durationFact",item.runtime?item.runtime+" min":"");}
           const hero=$("#heroBg"),posterEl=$("#poster");
           if(hero&&item.backdrop_url)hero.style.backgroundImage='linear-gradient(90deg,rgba(5,6,10,.28),rgba(5,6,10,.08)),url("'+item.backdrop_url+'")';
           if(posterEl&&item.poster_url)posterEl.style.backgroundImage='url("'+item.poster_url+'")';
-          set("#platformTag",(item.provider_names||[]).join(" · ")||"Consulte a disponibilidade no Brasil");
-          const providerHome=name=>{
+          set("#platformTag",(item.provider_names||[]).join(" · "));
+          const providerConfig=name=>{
             const n=String(name||"").toLowerCase();
-            if(n.includes("netflix"))return "https://www.netflix.com/br/";
-            if(n.includes("prime")||n.includes("amazon"))return "https://www.primevideo.com/";
-            if(n.includes("disney"))return "https://www.disneyplus.com/pt-br";
-            if(n.includes("apple"))return "https://tv.apple.com/br";
-            if(n.includes("max")||n.includes("hbo"))return "https://play.max.com/";
-            if(n.includes("paramount"))return "https://www.paramountplus.com/";
-            if(n.includes("crunchyroll"))return "https://www.crunchyroll.com/pt-br";
-            if(n.includes("globoplay"))return "https://globoplay.globo.com/";
-            if(n.includes("mubi"))return "https://mubi.com/pt/br";
-            if(n.includes("pluto"))return "https://pluto.tv/br";
-            return "";
+            if(n.includes("netflix"))return {name:"Netflix",home:"https://www.netflix.com/br/",pkg:"com.netflix.ninja",path:"www.netflix.com/br/"};
+            if(n.includes("prime")||n.includes("amazon"))return {name:"Prime Video",home:"https://www.primevideo.com/",pkg:"com.amazon.avod.thirdpartyclient",path:"www.primevideo.com/"};
+            if(n.includes("disney"))return {name:"Disney+",home:"https://www.disneyplus.com/pt-br",pkg:"com.disney.disneyplus",path:"www.disneyplus.com/pt-br"};
+            if(n.includes("apple"))return {name:"Apple TV+",home:"https://tv.apple.com/br",pkg:"com.apple.atve.amazon.appletv",path:"tv.apple.com/br"};
+            if(n.includes("max")||n.includes("hbo"))return {name:"Max",home:"https://play.max.com/",pkg:"com.wbd.stream",path:"play.max.com/"};
+            if(n.includes("paramount"))return {name:"Paramount+",home:"https://www.paramountplus.com/",pkg:"com.cbs.app",path:"www.paramountplus.com/"};
+            if(n.includes("crunchyroll"))return {name:"Crunchyroll",home:"https://www.crunchyroll.com/pt-br",pkg:"com.crunchyroll.crunchyroid",path:"www.crunchyroll.com/pt-br"};
+            if(n.includes("globoplay"))return {name:"Globoplay",home:"https://globoplay.globo.com/",pkg:"com.globo.globotv",path:"globoplay.globo.com/"};
+            if(n.includes("mubi"))return {name:"MUBI",home:"https://mubi.com/pt/br",pkg:"com.mubi",path:"mubi.com/pt/br"};
+            if(n.includes("pluto"))return {name:"Pluto TV",home:"https://pluto.tv/br",pkg:"tv.pluto.android",path:"pluto.tv/br"};
+            return null;
           };
+          const providerHome=name=>{const p=providerConfig(name);return p?p.home:"";};
+          const appLaunchUrl=name=>{
+            const p=providerConfig(name);if(!p)return "";
+            const fallback=encodeURIComponent(p.home);
+            return "intent://"+p.path+"#Intent;scheme=https;package="+p.pkg+";S.browser_fallback_url="+fallback+";end";
+          };
+          const injectDetailStyles=()=>{
+            if($("#cp-detail-refinement-styles"))return;
+            const style=document.createElement("style");style.id="cp-detail-refinement-styles";
+            style.textContent=`
+              .cp-provider-cartela{max-width:1500px;margin:0 auto;padding:0 var(--gutter) 24px}
+              .cp-provider-heading{margin:0 0 16px}.cp-provider-heading h2{font-size:clamp(20px,2.2vw,28px);letter-spacing:-.04em;margin:0}
+              .cp-provider-eyebrow{display:none}.cp-provider-heading p,.cp-provider-attribution,.cp-provider-empty,.cp-provider-group-title{display:none!important}
+              .cp-provider-grid{display:flex;flex-wrap:wrap;gap:10px}
+              .cp-provider-card{position:relative;display:flex;align-items:center;gap:10px;min-width:150px;min-height:62px;padding:10px 13px;border:1px solid #ffffff1b;border-radius:10px;background:#ffffff08;color:#f5f6fa;text-decoration:none;transition:background .18s,border-color .18s,transform .18s}
+              a.cp-provider-card:hover{background:#ffffff15;border-color:#ffffff55;transform:translateY(-2px)}
+              .cp-provider-logo{width:35px;height:35px;display:grid;place-items:center;flex:0 0 35px}.cp-provider-logo img{max-width:100%;max-height:100%;object-fit:contain}
+              .cp-provider-monogram{font-weight:800;font-size:17px}.cp-provider-name{font-size:12px;font-weight:750}.cp-provider-category{display:none}.cp-provider-arrow{margin-left:auto;color:#9ca4b5}
+              .cp-detail-extra{max-width:1500px;margin:0 auto;padding:0 var(--gutter) 30px}
+              .cp-detail-extra-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+              .cp-detail-extra-item{padding:16px;border:1px solid #ffffff14;border-radius:11px;background:#ffffff05;min-width:0}
+              .cp-detail-extra-label{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#8e96a8;margin-bottom:8px}
+              .cp-detail-extra-value{font-size:12px;line-height:1.55;color:#eef0f6;overflow-wrap:anywhere}
+              .cp-detail-extra[hidden]{display:none!important}
+              @media(max-width:650px){.cp-provider-cartela{padding-left:20px;padding-right:20px}.cp-provider-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.cp-provider-card{min-width:0;padding:9px;gap:7px}.cp-provider-name{font-size:11px}.cp-detail-extra{padding-left:20px;padding-right:20px}.cp-detail-extra-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+            `;
+            document.head.appendChild(style);
+          };
+          injectDetailStyles();
           const renderProviderCartela=()=>{
             let panel=$("#cp-provider-cartela");
             if(!panel){
@@ -575,17 +607,16 @@
               if(!group.length)return "";
               return '<div class="cp-provider-group"><div class="cp-provider-group-title">'+esc(category)+
                 '</div><div class="cp-provider-grid">'+group.map(x=>{
-                  const home=providerHome(x.p.name);
-                  return home?'<a class="cp-provider-card" href="'+home+'" target="_self" rel="noopener" aria-label="Abrir '+esc(x.p.name)+' para assistir '+esc(item.title)+'">'+
+                  const home=providerHome(x.p.name),launch=appLaunchUrl(x.p.name);
+                  return home?'<a class="cp-provider-card" href="'+launch+'" data-web-fallback="'+home+'" target="_self" rel="noopener" aria-label="Abrir aplicativo '+esc(x.p.name)+' para assistir '+esc(item.title)+'">'+
                     '<span class="cp-provider-logo">'+x.logo+'</span><span class="cp-provider-name">'+esc(x.p.name)+
                     '</span><span class="cp-provider-category">'+esc(x.p.category)+'</span><span class="cp-provider-arrow" aria-hidden="true">↗</span></a>':
                     '<div class="cp-provider-card" aria-label="'+esc(x.p.name)+' disponível para '+esc(item.title)+'"><span class="cp-provider-logo">'+x.logo+'</span><span class="cp-provider-name">'+esc(x.p.name)+'</span><span class="cp-provider-category">'+esc(x.p.category)+'</span></div>';
                 }).join("")+
                 '</div></div>';
             }).join("");
-            panel.innerHTML='<div class="cp-provider-heading"><div><div class="cp-provider-eyebrow">DISPONIBILIDADE NO BRASIL</div><h2>Serviços encontrados</h2><p>Selecione um serviço para abri-lo. Quando não há link direto confirmado para o título, a Central+ abre o serviço oficial, sem usar o JustWatch.</p></div></div>'+
-              (groups||'<p class="cp-provider-empty">Não encontramos opções de streaming por assinatura ou gratuitas para este título no Brasil neste momento.</p>')+
-              '<p class="cp-provider-attribution">A disponibilidade pode mudar e a reprodução depende do serviço e da sua conta.</p>';
+            panel.innerHTML='<div class="cp-provider-heading"><h2>Onde assistir</h2></div>'+
+              (groups||'<p class="cp-provider-empty">Nenhum serviço encontrado.</p>');
           };
           renderProviderCartela();
           const stream=$("#streamBtn");
@@ -604,14 +635,15 @@
               if(type==="tv"&&curated&&curated.episodes&&curated.episodes[String(episode)])return {url:curated.episodes[String(episode)],exact:true};
               if(curated&&(type==="tv"?curated.seriesUrl:curated.movieUrl))return {url:type==="tv"?curated.seriesUrl:curated.movieUrl,exact:false};
               // Sem link oficial específico verificado, não redirecionar para busca genérica.
-              return {url:providerHome(provider),exact:false,search:false};
+              return {url:appLaunchUrl(provider),web:providerHome(provider),exact:false,search:false};
             };
             const renderEpisode=()=>{
               const episode=readEpisode(),target=resolveWatchUrl();
               stream.textContent=target.exact?(type==="tv"?"▶ Assistir episódio":"▶ Assistir filme"):"▶ ASSISTIR";
               stream.href=target.url||"#";
+              if(target.web)stream.dataset.webFallback=target.web;
               stream.dataset.exactEpisode=target.exact?"true":"false";
-              stream.title=target.exact?"Abrir o título/episódio exato na plataforma oficial":target.url?"Abrir o título na plataforma oficial "+provider:target.url?"Abrir o serviço oficial de streaming "+provider:"Ainda não há um serviço oficial compatível para este título";
+              stream.title=target.exact?"Abrir o título/episódio exato na plataforma oficial":target.url?"Tentar abrir o aplicativo "+provider:"Ainda não há um serviço oficial compatível para este título";
               stream.setAttribute("aria-label",stream.title);
               stream.setAttribute("aria-disabled",target.url?"false":"true");
             };
@@ -636,27 +668,19 @@
               if(!stream.dataset.noticeBound){
                 stream.dataset.noticeBound="true";
                 stream.addEventListener("click",event=>{
-                  if(!stream.getAttribute("href")||stream.getAttribute("href")==="#"){
-                    event.preventDefault();
-                    const notice=$("#streamNotice");
-                    if(notice){notice.textContent="Abrindo o serviço oficial de streaming. Não foi possível confirmar um link direto para este episódio.";notice.hidden=false;}
-                    return;
-                  }
-                  if(stream.dataset.exactEpisode!=="true"){
-                    const notice=$("#streamNotice");
-                    if(notice){notice.textContent="Este link abre a página oficial cadastrada, mas não há confirmação de reprodução direta do episódio.";notice.hidden=false;}
-                  }
+                  if(!stream.getAttribute("href")||stream.getAttribute("href")==="#"){event.preventDefault();return;}
                 });
               }
             }else{
               // Filme: somente link direto oficial verificado. Não cair em busca genérica.
               const target=resolveWatchUrl();
               stream.href=target.url||"#";
+              if(target.web)stream.dataset.webFallback=target.web;
               stream.textContent=target.exact?"▶ Assistir filme":"▶ ASSISTIR";
-              stream.title=target.exact?"Abrir o filme na plataforma oficial":target.url?"Abrir o título na plataforma oficial "+provider:"Ainda não existe link oficial específico verificado para este título";
+              stream.title=target.exact?"Abrir o filme na plataforma oficial":target.url?"Tentar abrir o aplicativo "+provider:"Ainda não existe um aplicativo de streaming identificado para este título";
               stream.setAttribute("aria-disabled",target.url?"false":"true");
               stream.setAttribute("aria-label",stream.title);
-              if(!target.url)stream.addEventListener("click",event=>{event.preventDefault();const notice=$("#streamNotice");if(notice){notice.textContent="Abrindo o serviço oficial de streaming. Não foi possível confirmar um link direto para este título.";notice.hidden=false;}});
+              if(!target.url)stream.addEventListener("click",event=>{event.preventDefault();});
             }
           }
           if(stream&&!stream.dataset.historyBound){
@@ -679,7 +703,21 @@
               });
             }
           }
-          const options=$("#watchOptionsBtn");if(options){options.href="#cp-provider-cartela";options.textContent="Ver opções no Brasil";options.addEventListener("click",event=>{event.preventDefault();const panel=$("#cp-provider-cartela");if(panel)panel.scrollIntoView({behavior:"smooth",block:"start"});});}
+          const trailer=$("#trailerBtn");
+          if(trailer){if(item.trailer_url){trailer.href=item.trailer_url;trailer.target="_blank";trailer.rel="noopener";}else{trailer.href="https://www.youtube.com/results?search_query="+encodeURIComponent(item.title+" trailer oficial");trailer.target="_blank";trailer.rel="noopener";}}
+          const oldNotice=$(".notice");if(oldNotice)oldNotice.remove();
+          const oldFooter=$(".footer");if(oldFooter)oldFooter.remove();
+          const old4k=[...document.querySelectorAll(".meta .tag")].find(el=>el.textContent.trim()==="4K");if(old4k)old4k.remove();
+          const facts=$(".facts");
+          if(facts){
+            const extra=[["País",item.country],["Idioma original",item.language?String(item.language).toUpperCase():""],["Produtora",item.production],["Formato de imagem",""]];
+            extra.forEach(([label,value])=>{if(!value)return;const box=document.createElement("div");box.innerHTML='<div class="fact-label">'+esc(label)+'</div><div class="fact-value">'+esc(value)+'</div>';facts.appendChild(box);});
+          }
+          let extra=$("#cp-detail-extra");
+          if(!extra){extra=document.createElement("section");extra.id="cp-detail-extra";extra.className="cp-detail-extra";extra.innerHTML='<h2 class="section-title">Ficha técnica</h2><div class="cp-detail-extra-grid"></div>';const below=$(".below");if(below)below.insertAdjacentElement("afterend",extra);}
+          const extraGrid=extra.querySelector(".cp-detail-extra-grid");
+          const tech=[["Título original",item.original_title],["Direção",item.director],["Criação",item.creator],["Elenco",item.cast],["País de produção",item.country],["Idioma original",item.language?String(item.language).toUpperCase():""],["Produtora",item.production],["Situação",item.status],["Temporadas",type==="tv"&&item.seasons?String(item.seasons):""],["Episódios",type==="tv"&&item.episodes?String(item.episodes):""]];
+          extraGrid.innerHTML=tech.filter(([label,value])=>value).map(([label,value])=>'<div class="cp-detail-extra-item"><div class="cp-detail-extra-label">'+esc(label)+'</div><div class="cp-detail-extra-value">'+esc(value)+'</div></div>').join("");
           document.title="Central+ | "+item.title;
         }catch(error){
           const loadingTitle=$("#title"),loadingPoster=$("#posterTitle"),loadingSynopsis=$("#synopsis"),loadingLongSynopsis=$("#longSynopsis");
