@@ -83,6 +83,8 @@
             id:user.id,
             display_name:user.user_metadata?.display_name||user.user_metadata?.full_name||user.user_metadata?.name||null,
             avatar_url:user.user_metadata?.avatar_url||user.user_metadata?.picture||null,
+            username:user.user_metadata?.username||null,
+            bio:null
           },{onConflict:"id"});
           if(insertError)throw insertError;
         }
@@ -177,11 +179,14 @@
           id:currentUser.id,
           display_name:name||null,
           avatar_url:avatar&&/^https?:\/\//i.test(avatar)?avatar:null,
+          username:username||null,
+          bio:bio||null,
         },{onConflict:"id"});
         if(error)throw error;
         text("profileHeading",name||"Seu espaço");
 
         try{localStorage.removeItem("centralPlusProfileExtras:"+currentUser.id);}catch(_){}
+        setStatus("Perfil sincronizado com sua conta. Nome, foto, nome de usuário e bio estarão disponíveis nos dispositivos em que você entrar.","success");
         updateAvatarPreview();
       }catch(error){
         const message=error.code==="23505"?"Esse nome de usuário já está em uso. Escolha outro.":(error.message||"Não foi possível salvar o perfil.");
