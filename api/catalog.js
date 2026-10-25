@@ -148,6 +148,22 @@ module.exports = async function handler(req, res) {
       normalized.status = item.status || "";
       return res.status(200).json({ item: normalized, source: "TMDB", region: "BR", updatedAt: new Date().toISOString() });
     }
+    if (section === "similar") {
+      const id = Number(q.id);
+      if (!Number.isInteger(id) || id <= 0) return res.status(400).json({ error: "ID inválido." });
+      const data = await tmdb("/" + type + "/" + id + "/similar", { language: lang, page: 1 }, auth);
+      const candidates = (data.results || []).filter(item => item.poster_path || item.backdrop_path).slice(0, 12);
+      const items = [];
+      for (const raw of candidates) {
+        const item = normalize(raw, type);
+        const availability = await providers(type, item.id, auth);
+        item.provider_names = availability.names;
+        item.provider_options = availability.options;
+        if (item.provider_names.length) items.push(item);
+        if (items.length >= 8) break;
+      }
+      return res.status(200).json({ items, source: "TMDB", region: "BR", updatedAt: new Date().toISOString() });
+    }
     if (section === "streaming" || section === "streaming_new") {
       // Restrict results to titles available online in Brazil; cinema-only titles are excluded.
       const today = new Date().toISOString().slice(0, 10);
