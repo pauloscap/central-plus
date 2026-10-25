@@ -82,7 +82,7 @@
           const {error:insertError}=await client.from("profiles").upsert({
             id:user.id,
             display_name:user.user_metadata?.display_name||user.user_metadata?.full_name||user.user_metadata?.name||null,
-            avatar_url:user.user_metadata?.avatar_url||null
+            avatar_url:user.user_metadata?.avatar_url||user.user_metadata?.picture||null,
           },{onConflict:"id"});
           if(insertError)throw insertError;
         }
@@ -180,8 +180,8 @@
         },{onConflict:"id"});
         if(error)throw error;
         text("profileHeading",name||"Seu espaço");
-        try{localStorage.setItem("centralPlusProfileExtras:"+currentUser.id,JSON.stringify({username,bio}));}catch(_){}
-        try{localStorage.removeItem("centralPlusProfileExtras:"+currentUser.id);}catch(_){}\n        setStatus("Perfil sincronizado com sua conta. Nome, foto, nome de usuário e bio estarão disponíveis nos dispositivos em que você entrar.","success");
+
+        try{localStorage.removeItem("centralPlusProfileExtras:"+currentUser.id);}catch(_){}
         updateAvatarPreview();
       }catch(error){
         const message=error.code==="23505"?"Esse nome de usuário já está em uso. Escolha outro.":(error.message||"Não foi possível salvar o perfil.");
