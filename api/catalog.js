@@ -116,8 +116,8 @@ module.exports = async function handler(req, res) {
       // Restrict the catalog to services already integrated into Central+.
       // Without an explicit provider, a monetization-type-only discover query can
       // return titles that are not actually available on the user's streaming apps.
-      const centralPlusProviderIds = [...CENTRAL_PLUS_PROVIDER_IDS].join("|");
-      const providerIds = String(q.provider || centralPlusProviderIds).split("|")
+      const centralPlusProviderIds = [...CENTRAL_PLUS_PROVIDER_IDS].join(",");
+      const providerIds = String(q.provider || centralPlusProviderIds).replace(/\\|/g, ",").split(",")
         .map(value => value.trim())
         .filter(value => /^\d+$/.test(value))
         .filter((value, index, all) => all.indexOf(value) === index)
@@ -158,7 +158,7 @@ module.exports = async function handler(req, res) {
       // Assim, tendências/populares/mais bem avaliados nunca incluem títulos sem serviço de streaming confirmado.
       const today = new Date().toISOString().slice(0, 10);
       const since = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
-      const providerIds = "8|337|119|9|384|1899|307|350"; // conjunto validado para as vitrines gerais; as fileiras por serviço consultam cada provedor individualmente
+      const providerIds = "8,337,119,9,384,1899,307,350"; // vírgula = qualquer um destes serviços; evita exigir o título em todos os serviços
       const sortBy = section === "top_rated" ? "vote_average.desc"
         : ["new","now_playing","upcoming"].includes(section)
           ? (type === "tv" ? "first_air_date.desc" : "primary_release_date.desc")
@@ -181,7 +181,7 @@ module.exports = async function handler(req, res) {
     // Regra central: nenhum filme/série aparece em listas públicas sem disponibilidade
     // confirmada em pelo menos um serviço integrado na região BR (assinatura/grátis/anúncios).
     const candidates = (data.results || []).filter(x => x.poster_path).map(x => normalize(x, type));
-    const requestedProviderIds = String(q.provider || "").split("|").map(x => Number(x.trim())).filter(Number.isInteger);
+    const requestedProviderIds = String(q.provider || "").split(/[|,]/).map(x => Number(x.trim())).filter(Number.isInteger);
     const items = await Promise.all(candidates.map(async item => {
       const availability = await providers(type, item.id, auth);
       item.provider_names = availability.names;
