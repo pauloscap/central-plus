@@ -154,14 +154,29 @@ module.exports = async function handler(req, res) {
       const available = items.filter(item => item.provider_names.length > 0);
       return res.status(200).json({ items: available, page: data.page || 1, total_pages: data.total_pages || 1, source: "TMDB", region: "BR", updatedAt: new Date().toISOString() });
     } else {
-      const routes = type === "tv"
-        ? { trending:"/trending/tv/week", popular:"/tv/popular", top_rated:"/tv/top_rated", upcoming:"/tv/on_the_air", now_playing:"/tv/airing_today", new:"/tv/on_the_air" }
-        : { trending:"/trending/movie/week", popular:"/movie/popular", top_rated:"/movie/top_rated", upcoming:"/movie/upcoming", now_playing:"/movie/now_playing", new:"/movie/now_playing" };
-      const route = routes[section] || routes.trending;
-      const params = { language: lang, page: Math.max(1, Math.min(5, Number(q.page) || 1)) };
-      if (type === "movie" && ["upcoming","now_playing","new"].includes(section)) params.region = "BR";
-      if (type === "tv" && ["upcoming","now_playing","new"].includes(section)) params.timezone = "America/Sao_Paulo";
-      data = await tmdb(route, params, auth);
+      // Todas as vitrines comuns também partem do catálogo com disponibilidade online no Brasil.
+      // Assim, tendências/populares/mais bem avaliados nunca incluem títulos sem serviço de streaming confirmado.
+      const today = new Date().toISOString().slice(0, 10);
+      const since = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+      const providerIds = [...CENTRAL_PLUS_PROVIDER_IDS].join("|");
+      const sortBy = section === "top_rated" ? "vote_average.desc"
+        : ["new","now_playing","upcoming"].includes(section)
+          ? (type === "tv" ? "first_air_date.desc" : "primary_release_date.desc")
+          : "popularity.desc";
+      const params = {
+        language: lang, region: "BR", watch_region: "BR",
+        with_watch_monetization_types: "flatrate|free|ads",
+        with_watch_providers: providerIds,
+        include_adult: "false", sort_by: sortBy,
+        page: Math.max(1, Math.min(5, Number(q.page) || 1))
+      };
+      if (type === "tv") params["first_air_date.lte"] = today;
+      else params["primary_release_date.lte"] = today;
+      if (["new","now_playing","upcoming"].includes(section)) {
+        params[type === "tv" ? "first_air_date.gte" : "primary_release_date.gte"] = since;
+      }
+      if (section === "top_rated") params["vote_count.gte"] = 100;
+      data = await tmdb("/discover/" + type, params, auth);
     }
     // Regra central: nenhum filme/série aparece em listas públicas sem disponibilidade
     // confirmada em pelo menos um serviço integrado na região BR (assinatura/grátis/anúncios).
