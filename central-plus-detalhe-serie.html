@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
 <title>Central+ | Detalhes da série</title>
+<script>if(new URLSearchParams(location.search).has('tmdbId'))document.documentElement.classList.add('cp-dynamic-detail-loading');</script>
 <style>
+.cp-dynamic-detail-loading main{visibility:hidden}.cp-dynamic-detail-loading body{background:#08090d}
+
 :root{color-scheme:dark;--bg:#08090d;--panel:#12151d;--text:#f5f6fa;--muted:#b5bac7;--line:#ffffff20;--gutter:clamp(20px,5vw,76px)}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer}
 .topbar{height:76px;display:flex;align-items:center;gap:clamp(18px,2.3vw,34px);padding:0 var(--gutter);border-bottom:1px solid rgba(255,255,255,.09);background:rgba(6,7,12,.88);backdrop-filter:blur(22px);position:sticky;top:0;z-index:20}
