@@ -82,7 +82,7 @@ async function providers(type, id, auth) {
   } catch (_) { return { names: [], options: [], link: "" }; }
 }
 async function discoverAcrossProviders(type, params, providerIds, auth) {
-  const ids = [...new Set(String(providerIds || "").split(/[|,]/).map(x => x.trim()).filter(x => /^\d+$/.test(x)))];
+  const ids = [...new Set(String(providerIds || "").split(/[|,]/).map(x => x.trim()).filter(x => x.length > 0 && [...x].every(ch => ch >= "0" && ch <= "9")))];
   if (ids.length <= 1) {
     const id = ids[0] || "";
     const page = await tmdb("/discover/" + type, { ...params, with_watch_providers: id || params.with_watch_providers }, auth);
