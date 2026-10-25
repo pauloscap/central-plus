@@ -570,7 +570,7 @@
             const style=document.createElement("style");style.id="cp-detail-refinement-styles";
             style.textContent=`
               .cp-provider-cartela{max-width:1500px;margin:0 auto;padding:0 var(--gutter) 24px}
-              .cp-provider-heading{margin:0 0 16px}.cp-provider-heading h2{font-size:clamp(20px,2.2vw,28px);letter-spacing:-.04em;margin:0}
+              .cp-provider-heading{margin:30px 0 16px;padding-top:4px}.cp-provider-heading h2{font-size:clamp(20px,2.2vw,28px);letter-spacing:-.04em;margin:0}
               .cp-provider-eyebrow{display:none}.cp-provider-heading p,.cp-provider-attribution,.cp-provider-empty,.cp-provider-group-title{display:none!important}
               .cp-provider-grid{display:flex;flex-wrap:wrap;gap:10px}
               .cp-provider-card{position:relative;display:flex;align-items:center;gap:10px;min-width:150px;min-height:62px;padding:10px 13px;border:1px solid #ffffff1b;border-radius:10px;background:#ffffff08;color:#f5f6fa;text-decoration:none;transition:background .18s,border-color .18s,transform .18s}
@@ -713,11 +713,6 @@
             const extra=[["País",item.country],["Idioma original",item.language?String(item.language).toUpperCase():""],["Produtora",item.production],["Formato de imagem",""]];
             extra.forEach(([label,value])=>{if(!value)return;const box=document.createElement("div");box.innerHTML='<div class="fact-label">'+esc(label)+'</div><div class="fact-value">'+esc(value)+'</div>';facts.appendChild(box);});
           }
-          let extra=$("#cp-detail-extra");
-          if(!extra){extra=document.createElement("section");extra.id="cp-detail-extra";extra.className="cp-detail-extra";extra.innerHTML='<h2 class="section-title">Ficha técnica</h2><div class="cp-detail-extra-grid"></div>';const below=$(".below");if(below)below.insertAdjacentElement("afterend",extra);}
-          const extraGrid=extra.querySelector(".cp-detail-extra-grid");
-          const tech=[["Título original",item.original_title],["Direção",item.director],["Criação",item.creator],["Elenco",item.cast],["País de produção",item.country],["Idioma original",item.language?String(item.language).toUpperCase():""],["Produtora",item.production],["Situação",item.status],["Temporadas",type==="tv"&&item.seasons?String(item.seasons):""],["Episódios",type==="tv"&&item.episodes?String(item.episodes):""]];
-          extraGrid.innerHTML=tech.filter(([label,value])=>value).map(([label,value])=>'<div class="cp-detail-extra-item"><div class="cp-detail-extra-label">'+esc(label)+'</div><div class="cp-detail-extra-value">'+esc(value)+'</div></div>').join("");
           const relatedRail=$("#relatedRail");
           if(relatedRail){
             relatedRail.innerHTML="";
