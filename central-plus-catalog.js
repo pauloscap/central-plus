@@ -548,11 +548,11 @@
           const providerConfig=name=>{
             const n=String(name||"").toLowerCase();
             if(n.includes("netflix"))return {name:"Netflix",home:"https://www.netflix.com/br/",pkg:"com.netflix.ninja",path:"www.netflix.com/br/"};
-            if(n.includes("prime")||n.includes("amazon"))return {name:"Prime Video",home:"https://www.primevideo.com/",pkg:"com.amazon.avod.thirdpartyclient",path:"www.primevideo.com/"};
+            if(n.includes("prime")||n.includes("amazon"))return {name:"Prime Video",home:"https://www.primevideo.com/",pkg:"com.amazon.firebat",path:"www.primevideo.com/"};
             if(n.includes("disney"))return {name:"Disney+",home:"https://www.disneyplus.com/pt-br",pkg:"com.disney.disneyplus",path:"www.disneyplus.com/pt-br"};
             if(n.includes("apple"))return {name:"Apple TV+",home:"https://tv.apple.com/br",pkg:"com.apple.atve.amazon.appletv",path:"tv.apple.com/br"};
             if(n.includes("max")||n.includes("hbo"))return {name:"Max",home:"https://play.max.com/",pkg:"com.wbd.stream",path:"play.max.com/"};
-            if(n.includes("paramount"))return {name:"Paramount+",home:"https://www.paramountplus.com/",pkg:"com.cbs.app",path:"www.paramountplus.com/"};
+            if(n.includes("paramount"))return {name:"Paramount+",home:"https://www.paramountplus.com/",pkg:"com.cbs.ott",path:"www.paramountplus.com/"};
             if(n.includes("crunchyroll"))return {name:"Crunchyroll",home:"https://www.crunchyroll.com/pt-br",pkg:"com.crunchyroll.crunchyroid",path:"www.crunchyroll.com/pt-br"};
             if(n.includes("globoplay"))return {name:"Globoplay",home:"https://globoplay.globo.com/",pkg:"com.globo.globotv",path:"globoplay.globo.com/"};
             if(n.includes("mubi"))return {name:"MUBI",home:"https://mubi.com/pt/br",pkg:"com.mubi",path:"mubi.com/pt/br"};
@@ -563,7 +563,7 @@
           const appLaunchUrl=name=>{
             const p=providerConfig(name);if(!p)return "";
             const fallback=encodeURIComponent(p.home);
-            return "intent://"+p.path+"#Intent;scheme=https;package="+p.pkg+";S.browser_fallback_url="+fallback+";end";
+            return "intent://"+p.path+"#Intent;scheme=https;package="+p.pkg+";action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;S.browser_fallback_url="+fallback+";end";
           };
           const injectDetailStyles=()=>{
             if($("#cp-detail-refinement-styles"))return;
