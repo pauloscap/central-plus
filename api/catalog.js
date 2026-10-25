@@ -117,11 +117,11 @@ module.exports = async function handler(req, res) {
       // Without an explicit provider, a monetization-type-only discover query can
       // return titles that are not actually available on the user's streaming apps.
       const centralPlusProviderIds = [...CENTRAL_PLUS_PROVIDER_IDS].join(",");
-      const providerIds = String(q.provider || centralPlusProviderIds).replace(/\\|/g, ",").split(",")
+      const providerIds = String(q.provider || centralPlusProviderIds).split(/[|,]/)
         .map(value => value.trim())
         .filter(value => /^\d+$/.test(value))
         .filter((value, index, all) => all.indexOf(value) === index)
-        .join("|");
+        .join(",");
       const params = {
         language: lang,
         region: "BR",
