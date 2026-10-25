@@ -83,12 +83,21 @@ async function providers(type, id, auth) {
 }
 async function discoverAcrossProviders(type, params, providerIds, auth) {
   const ids = [...new Set(String(providerIds || "").split(/[|,]/).map(x => x.trim()).filter(x => /^\d+$/.test(x)))];
-  if (ids.length <= 1) return tmdb("/discover/" + type, { ...params, with_watch_providers: ids[0] || params.with_watch_providers }, auth);
+  if (ids.length <= 1) {
+    const id = ids[0] || "";
+    const page = await tmdb("/discover/" + type, { ...params, with_watch_providers: id || params.with_watch_providers }, auth);
+    return { ...page, results: (page.results || []).map(item => ({ ...item, _centralPlusProviderIds: id ? [Number(id)] : [] })) };
+  }
   const pages = await Promise.all(ids.map(id => tmdb("/discover/" + type, { ...params, with_watch_providers: id }, auth)));
   const unique = new Map();
-  for (const page of pages) for (const item of (page.results || [])) {
+  for (let index = 0; index < pages.length; index++) for (const item of (pages[index].results || [])) {
     const key = item.id;
-    if (!unique.has(key) || Number(item.popularity || 0) > Number(unique.get(key).popularity || 0)) unique.set(key, item);
+    if (!unique.has(key)) unique.set(key, { ...item, _centralPlusProviderIds: [Number(ids[index])] });
+    else {
+      const saved = unique.get(key);
+      if (!saved._centralPlusProviderIds.includes(Number(ids[index]))) saved._centralPlusProviderIds.push(Number(ids[index]));
+      if (Number(item.popularity || 0) > Number(saved.popularity || 0)) unique.set(key, { ...item, _centralPlusProviderIds: saved._centralPlusProviderIds });
+    }
   }
   const results = [...unique.values()].sort((a, b) => Number(b.popularity || 0) - Number(a.popularity || 0)).slice(0, 20);
   return { results, page: params.page || 1, total_pages: Math.max(1, ...pages.map(page => Number(page.total_pages) || 1)) };
@@ -192,20 +201,16 @@ module.exports = async function handler(req, res) {
     }
     // Regra central: nenhum filme/série aparece em listas públicas sem disponibilidade
     // confirmada em pelo menos um serviço integrado na região BR (assinatura/grátis/anúncios).
-    const candidates = (data.results || []).filter(x => x.poster_path).slice(0, 20).map(x => normalize(x, type));
+    const candidates = (data.results || []).filter(x => x.poster_path).slice(0, 20).map(x => Object.assign(normalize(x, type), { _centralPlusProviderIds: x._centralPlusProviderIds || [] }));
     const requestedProviderIds = String(q.provider || "").split(/[|,]/).map(x => Number(x.trim())).filter(Number.isInteger);
-    const items = await Promise.all(candidates.map(async item => {
-      const availability = await providers(type, item.id, auth);
-      item.provider_names = availability.names;
-      item.provider_options = availability.options;
-      item.provider_link = availability.link;
-      if (requestedProviderIds.length) {
-        const matching = item.provider_options.filter(option => requestedProviderIds.includes(Number(option.id)));
-        item.provider_options = matching;
-        item.provider_names = [...new Set(matching.map(option => option.name))];
-      }
+    const items = candidates.map(item => {
+      const matchedIds = item._centralPlusProviderIds.filter(id => CENTRAL_PLUS_PROVIDER_IDS.has(Number(id)) && (!requestedProviderIds.length || requestedProviderIds.includes(Number(id))));
+      item.provider_names = [...new Set(matchedIds.map(id => PROVIDERS[Number(id)]).filter(Boolean))];
+      item.provider_options = matchedIds.map(id => ({ id:Number(id), name:PROVIDERS[Number(id)], logo_url:"", category:"Assinatura", category_key:"flatrate" }));
+      item.provider_link = "";
+      delete item._centralPlusProviderIds;
       return item;
-    }));
+    });
     const available = items.filter(item => item.provider_names.length > 0);
     return res.status(200).json({
       items: available, page: data.page || 1, total_pages: data.total_pages || 1,
