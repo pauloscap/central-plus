@@ -126,7 +126,7 @@ module.exports = async function handler(req, res) {
         language: lang,
         region: "BR",
         watch_region: "BR",
-        with_watch_monetization_types: "flatrate|free|ads",
+        with_watch_monetization_types: "flatrate,free,ads",
         include_adult: "false",
         sort_by: section === "streaming_new"
           ? (type === "tv" ? "first_air_date.desc" : "primary_release_date.desc")
@@ -165,7 +165,7 @@ module.exports = async function handler(req, res) {
           : "popularity.desc";
       const params = {
         language: lang, region: "BR", watch_region: "BR",
-        with_watch_monetization_types: "flatrate|free|ads",
+        with_watch_monetization_types: "flatrate,free,ads",
         with_watch_providers: providerIds,
         include_adult: "false", sort_by: sortBy,
         page: Math.max(1, Math.min(5, Number(q.page) || 1))
