@@ -152,6 +152,88 @@ button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline:3px so
 @media(max-width:1050px){.apps-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.apps-feature{min-height:330px}.apps-feature-orbit{right:1%;width:34vw}}
 @media(max-width:700px){.apps-feature{min-height:0;padding:27px 23px 30px;margin-bottom:30px;border-radius:20px}.apps-feature-copy{width:100%}.apps-feature h2{font-size:clamp(35px,9vw,48px);margin:19px 0 13px}.apps-feature p{max-width:100%;font-size:13px;padding-right:4px}.apps-feature-orbit{position:relative;right:auto;top:auto;transform:none;width:210px;max-width:70%;margin:10px auto -16px;opacity:.9}.apps-feature{display:flex;flex-direction:column;align-items:stretch}.apps-feature-actions{margin-top:22px}.apps-feature-note{font-size:9px}.apps-catalog-head{align-items:center}.apps-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.apps-grid .app-card{min-height:185px;border-radius:14px}.apps-grid .app-tile{min-height:108px;margin:8px 8px 0}.apps-grid .app-logo{width:54px;height:54px}.apps-grid .card-caption{padding:12px 10px 0}.apps-grid .card-caption>span{font-size:12px}.apps-grid .app-note{font-size:10px}.apps-filter{padding:9px 13px}}
 @media(max-width:390px){.apps-grid{gap:8px}.apps-grid .app-tile{min-height:94px}.apps-grid .app-logo{width:47px;height:47px}.apps-grid .app-card{min-height:170px}}
+
+
+/* Central+ Apps v2 — identidade visual de cada serviço em todo o card */
+.app[data-page="apps"] #apps .apps-grid .app-card{
+  position:relative;
+  isolation:isolate;
+  color:#fff;
+  background:var(--app-brand-bg,#181b25);
+  border:1px solid var(--app-brand-border,rgba(255,255,255,.2));
+  box-shadow:0 12px 28px rgba(0,0,0,.22);
+}
+.app[data-page="apps"] #apps .apps-grid .app-card:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  background:var(--app-brand-glow,radial-gradient(ellipse at 85% 0%,rgba(255,255,255,.2),transparent 48%));
+  pointer-events:none;
+}
+.app[data-page="apps"] #apps .apps-grid .app-card:hover,
+.app[data-page="apps"] #apps .apps-grid .app-card:focus-visible{
+  background:var(--app-brand-bg,#181b25);
+  border-color:rgba(255,255,255,.55);
+  box-shadow:0 20px 40px rgba(0,0,0,.34),0 0 0 1px rgba(255,255,255,.08);
+}
+.app[data-page="apps"] #apps .apps-grid .app-tile{
+  background:transparent;
+  border-color:rgba(255,255,255,.22);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12);
+}
+.app[data-page="apps"] #apps .apps-grid .app-tile:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.12),transparent 58%);
+  pointer-events:none;
+}
+.app[data-page="apps"] #apps .apps-grid .app-tile:after{
+  background:radial-gradient(circle,rgba(255,255,255,.12),transparent 68%);
+}
+.app[data-page="apps"] #apps .apps-grid .app-logo{
+  width:78px;height:78px;max-width:70%;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:20px;
+  background:rgba(0,0,0,.13);
+  box-shadow:0 8px 22px rgba(0,0,0,.13);
+}
+.app[data-page="apps"] #apps .apps-grid .app-logo img{padding:10px;filter:drop-shadow(0 2px 7px rgba(0,0,0,.18))}
+.app[data-page="apps"] #apps .apps-grid .app-logo .logo-fallback{color:#fff;font-weight:850;text-shadow:0 2px 10px rgba(0,0,0,.22)}
+.app[data-page="apps"] #apps .apps-grid .card-caption>span{color:#fff}
+.app[data-page="apps"] #apps .apps-grid .app-note{color:rgba(255,255,255,.76)}
+.app[data-page="apps"] #apps .apps-grid .app-card:after{
+  color:#fff;border-color:rgba(255,255,255,.35);background:rgba(0,0,0,.1);
+}
+.app[data-page="apps"] #apps .apps-grid .app-card[data-title="Netflix"]{--app-brand-bg:linear-gradient(145deg,#e50914,#a50710 78%,#69050a)}
+.app[data-page="apps"] #apps .apps-grid .app-card[data-title="Prime Video"]{--app-brand-bg:linear-gradient(145deg,#0879bd,#07508e 76%,#062c52)}
+.app[data-page="apps"] #apps .apps-grid .app-card[data-title="Disney+"]{--app-brand-bg:linear-gradient(145deg,#087e83,#00a6a6 55%,#064d62)}
+.app[data-page="apps"] #apps .apps-grid .app-card[data-title="HBO Max"]{--app-brand-bg:linear-gradient(145deg,#6327b8,#35106e 72%,#1b093c)}
+.app[data-page="apps"] #apps .apps-grid .app-card[data-title="Globoplay"]{--app-brand-bg:linear-gradient(145deg,#e52635,#9d173b 52%,#4c287d)}
+.app[data-page="apps"] #apps .apps-grid .app-card[data-title="Apple TV"]{--app-brand-bg:linear-gradient(145deg,#343943,#17191f 70%,#08090c)}
+.app[data-page="apps"] #apps .apps-grid .app-card[data-title="Paramount+"]{--app-brand-bg:linear-gradient(145deg,#1769bc,#123d83 65%,#081d49)}
+.app[data-page="apps"] #apps .apps-grid .app-card[data-title="MUBI"]{--app-brand-bg:linear-gradient(145deg,#e9e5da,#c9c4b7 70%,#aaa99f);--app-brand-border:rgba(0,0,0,.14)}
+.app[data-page="apps"] #apps .apps-grid .app-card[data-title="MUBI"] .app-logo{background:rgba(0,0,0,.08);border-color:rgba(0,0,0,.12)}
+.app[data-page="apps"] #apps .apps-grid .app-card[data-title="MUBI"] .app-logo .logo-fallback,
+.app[data-page="apps"] #apps .apps-grid .app-card[data-title="MUBI"] .card-caption>span,
+.app[data-page="apps"] #apps .apps-grid .app-card[data-title="MUBI"] .app-note,
+.app[data-page="apps"] #apps .apps-grid .app-card[data-title="MUBI"]:after{color:#171717;text-shadow:none}
+.app[data-page="apps"] #apps .apps-grid .app-card[data-title="Pluto TV"]{--app-brand-bg:linear-gradient(145deg,#6a32d6,#3d1a9a 72%,#21104e)}
+.app[data-page="apps"] #apps .apps-grid .app-card[data-title="Crunchyroll"]{--app-brand-bg:linear-gradient(145deg,#f47521,#c94a0b 72%,#792904)}
+.app[data-page="apps"] #apps .apps-grid .app-card[data-title="WOW Presents"]{--app-brand-bg:linear-gradient(145deg,#e94c9a,#a51e68 72%,#57103d)}
+.app[data-page="apps"] #apps .apps-grid .app-card[data-title="YouTube"]{--app-brand-bg:linear-gradient(145deg,#f52222,#b80d16 72%,#69070e)}
+.app[data-page="apps"] #apps .apps-grid .app-card[data-title="Amazon Music"]{--app-brand-bg:linear-gradient(145deg,#12a8e8,#0865ad 72%,#07365f)}
+.app[data-page="apps"] #apps .apps-grid .app-card[data-title="Spotify"]{--app-brand-bg:linear-gradient(145deg,#1ed760,#0e8e43 72%,#07552b)}
+.app[data-page="apps"] #apps .apps-grid .app-card[data-title="Spotify"] .app-logo .logo-fallback,
+.app[data-page="apps"] #apps .apps-grid .app-card[data-title="Spotify"] .card-caption>span,
+.app[data-page="apps"] #apps .apps-grid .app-card[data-title="Spotify"] .app-note,
+.app[data-page="apps"] #apps .apps-grid .app-card[data-title="Spotify"]:after{color:#06180d;text-shadow:none}
+.app[data-page="apps"] #apps .apps-grid .app-card[data-title="Spotify"] .app-logo{background:rgba(0,0,0,.08);border-color:rgba(0,0,0,.13)}
+@media(max-width:700px){
+ .app[data-page="apps"] #apps .apps-grid .app-logo{width:62px;height:62px}
+}
+
 </style>
 </head>
 <body>
