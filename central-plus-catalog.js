@@ -541,6 +541,20 @@
           if(hero&&item.backdrop_url)hero.style.backgroundImage='linear-gradient(90deg,rgba(5,6,10,.28),rgba(5,6,10,.08)),url("'+item.backdrop_url+'")';
           if(posterEl&&item.poster_url)posterEl.style.backgroundImage='url("'+item.poster_url+'")';
           set("#platformTag",(item.provider_names||[]).join(" · ")||"Consulte a disponibilidade no Brasil");
+          const providerHome=name=>{
+            const n=String(name||"").toLowerCase();
+            if(n.includes("netflix"))return "https://www.netflix.com/br/";
+            if(n.includes("prime")||n.includes("amazon"))return "https://www.primevideo.com/";
+            if(n.includes("disney"))return "https://www.disneyplus.com/pt-br";
+            if(n.includes("apple"))return "https://tv.apple.com/br";
+            if(n.includes("max")||n.includes("hbo"))return "https://play.max.com/";
+            if(n.includes("paramount"))return "https://www.paramountplus.com/";
+            if(n.includes("crunchyroll"))return "https://www.crunchyroll.com/pt-br";
+            if(n.includes("globoplay"))return "https://globoplay.globo.com/";
+            if(n.includes("mubi"))return "https://mubi.com/pt/br";
+            if(n.includes("pluto"))return "https://pluto.tv/br";
+            return "";
+          };
           const renderProviderCartela=()=>{
             let panel=$("#cp-provider-cartela");
             if(!panel){
@@ -550,7 +564,7 @@
               else return;
             }
             const options=Array.isArray(item.provider_options)?item.provider_options:[];
-            const categoryOrder=["Assinatura","Grátis","Grátis com anúncios","Aluguel","Compra"];
+            const categoryOrder=["Assinatura","Grátis","Grátis com anúncios"];
             const cards=options.map(p=>{
               const logo=p.logo_url?'<img src="'+esc(p.logo_url)+'" alt="" loading="lazy">':'<span class="cp-provider-monogram">'+esc(p.name.slice(0,1))+'</span>';
               return {p,logo};
@@ -559,51 +573,24 @@
               const group=cards.filter(x=>x.p.category===category);
               if(!group.length)return "";
               return '<div class="cp-provider-group"><div class="cp-provider-group-title">'+esc(category)+
-                '</div><div class="cp-provider-grid">'+group.map(x=>'<div class="cp-provider-card" aria-label="'+esc(x.p.name)+' disponível para '+esc(item.title)+'">'+
-                '<span class="cp-provider-logo">'+x.logo+'</span><span class="cp-provider-name">'+esc(x.p.name)+
-                '</span><span class="cp-provider-category">'+esc(x.p.category)+'</span></div>').join("")+
+                '</div><div class="cp-provider-grid">'+group.map(x=>{
+                  const home=providerHome(x.p.name);
+                  return home?'<a class="cp-provider-card" href="'+home+'" target="_self" rel="noopener" aria-label="Abrir '+esc(x.p.name)+' para assistir '+esc(item.title)+'">'+
+                    '<span class="cp-provider-logo">'+x.logo+'</span><span class="cp-provider-name">'+esc(x.p.name)+
+                    '</span><span class="cp-provider-category">'+esc(x.p.category)+'</span><span class="cp-provider-arrow" aria-hidden="true">↗</span></a>':
+                    '<div class="cp-provider-card" aria-label="'+esc(x.p.name)+' disponível para '+esc(item.title)+'"><span class="cp-provider-logo">'+x.logo+'</span><span class="cp-provider-name">'+esc(x.p.name)+'</span><span class="cp-provider-category">'+esc(x.p.category)+'</span></div>';
+                }).join("")+
                 '</div></div>';
             }).join("");
-            panel.innerHTML='<div class="cp-provider-heading"><div><div class="cp-provider-eyebrow">DISPONIBILIDADE NO BRASIL</div><h2>Serviços encontrados</h2><p>Os serviços abaixo indicam disponibilidade. O botão de reprodução só será ativado quando houver um link oficial específico verificado para este título.</p></div></div>'+
-              (groups||'<p class="cp-provider-empty">Não encontramos opções de streaming para este título no Brasil neste momento.</p>')+
-              '<p class="cp-provider-attribution">Os links abrem páginas oficiais dos serviços. A reprodução depende da disponibilidade do título e da sua conta.</p>';
+            panel.innerHTML='<div class="cp-provider-heading"><div><div class="cp-provider-eyebrow">DISPONIBILIDADE NO BRASIL</div><h2>Serviços encontrados</h2><p>Selecione um serviço para abri-lo. Quando não há link direto confirmado para o título, a Central+ abre o serviço oficial, sem usar o JustWatch.</p></div></div>'+
+              (groups||'<p class="cp-provider-empty">Não encontramos opções de streaming por assinatura ou gratuitas para este título no Brasil neste momento.</p>')+
+              '<p class="cp-provider-attribution">A disponibilidade pode mudar e a reprodução depende do serviço e da sua conta.</p>';
           };
-          if(!document.getElementById("cp-provider-cartela-styles")){
-            const css=document.createElement("style");css.id="cp-provider-cartela-styles";css.textContent=`
-              .cp-provider-cartela{margin:24px 0 8px;padding:22px;border:1px solid #ffffff16;border-radius:18px;background:linear-gradient(145deg,#151923,#0c0e14);color:#f6f7fb}
-              .cp-provider-heading h2{margin:5px 0;font-size:clamp(20px,3vw,28px);letter-spacing:-.04em}
-              .cp-provider-heading p,.cp-provider-attribution{font-size:12px;line-height:1.5;color:#a8afbd;margin:6px 0 18px}
-              .cp-provider-eyebrow{font-size:10px;letter-spacing:.16em;color:#aab6d0;font-weight:800}
-              .cp-provider-group{margin-top:18px}.cp-provider-group-title{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#a8afbd;margin-bottom:9px}
-              .cp-provider-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px}
-              .cp-provider-card{position:relative;display:flex;align-items:center;gap:10px;min-width:0;padding:12px;border:1px solid #ffffff16;border-radius:12px;background:#ffffff06;color:inherit;text-decoration:none;transition:background .2s,border-color .2s}
-              .cp-provider-card:hover{background:#ffffff10;border-color:#ffffff40}.cp-provider-logo{width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border-radius:10px;overflow:hidden;background:#fff}
-              .cp-provider-logo img{width:100%;height:100%;object-fit:cover}.cp-provider-monogram{font-size:19px;font-weight:800;color:#151923}
-              .cp-provider-name{font-size:12px;font-weight:750;line-height:1.25;overflow-wrap:anywhere}.cp-provider-category{position:absolute;left:64px;bottom:10px;font-size:9px;color:#a8afbd}
-              .cp-provider-arrow{margin-left:auto;align-self:flex-start;color:#a8afbd}.cp-provider-empty{color:#c4c9d3;font-size:13px}
-              .cp-provider-attribution{margin:18px 0 0;font-size:10px}.cp-provider-all{display:inline-block;margin-top:8px;color:#f3f4f8;font-size:12px;font-weight:750;text-decoration:underline;text-underline-offset:3px}
-              @media(max-width:480px){.cp-provider-cartela{padding:15px}.cp-provider-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.cp-provider-card{padding:9px;gap:8px}.cp-provider-logo{width:34px;height:34px;flex-basis:34px}.cp-provider-category{left:51px;font-size:8px}}
-            `;document.head.appendChild(css);
-          }
           renderProviderCartela();
           const stream=$("#streamBtn");
           if(stream){
             const providerList=(item.provider_names||[]).filter(Boolean);
-            const searchForProvider=name=>{
-              const n=String(name||"").toLowerCase();
-              if(n.includes("netflix"))return "https://www.netflix.com/search?q=";
-              if(n.includes("prime")||n.includes("amazon"))return "https://www.primevideo.com/search/ref=atv_nb_sr?phrase=";
-              if(n.includes("disney"))return "https://www.disneyplus.com/search?q=";
-              if(n.includes("apple"))return "https://tv.apple.com/br/search?term=";
-              if(n.includes("max")||n.includes("hbo"))return "https://play.max.com/search?q=";
-              if(n.includes("paramount"))return "https://www.paramountplus.com/search/?query=";
-              if(n.includes("crunchyroll"))return "https://www.crunchyroll.com/search?q=";
-              if(n.includes("globoplay"))return "https://globoplay.globo.com/busca/?q=";
-              if(n.includes("mubi"))return "https://mubi.com/pt/br/search?query=";
-              if(n.includes("pluto"))return "https://pluto.tv/br/search/details/";
-              return "";
-            };
-            const provider=providerList.find(name=>searchForProvider(name))||providerList[0]||"";
+            const provider=providerList.find(name=>providerHome(name))||providerList[0]||"";
             // Links de busca genérica não são destinos válidos para o botão Assistir.
             // Add only verified official title/episode deep links here. Never invent platform IDs.
             // Shape: TMDB ID -> { seriesUrl: "...", movieUrl: "...", episodes: { "1": "...", "2": "..." } }
@@ -616,14 +603,14 @@
               if(type==="tv"&&curated&&curated.episodes&&curated.episodes[String(episode)])return {url:curated.episodes[String(episode)],exact:true};
               if(curated&&(type==="tv"?curated.seriesUrl:curated.movieUrl))return {url:type==="tv"?curated.seriesUrl:curated.movieUrl,exact:false};
               // Sem link oficial específico verificado, não redirecionar para busca genérica.
-              return {url:"",exact:false,search:false};
+              return {url:providerHome(provider),exact:false,search:false};
             };
             const renderEpisode=()=>{
               const episode=readEpisode(),target=resolveWatchUrl();
-              stream.textContent=target.exact?(type==="tv"?"▶ Assistir episódio":"▶ Assistir filme"):(target.url?"▶ Abrir "+(provider||"streaming"):"Link direto indisponível");
+              stream.textContent=target.exact?(type==="tv"?"▶ Assistir episódio":"▶ Assistir filme"):"▶ ASSISTIR";
               stream.href=target.url||"#";
               stream.dataset.exactEpisode=target.exact?"true":"false";
-              stream.title=target.exact?"Abrir o título/episódio exato na plataforma oficial":target.url?"Abrir o título na plataforma oficial "+provider:"Ainda não existe link oficial específico verificado para este título";
+              stream.title=target.exact?"Abrir o título/episódio exato na plataforma oficial":target.url?"Abrir o título na plataforma oficial "+provider:target.url?"Abrir o serviço oficial de streaming "+provider:"Ainda não há um serviço oficial compatível para este título";
               stream.setAttribute("aria-label",stream.title);
               stream.setAttribute("aria-disabled",target.url?"false":"true");
             };
@@ -651,7 +638,7 @@
                   if(!stream.getAttribute("href")||stream.getAttribute("href")==="#"){
                     event.preventDefault();
                     const notice=$("#streamNotice");
-                    if(notice){notice.textContent="Ainda não há um link oficial específico verificado para este episódio. Nenhuma busca genérica será aberta.";notice.hidden=false;}
+                    if(notice){notice.textContent="Abrindo o serviço oficial de streaming. Não foi possível confirmar um link direto para este episódio.";notice.hidden=false;}
                     return;
                   }
                   if(stream.dataset.exactEpisode!=="true"){
@@ -664,11 +651,11 @@
               // Filme: somente link direto oficial verificado. Não cair em busca genérica.
               const target=resolveWatchUrl();
               stream.href=target.url||"#";
-              stream.textContent=target.exact?"▶ Assistir filme":(target.url?"▶ Abrir "+(provider||"streaming"):"Link direto indisponível");
+              stream.textContent=target.exact?"▶ Assistir filme":"▶ ASSISTIR";
               stream.title=target.exact?"Abrir o filme na plataforma oficial":target.url?"Abrir o título na plataforma oficial "+provider:"Ainda não existe link oficial específico verificado para este título";
               stream.setAttribute("aria-disabled",target.url?"false":"true");
               stream.setAttribute("aria-label",stream.title);
-              if(!target.url)stream.addEventListener("click",event=>{event.preventDefault();const notice=$("#streamNotice");if(notice){notice.textContent="Este título ainda não tem link oficial específico verificado. Nenhuma busca genérica será aberta.";notice.hidden=false;}});
+              if(!target.url)stream.addEventListener("click",event=>{event.preventDefault();const notice=$("#streamNotice");if(notice){notice.textContent="Abrindo o serviço oficial de streaming. Não foi possível confirmar um link direto para este título.";notice.hidden=false;}});
             }
           }
           if(stream&&!stream.dataset.historyBound){
