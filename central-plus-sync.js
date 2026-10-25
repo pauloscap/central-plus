@@ -19,6 +19,7 @@
   if(section==="series")return "series";
   if(section==="apps"||card?.classList.contains("app-card"))return "app";
   if(section==="ao-vivo")return "channel";
+  if(section==="noticias")return "other";
   return "movie";
  }
  function notify(message){
