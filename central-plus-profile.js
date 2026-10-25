@@ -15,7 +15,6 @@
   if(!url || !/^https?:\/\//i.test(url)){
    if(img)img.remove();
    const svg=trigger.querySelector("svg");if(svg)svg.style.display="";
-   trigger.style.backgroundImage="";
    return;
   }
   if(!img){
@@ -26,15 +25,12 @@
   img.src=url;img.onerror=function(){img.remove();const svg=trigger.querySelector("svg");if(svg)svg.style.display="";};
   const svg=trigger.querySelector("svg");if(svg)svg.style.display="none";
   trigger.style.overflow="hidden";
-  trigger.setAttribute("aria-label","Abrir perfil e conta");
-  trigger.title="Perfil e conta";
+  trigger.setAttribute("aria-label","Abrir perfil e conta");trigger.title="Perfil e conta";
  }
  async function boot(){
   const trigger=findTrigger();
   if(trigger){
-   trigger.setAttribute("aria-label","Abrir perfil e conta");
-   trigger.title="Perfil e conta";
-   trigger.style.cursor="pointer";
+   trigger.setAttribute("aria-label","Abrir perfil e conta");trigger.title="Perfil e conta";trigger.style.cursor="pointer";
    trigger.addEventListener("click",function(e){e.preventDefault();e.stopImmediatePropagation();window.location.href="/central-plus-conta.html";},true);
    if(trigger.tagName!=="BUTTON"){trigger.setAttribute("role","link");trigger.setAttribute("tabindex","0");trigger.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();window.location.href="/central-plus-conta.html";}});}
   }
@@ -44,10 +40,7 @@
    async function refresh(session){
     if(!session||!session.user){setPhoto(trigger,"");return;}
     let photo=session.user.user_metadata?.avatar_url||session.user.user_metadata?.picture||"";
-    try{
-     const {data}=await client.from("profiles").select("avatar_url").eq("id",session.user.id).maybeSingle();
-     if(data?.avatar_url)photo=data.avatar_url;
-    }catch(_){}
+    try{const {data}=await client.from("profiles").select("avatar_url").eq("id",session.user.id).maybeSingle();if(data?.avatar_url)photo=data.avatar_url;}catch(_){}
     setPhoto(trigger,photo);
    }
    const {data}=await client.auth.getSession();await refresh(data?.session);
