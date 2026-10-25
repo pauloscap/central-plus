@@ -146,11 +146,11 @@ const platformTypes={
 };
 function byId(id){return document.getElementById(id)}
 function set(id,value){const el=byId(id);if(el)el.textContent=value}
-function serviceSearch(show){return (platformTypes[show.type]||platformTypes.apple).url+encodeURIComponent(show.search)}
+function verifiedSeriesUrl(show){return typeof show.direct==='string'&&/^https:\/\/(www\.)?(netflix\.com|primevideo\.com|disneyplus\.com|tv\.apple\.com|play\.max\.com|paramountplus\.com|globoplay\.globo\.com|mubi\.com|crunchyroll\.com|pluto\.tv)\//i.test(show.direct)?show.direct:''}
 set('title',m.title);set('posterTitle',m.poster);set('year',m.year);set('yearFact',m.year);set('seasons',m.seasons);set('seasonsFact',m.seasons);set('genre',m.genre);set('genreFact',m.genreFact);set('rating',m.rating);set('ratingFact',m.rating+' anos (referência)');set('creator',m.creator);set('cast',m.cast);set('synopsis',m.synopsis);set('longSynopsis',m.synopsis);set('platformTag',m.platform);document.title='Central+ | '+m.title;
 byId('heroBg').style.backgroundImage='linear-gradient(90deg,rgba(5,6,10,.25),rgba(5,6,10,.05)),url("'+m.backdropImage+'")';
 byId('poster').style.backgroundImage='linear-gradient(0deg,#08090d26,#08090d26),url("'+m.posterImage+'")';
-byId('streamBtn').href=serviceSearch(m);
+const verifiedDirect=verifiedSeriesUrl(m);byId('streamBtn').href=verifiedDirect||'#';byId('streamBtn').setAttribute('aria-disabled',verifiedDirect?'false':'true');byId('streamBtn').title=verifiedDirect?'Abrir página oficial cadastrada da série':'Ainda não há link oficial específico verificado para esta série';if(!verifiedDirect){byId('streamBtn').addEventListener('click',event=>{event.preventDefault();showToast('Link direto desta série ainda não verificado')})}
 byId('streamBtn').target='_self';
 const episodeStorageKey='centralplus-series-progress-v1';
 const episodeButton=byId('episodeWatchedBtn');
