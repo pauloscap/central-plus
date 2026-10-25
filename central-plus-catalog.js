@@ -623,15 +623,17 @@
               const episode=readEpisode(),curated=directLinks[String(item.id)];
               if(curated&&curated.episodes&&curated.episodes[String(episode)])return {url:curated.episodes[String(episode)],exact:true};
               if(curated&&curated.seriesUrl)return {url:curated.seriesUrl,exact:false};
+              // Prefer the title-specific JustWatch availability page supplied by TMDB over a generic provider search.
+              if(item.provider_link)return {url:item.provider_link,exact:false,availability:true};
               if(providerSearch)return {url:providerSearch+encodeURIComponent(item.title),exact:false};
               return {url:"",exact:false};
             };
             const renderEpisode=()=>{
               const episode=readEpisode(),target=resolveWatchUrl();
-              stream.textContent=type==="tv"?"▶ Abrir "+(provider||"streaming")+" para assistir":"▶ Abrir "+(provider||"streaming");
+              stream.textContent=target.availability?"▶ Ver onde assistir":(type==="tv"?"▶ Abrir "+(provider||"streaming")+" para assistir":"▶ Abrir "+(provider||"streaming"));
               stream.href=target.url||"#";
               stream.dataset.exactEpisode=target.exact?"true":"false";
-              stream.title=target.exact?"Abrir episódio exato na plataforma":"Abrir a plataforma oficial na busca desta série; reprodução direta depende de um deep link oficial do episódio";
+              stream.title=target.exact?"Abrir episódio exato na plataforma":target.availability?"Abrir a ficha exata desta série no JustWatch e escolher uma opção disponível no Brasil":"Abrir a plataforma oficial na busca desta série; reprodução direta depende de um deep link oficial do episódio";
               stream.setAttribute("aria-label",stream.title);
             };
             if(type==="tv"){
@@ -663,8 +665,11 @@
                 });
               }
             }else{
-              stream.href=providerSearch?providerSearch+encodeURIComponent(item.title):"#";
-              stream.textContent="▶ Assistir";
+              // Use the exact title availability page when TMDB provides it; only fall back to provider search otherwise.
+              stream.href=item.provider_link|| (providerSearch?providerSearch+encodeURIComponent(item.title):"#");
+              stream.textContent=item.provider_link?"▶ Ver onde assistir":"▶ Assistir";
+              stream.title=item.provider_link?"Abrir a ficha exata deste filme no JustWatch e escolher uma opção disponível no Brasil":"Abrir a busca do filme na plataforma oficial";
+              stream.setAttribute("aria-label",stream.title);
             }
           }
           if(stream&&!stream.dataset.historyBound){
