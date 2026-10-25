@@ -11,8 +11,11 @@ const GENRES = {
 const PROVIDERS = {
   8:"Netflix",9:"Prime Video",337:"Disney+",350:"Apple TV+",384:"HBO Max",
   531:"Paramount+",119:"Amazon Prime Video",283:"Crunchyroll",2:"Apple TV",
-  1899:"Max",15:"Hulu",386:"Peacock"
+  1899:"Max",307:"Globoplay",11:"MUBI",300:"Pluto TV"
 };
+// Somente serviços integrados à Central+ e disponibilidade para assistir online.
+// Aluguel e compra não entram no catálogo "assistir agora".
+const CENTRAL_PLUS_PROVIDER_IDS = new Set([8,9,337,350,384,531,119,283,2,1899,307,11,300]);
 function credentials() {
   const bearer = process.env.TMDB_BEARER_TOKEN;
   const key = process.env.TMDB_API_KEY;
@@ -58,16 +61,15 @@ async function providers(type, id, auth) {
     const br = data.results && data.results.BR;
     if (!br) return { names: [], options: [], link: "" };
     const categories = [
-      ["flatrate", "Assinatura"], ["free", "Grátis"], ["ads", "Grátis com anúncios"],
-      ["rent", "Aluguel"], ["buy", "Compra"]
+      ["flatrate", "Assinatura"], ["free", "Grátis"], ["ads", "Grátis com anúncios"]
     ];
     const options = [];
     for (const [key, label] of categories) {
       for (const p of (br[key] || [])) {
-        if (!p.provider_name) continue;
+        if (!p.provider_name || !CENTRAL_PLUS_PROVIDER_IDS.has(Number(p.provider_id))) continue;
         options.push({
           id: p.provider_id || null,
-          name: p.provider_name,
+          name: PROVIDERS[p.provider_id] || p.provider_name,
           logo_url: image(p.logo_path, "w92"),
           category: label,
           category_key: key
@@ -114,7 +116,7 @@ module.exports = async function handler(req, res) {
       // Restrict the catalog to services already integrated into Central+.
       // Without an explicit provider, a monetization-type-only discover query can
       // return titles that are not actually available on the user's streaming apps.
-      const centralPlusProviderIds = "8|337|119|9|384|1899|307|350";
+      const centralPlusProviderIds = [...CENTRAL_PLUS_PROVIDER_IDS].join("|");
       const providerIds = String(q.provider || centralPlusProviderIds).split("|")
         .map(value => value.trim())
         .filter(value => /^\d+$/.test(value))
@@ -161,21 +163,26 @@ module.exports = async function handler(req, res) {
       if (type === "tv" && ["upcoming","now_playing","new"].includes(section)) params.timezone = "America/Sao_Paulo";
       data = await tmdb(route, params, auth);
     }
-    const items = (data.results || []).filter(x => x.poster_path).map(x => normalize(x, type));
-    const enrich = String(q.providers || "false") === "true";
-    if (enrich) {
-      // Streaming discovery returns many candidates; enrich only the first four so the featured titles can show verified services without delaying the whole catalog.
-      const enrichLimit = section === "streaming" || section === "streaming_new" ? 8 : 12;
-      await Promise.all(items.slice(0, enrichLimit).map(async item => {
-        const availability = await providers(type, item.id, auth);
-        item.provider_names = availability.names;
-        item.provider_options = availability.options;
-        item.provider_link = availability.link;
-      }));
-    }
+    // Regra central: nenhum filme/série aparece em listas públicas sem disponibilidade
+    // confirmada em pelo menos um serviço integrado na região BR (assinatura/grátis/anúncios).
+    const candidates = (data.results || []).filter(x => x.poster_path).map(x => normalize(x, type));
+    const requestedProviderIds = String(q.provider || "").split("|").map(x => Number(x.trim())).filter(Number.isInteger);
+    const items = await Promise.all(candidates.map(async item => {
+      const availability = await providers(type, item.id, auth);
+      item.provider_names = availability.names;
+      item.provider_options = availability.options;
+      item.provider_link = availability.link;
+      if (requestedProviderIds.length) {
+        const matching = item.provider_options.filter(option => requestedProviderIds.includes(Number(option.id)));
+        item.provider_options = matching;
+        item.provider_names = [...new Set(matching.map(option => option.name))];
+      }
+      return item;
+    }));
+    const available = items.filter(item => item.provider_names.length > 0);
     return res.status(200).json({
-      items, page: data.page || 1, total_pages: data.total_pages || 1,
-      source: "TMDB", region: "BR", updatedAt: new Date().toISOString()
+      items: available, page: data.page || 1, total_pages: data.total_pages || 1,
+      source: "TMDB", region: "BR", availabilityFiltered: true, updatedAt: new Date().toISOString()
     });
   } catch (error) {
     console.error("Central+ TMDB catalog error:", error && error.message ? error.message : error);
