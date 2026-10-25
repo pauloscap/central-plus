@@ -121,13 +121,31 @@ module.exports = async function handler(req, res) {
     if (section === "details") {
       const id = Number(q.id);
       if (!Number.isInteger(id) || id <= 0) return res.status(400).json({ error: "ID inválido." });
-      const item = await tmdb("/" + type + "/" + id, { language: lang }, auth);
+      const [item, credits, videos] = await Promise.all([
+        tmdb("/" + type + "/" + id, { language: lang }, auth),
+        tmdb("/" + type + "/" + id + "/credits", { language: lang }, auth).catch(() => ({})),
+        tmdb("/" + type + "/" + id + "/videos", { language: lang }, auth).catch(() => ({ results: [] }))
+      ]);
       const normalized = normalize(item, type);
       const availability = await providers(type, id, auth);
       normalized.provider_names = availability.names;
       normalized.provider_options = availability.options;
       normalized.provider_link = availability.link;
       normalized.runtime = item.runtime || (item.episode_run_time && item.episode_run_time[0]) || null;
+      normalized.director = type === "tv"
+        ? (item.created_by || []).map(person => person.name).join(", ")
+        : (credits.crew || []).filter(person => person.job === "Director").map(person => person.name).slice(0, 4).join(", ");
+      normalized.creator = (item.created_by || []).map(person => person.name).join(", ");
+      normalized.cast = (credits.cast || []).slice(0, 8).map(person => person.name).join(", ");
+      normalized.country = (item.production_countries || []).map(country => country.name).join(", ");
+      normalized.language = item.original_language || "";
+      normalized.production = (item.production_companies || []).slice(0, 4).map(company => company.name).join(", ");
+      const trailer = (videos.results || []).find(video => video.site === "YouTube" && video.type === "Trailer" && video.official) ||
+        (videos.results || []).find(video => video.site === "YouTube" && video.type === "Trailer") ||
+        (videos.results || []).find(video => video.site === "YouTube" && video.type === "Teaser");
+      normalized.trailer_url = trailer ? "https://www.youtube.com/watch?v=" + trailer.key : "";
+      normalized.trailer_name = trailer ? trailer.name : "";
+      normalized.status = item.status || "";
       return res.status(200).json({ item: normalized, source: "TMDB", region: "BR", updatedAt: new Date().toISOString() });
     }
     if (section === "streaming" || section === "streaming_new") {
