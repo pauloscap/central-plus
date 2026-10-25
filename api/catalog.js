@@ -137,7 +137,7 @@ module.exports = async function handler(req, res) {
       // Restrict the catalog to services already integrated into Central+.
       // Without an explicit provider, a monetization-type-only discover query can
       // return titles that are not actually available on the user's streaming apps.
-      const centralPlusProviderIds = [...CENTRAL_PLUS_PROVIDER_IDS].join(",");
+      const centralPlusProviderIds = "8"; // padrão temporário confiável: Netflix; fileiras individuais consultam os demais serviços
       const providerIds = String(q.provider || centralPlusProviderIds).split(/[|,]/)
         .map(value => value.trim())
         .filter(value => /^\d+$/.test(value))
@@ -179,7 +179,7 @@ module.exports = async function handler(req, res) {
       // Assim, tendências/populares/mais bem avaliados nunca incluem títulos sem serviço de streaming confirmado.
       const today = new Date().toISOString().slice(0, 10);
       const since = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
-      const providerIds = "8,337,119,9,384,1899,307,350"; // vírgula = qualquer um destes serviços; evita exigir o título em todos os serviços
+      const providerIds = "8"; // vitrines gerais só exibem títulos confirmados; fileiras por serviço consultam os demais provedores
       const sortBy = section === "top_rated" ? "vote_average.desc"
         : ["new","now_playing","upcoming"].includes(section)
           ? (type === "tv" ? "first_air_date.desc" : "primary_release_date.desc")
