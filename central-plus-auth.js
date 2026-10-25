@@ -67,7 +67,7 @@
       if(loadingProfile)return;
       loadingProfile=true;
       try{
-        const {data,error}=await client.from("profiles").select("display_name,avatar_url").eq("id",user.id).maybeSingle();
+        const {data,error}=await client.from("profiles").select("display_name,avatar_url,username,bio").eq("id",user.id).maybeSingle();
         if(error)throw error;
         const displayName=data?.display_name||user.user_metadata?.display_name||user.user_metadata?.full_name||user.user_metadata?.name||"";
         if($("profileName"))$("profileName").value=displayName;
@@ -76,8 +76,8 @@
         if($("profileAvatarUrl"))$("profileAvatarUrl").value=data?.avatar_url||user.user_metadata?.avatar_url||user.user_metadata?.picture||"";
         let extras={};
         try{extras=JSON.parse(localStorage.getItem("centralPlusProfileExtras:"+user.id)||"{}");}catch(_){}
-        if($("profileUsername"))$("profileUsername").value=extras.username||user.user_metadata?.username||"";
-        if($("profileBio"))$("profileBio").value=extras.bio||"";
+        if($("profileUsername"))$("profileUsername").value=data?.username||extras.username||user.user_metadata?.username||"";
+        if($("profileBio"))$("profileBio").value=data?.bio||extras.bio||"";
         if(!data){
           const {error:insertError}=await client.from("profiles").upsert({
             id:user.id,
@@ -181,7 +181,7 @@
         if(error)throw error;
         text("profileHeading",name||"Seu espaço");
         try{localStorage.setItem("centralPlusProfileExtras:"+currentUser.id,JSON.stringify({username,bio}));}catch(_){}
-        setStatus("Nome e avatar salvos na sua conta. Nome de usuário e bio ficam salvos neste dispositivo.","success");
+        try{localStorage.removeItem("centralPlusProfileExtras:"+currentUser.id);}catch(_){}\n        setStatus("Perfil sincronizado com sua conta. Nome, foto, nome de usuário e bio estarão disponíveis nos dispositivos em que você entrar.","success");
         updateAvatarPreview();
       }catch(error){
         const message=error.code==="23505"?"Esse nome de usuário já está em uso. Escolha outro.":(error.message||"Não foi possível salvar o perfil.");
