@@ -122,7 +122,18 @@ const shows={
 'invincible':{title:'Invencível',poster:'INVENCÍVEL',year:'2021–',seasons:'3 temporadas',genre:'Animação · Ação',genreFact:'Animação, ação, aventura',rating:'18',creator:'Robert Kirkman',cast:'Steven Yeun, Sandra Oh, J. K. Simmons',platform:'Prime Video',type:'prime',synopsis:'O filho de um super-herói lendário começa a descobrir seus próprios poderes e enfrenta uma verdade que muda tudo o que acreditava sobre sua família e o planeta.',search:'Invencível série animada',art:'linear-gradient(145deg,#b77f54,#64413b 38%,#17121b 80%,#08090d)',posterImage:'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1000&q=85',backdropImage:'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=2200&q=85'}
 };
 // As fichas geradas pelo catálogo TMDB usam tmdbId e são preenchidas por central-plus-catalog.js.
-if(new URLSearchParams(location.search).has('tmdbId')) return;
+if(new URLSearchParams(location.search).has('tmdbId')) {
+  document.title='Central+ | Carregando série…';
+  const loadingTitle=document.getElementById('title');
+  const loadingPoster=document.getElementById('posterTitle');
+  const loadingSynopsis=document.getElementById('synopsis');
+  const loadingLongSynopsis=document.getElementById('longSynopsis');
+  if(loadingTitle)loadingTitle.textContent='Carregando série…';
+  if(loadingPoster)loadingPoster.textContent='';
+  if(loadingSynopsis)loadingSynopsis.textContent='Buscando informações da série selecionada.';
+  if(loadingLongSynopsis)loadingLongSynopsis.textContent='Buscando informações da série selecionada.';
+  return;
+}
 const key=(new URLSearchParams(location.search).get('serie')||'ruptura').toLowerCase();
 const m=shows[key]||shows.ruptura;
 const platformTypes={
