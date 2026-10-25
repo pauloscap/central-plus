@@ -69,7 +69,9 @@
       try{
         const {data,error}=await client.from("profiles").select("display_name,avatar_url").eq("id",user.id).maybeSingle();
         if(error)throw error;
-        if($("profileName"))$("profileName").value=data?.display_name||user.user_metadata?.display_name||user.user_metadata?.full_name||user.user_metadata?.name||"";
+        const displayName=data?.display_name||user.user_metadata?.display_name||user.user_metadata?.full_name||user.user_metadata?.name||"";
+        if($("profileName"))$("profileName").value=displayName;
+        text("profileHeading",displayName.trim()||"Seu espaço");
         if($("profileUsername"))$("profileUsername").value=user.user_metadata?.username||"";
         if($("profileAvatarUrl"))$("profileAvatarUrl").value=data?.avatar_url||user.user_metadata?.avatar_url||user.user_metadata?.picture||"";
         let extras={};
@@ -177,6 +179,7 @@
           avatar_url:avatar&&/^https?:\/\//i.test(avatar)?avatar:null,
         },{onConflict:"id"});
         if(error)throw error;
+        text("profileHeading",name||"Seu espaço");
         try{localStorage.setItem("centralPlusProfileExtras:"+currentUser.id,JSON.stringify({username,bio}));}catch(_){}
         setStatus("Nome e avatar salvos na sua conta. Nome de usuário e bio ficam salvos neste dispositivo.","success");
         updateAvatarPreview();
