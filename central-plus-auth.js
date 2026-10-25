@@ -67,17 +67,16 @@
       if(loadingProfile)return;
       loadingProfile=true;
       try{
-        const {data,error}=await client.from("profiles").select("username,nome,avatar_url,bio").eq("id",user.id).maybeSingle();
+        const {data,error}=await client.from("profiles").select("display_name,avatar_url").eq("id",user.id).maybeSingle();
         if(error)throw error;
-        if($("profileName"))$("profileName").value=data?.nome||user.user_metadata?.name||"";
-        if($("profileUsername"))$("profileUsername").value=data?.username||user.user_metadata?.username||"";
+        if($("profileName"))$("profileName").value=data?.display_name||user.user_metadata?.display_name||user.user_metadata?.full_name||user.user_metadata?.name||"";
+        if($("profileUsername"))$("profileUsername").value=user.user_metadata?.username||"";
         if($("profileAvatarUrl"))$("profileAvatarUrl").value=data?.avatar_url||"";
-        if($("profileBio"))$("profileBio").value=data?.bio||"";
+        if($("profileBio"))$("profileBio").value="";
         if(!data){
           const {error:insertError}=await client.from("profiles").upsert({
             id:user.id,
-            nome:user.user_metadata?.name||null,
-            username:user.user_metadata?.username||null,
+            display_name:user.user_metadata?.display_name||user.user_metadata?.full_name||user.user_metadata?.name||null,
             avatar_url:user.user_metadata?.avatar_url||null
           },{onConflict:"id"});
           if(insertError)throw insertError;
@@ -114,7 +113,7 @@
       try{
         const {error}=await client.auth.signInWithOAuth({
           provider:"google",
-          options:{redirectTo:window.location.origin+"/central-plus-conta.html"}
+          options:{redirectTo:"https://central-plus-roan.vercel.app/central-plus-conta.html"}
         });
         if(error)throw error;
       }catch(error){
@@ -134,7 +133,7 @@
         if(mode==="signup"){
           const {data,error}=await client.auth.signUp({
             email,password,
-            options:{data:{name,username:username||null}}
+            options:{data:{display_name:name,full_name:name,name,username:username||null}}
           });
           if(error)throw error;
           if(data.session&&data.user){
@@ -171,13 +170,12 @@
       try{
         const {error}=await client.from("profiles").upsert({
           id:currentUser.id,
-          username:username||null,
-          nome:name||null,
+          display_name:name||null,
           avatar_url:avatar&&/^https?:\/\//i.test(avatar)?avatar:null,
-          bio:bio||null
         },{onConflict:"id"});
         if(error)throw error;
-        setStatus("Perfil salvo com sucesso no Supabase.","success");
+        try{localStorage.setItem("centralPlusProfileExtras:"+currentUser.id,JSON.stringify({username,bio}));}catch(_){}
+        setStatus("Nome e avatar salvos na sua conta. Nome de usuário e bio ficam salvos neste dispositivo.","success");
         updateAvatarPreview();
       }catch(error){
         const message=error.code==="23505"?"Esse nome de usuário já está em uso. Escolha outro.":(error.message||"Não foi possível salvar o perfil.");
