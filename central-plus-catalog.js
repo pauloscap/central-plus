@@ -579,10 +579,9 @@
                 '</span><span class="cp-provider-category">'+esc(x.p.category)+'</span><span class="cp-provider-arrow">↗</span></a>').join("")+
                 '</div></div>';
             }).join("");
-            const fullLink=item.provider_link?'<a class="cp-provider-all" href="'+esc(item.provider_link)+'" target="_blank" rel="noopener noreferrer">Ver todas as opções no JustWatch ↗</a>':"";
-            panel.innerHTML='<div class="cp-provider-heading"><div><div class="cp-provider-eyebrow">ONDE ASSISTIR NO BRASIL</div><h2>Escolha seu streaming</h2><p>Opções informadas para este título. A disponibilidade pode mudar.</p></div></div>'+
+            panel.innerHTML='<div class="cp-provider-heading"><div><div class="cp-provider-eyebrow">ABRIR NO STREAMING</div><h2>Escolha seu streaming</h2><p>Selecione um serviço para procurar este título diretamente na plataforma oficial.</p></div></div>'+
               (groups||'<p class="cp-provider-empty">Não encontramos opções de streaming para este título no Brasil neste momento.</p>')+
-              '<p class="cp-provider-attribution">Disponibilidade fornecida pelo JustWatch via TMDB. Os cards abrem a busca da plataforma quando há um endereço oficial conhecido; caso contrário, use o link de disponibilidade.</p>'+fullLink;
+              '<p class="cp-provider-attribution">Os links abrem páginas oficiais dos serviços. A reprodução depende da disponibilidade do título e da sua conta.</p>';
           };
           if(!document.getElementById("cp-provider-cartela-styles")){
             const css=document.createElement("style");css.id="cp-provider-cartela-styles";css.textContent=`
@@ -604,37 +603,45 @@
           renderProviderCartela();
           const stream=$("#streamBtn");
           if(stream){
-            const provider=(item.provider_names||[]).find(Boolean)||"";
-            const providerLower=provider.toLowerCase();
-            const providerSearch=providerLower.includes("netflix")?"https://www.netflix.com/search?q=":
-              providerLower.includes("prime")?"https://www.primevideo.com/search/ref=atv_nb_sr?phrase=":
-              providerLower.includes("disney")?"https://www.disneyplus.com/search?q=":
-              providerLower.includes("apple")?"https://tv.apple.com/br/search?term=":
-              providerLower.includes("max")||providerLower.includes("hbo")?"https://play.max.com/search?q=":
-              providerLower.includes("paramount")?"https://www.paramountplus.com/search/?query=":
-              providerLower.includes("crunchyroll")?"https://www.crunchyroll.com/search?q=":"";
-            // Add only verified official episode URLs to this registry. Never infer platform IDs.
-            // Shape: TMDB series ID -> { seriesUrl: "...", episodes: { "1": "...", "2": "..." } }
+            const providerList=(item.provider_names||[]).filter(Boolean);
+            const searchForProvider=name=>{
+              const n=String(name||"").toLowerCase();
+              if(n.includes("netflix"))return "https://www.netflix.com/search?q=";
+              if(n.includes("prime")||n.includes("amazon"))return "https://www.primevideo.com/search/ref=atv_nb_sr?phrase=";
+              if(n.includes("disney"))return "https://www.disneyplus.com/search?q=";
+              if(n.includes("apple"))return "https://tv.apple.com/br/search?term=";
+              if(n.includes("max")||n.includes("hbo"))return "https://play.max.com/search?q=";
+              if(n.includes("paramount"))return "https://www.paramountplus.com/search/?query=";
+              if(n.includes("crunchyroll"))return "https://www.crunchyroll.com/search?q=";
+              if(n.includes("globoplay"))return "https://globoplay.globo.com/busca/?q=";
+              if(n.includes("mubi"))return "https://mubi.com/pt/br/search?query=";
+              if(n.includes("pluto"))return "https://pluto.tv/br/search/details/";
+              return "";
+            };
+            const provider=providerList.find(name=>searchForProvider(name))||providerList[0]||"";
+            const providerSearch=searchForProvider(provider);
+            // Add only verified official title/episode deep links here. Never invent platform IDs.
+            // Shape: TMDB ID -> { seriesUrl: "...", movieUrl: "...", episodes: { "1": "...", "2": "..." } }
             const directLinks={};
             const progressKey="centralplus-series-progress-v1";
             const seriesKey=String(item.id||item.title).toLowerCase();
             const readEpisode=()=>{try{const saved=JSON.parse(localStorage.getItem(progressKey)||"{}");return Number.isInteger(saved[seriesKey])&&saved[seriesKey]>=0?saved[seriesKey]+1:1}catch(_){return 1}};
             const resolveWatchUrl=()=>{
               const episode=readEpisode(),curated=directLinks[String(item.id)];
-              if(curated&&curated.episodes&&curated.episodes[String(episode)])return {url:curated.episodes[String(episode)],exact:true};
-              if(curated&&curated.seriesUrl)return {url:curated.seriesUrl,exact:false};
-              // Prefer the title-specific JustWatch availability page supplied by TMDB over a generic provider search.
-              if(item.provider_link)return {url:item.provider_link,exact:false,availability:true};
-              if(providerSearch)return {url:providerSearch+encodeURIComponent(item.title),exact:false};
+              if(type==="tv"&&curated&&curated.episodes&&curated.episodes[String(episode)])return {url:curated.episodes[String(episode)],exact:true};
+              if(curated&&(type==="tv"?curated.seriesUrl:curated.movieUrl))return {url:type==="tv"?curated.seriesUrl:curated.movieUrl,exact:false};
+              // Never send users to JustWatch. Without a verified deep link, use the official streaming service search.
+              if(providerSearch)return {url:providerSearch+encodeURIComponent(item.title),exact:false,search:true};
               return {url:"",exact:false};
             };
             const renderEpisode=()=>{
               const episode=readEpisode(),target=resolveWatchUrl();
-              stream.textContent=target.availability?"▶ Ver onde assistir":(type==="tv"?"▶ Abrir "+(provider||"streaming")+" para assistir":"▶ Abrir "+(provider||"streaming"));
+              stream.textContent=target.exact?(type==="tv"?"▶ Assistir episódio":"▶ Assistir filme"):(target.url?"▶ Abrir "+(provider||"streaming"):"Link de streaming indisponível");
               stream.href=target.url||"#";
               stream.dataset.exactEpisode=target.exact?"true":"false";
-              stream.title=target.exact?"Abrir episódio exato na plataforma":target.availability?"Abrir a ficha exata desta série no JustWatch e escolher uma opção disponível no Brasil":"Abrir a plataforma oficial na busca desta série; reprodução direta depende de um deep link oficial do episódio";
+              stream.title=target.exact?"Abrir o título/episódio exato na plataforma oficial":target.url?"Abrir a busca do título no streaming oficial "+provider:"Não há link oficial conhecido para este título; nenhum link de terceiros será aberto";
               stream.setAttribute("aria-label",stream.title);
+              stream.setAttribute("aria-disabled",target.url?"false":"true");
             };
             if(type==="tv"){
               renderEpisode();
@@ -665,10 +672,12 @@
                 });
               }
             }else{
-              // Use the exact title availability page when TMDB provides it; only fall back to provider search otherwise.
-              stream.href=item.provider_link|| (providerSearch?providerSearch+encodeURIComponent(item.title):"#");
-              stream.textContent=item.provider_link?"▶ Ver onde assistir":"▶ Assistir";
-              stream.title=item.provider_link?"Abrir a ficha exata deste filme no JustWatch e escolher uma opção disponível no Brasil":"Abrir a busca do filme na plataforma oficial";
+              // Filme: priorizar link direto verificado; caso não exista, abrir o streaming oficial, nunca JustWatch.
+              const target=resolveWatchUrl();
+              stream.href=target.url||"#";
+              stream.textContent=target.exact?"▶ Assistir filme":(target.url?"▶ Abrir "+(provider||"streaming"):"Link de streaming indisponível");
+              stream.title=target.exact?"Abrir o filme na plataforma oficial":target.url?"Abrir a busca do filme no streaming oficial "+provider:"Não há link oficial conhecido para este título; nenhum link de terceiros será aberto";
+              stream.setAttribute("aria-disabled",target.url?"false":"true");
               stream.setAttribute("aria-label",stream.title);
             }
           }
