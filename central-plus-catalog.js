@@ -718,6 +718,23 @@
           const extraGrid=extra.querySelector(".cp-detail-extra-grid");
           const tech=[["Título original",item.original_title],["Direção",item.director],["Criação",item.creator],["Elenco",item.cast],["País de produção",item.country],["Idioma original",item.language?String(item.language).toUpperCase():""],["Produtora",item.production],["Situação",item.status],["Temporadas",type==="tv"&&item.seasons?String(item.seasons):""],["Episódios",type==="tv"&&item.episodes?String(item.episodes):""]];
           extraGrid.innerHTML=tech.filter(([label,value])=>value).map(([label,value])=>'<div class="cp-detail-extra-item"><div class="cp-detail-extra-label">'+esc(label)+'</div><div class="cp-detail-extra-value">'+esc(value)+'</div></div>').join("");
+          const relatedRail=$("#relatedRail");
+          if(relatedRail){
+            relatedRail.innerHTML="";
+            try{
+              const response=await fetch(API+"?type="+type+"&section=similar&id="+encodeURIComponent(id));
+              const relatedData=await response.json();
+              (relatedData.items||[]).slice(0,8).forEach(related=>{
+                const card=document.createElement("a");card.className="related-card";card.href=detailHref(related);card.setAttribute("aria-label","Ver detalhes de "+related.title);
+                card.style.backgroundImage='linear-gradient(0deg,rgba(4,5,9,.94),transparent 78%),url("'+(related.backdrop_url||related.poster_url||"")+'")';
+                const copy=document.createElement("div");copy.className="related-card-copy";
+                const title=document.createElement("div");title.className="related-card-title";title.textContent=related.title;
+                const meta=document.createElement("div");meta.className="related-card-meta";meta.textContent=[related.year,(related.genres||[]).slice(0,2).join(" · ")].filter(Boolean).join(" · ");
+                copy.append(title,meta);card.append(copy);relatedRail.append(card);
+              });
+            }catch(_){}
+          }
+          const topLabel=$(".topbar .right");if(topLabel)topLabel.textContent=type==="tv"?"FICHA DA SÉRIE":"FICHA DO FILME";
           document.title="Central+ | "+item.title;
         }catch(error){
           const loadingTitle=$("#title"),loadingPoster=$("#posterTitle"),loadingSynopsis=$("#synopsis"),loadingLongSynopsis=$("#longSynopsis");
