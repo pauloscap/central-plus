@@ -682,6 +682,12 @@
           const options=$("#watchOptionsBtn");if(options){options.href="#cp-provider-cartela";options.textContent="Ver opções no Brasil";options.addEventListener("click",event=>{event.preventDefault();const panel=$("#cp-provider-cartela");if(panel)panel.scrollIntoView({behavior:"smooth",block:"start"});});}
           document.title="Central+ | "+item.title;
         }catch(error){
+          const loadingTitle=$("#title"),loadingPoster=$("#posterTitle"),loadingSynopsis=$("#synopsis"),loadingLongSynopsis=$("#longSynopsis");
+          if(loadingTitle)loadingTitle.textContent="Não foi possível carregar este título";
+          if(loadingPoster)loadingPoster.textContent="";
+          if(loadingSynopsis)loadingSynopsis.textContent="Não conseguimos carregar os detalhes agora. Volte ao catálogo e tente novamente.";
+          if(loadingLongSynopsis)loadingLongSynopsis.textContent="Não conseguimos carregar os detalhes agora. Volte ao catálogo e tente novamente.";
+          document.title="Central+ | Detalhes indisponíveis";
           document.documentElement.classList.remove("cp-dynamic-detail-loading");
           console.warn("Central+ TMDB detail:",error);
           const title=$("#title"),synopsis=$("#synopsis"),longSynopsis=$("#longSynopsis");
