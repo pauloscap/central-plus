@@ -628,10 +628,10 @@
             };
             const renderEpisode=()=>{
               const episode=readEpisode(),target=resolveWatchUrl();
-              stream.textContent=type==="tv"?"▶ Assista o episódio "+String(episode).padStart(2,"0"):"▶ Assistir";
+              stream.textContent=type==="tv"?"▶ Abrir "+(provider||"streaming")+" para assistir":"▶ Abrir "+(provider||"streaming");
               stream.href=target.url||"#";
               stream.dataset.exactEpisode=target.exact?"true":"false";
-              stream.title=target.exact?"Abrir episódio exato na plataforma":"Link direto do episódio não verificado; abrir busca/ficha da série";
+              stream.title=target.exact?"Abrir episódio exato na plataforma":"Abrir a plataforma oficial na busca desta série; reprodução direta depende de um deep link oficial do episódio";
               stream.setAttribute("aria-label",stream.title);
             };
             if(type==="tv"){
